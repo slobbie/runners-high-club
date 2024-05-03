@@ -1,3 +1,13 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@feature/*": ["src/feature/*"],
+      "@common/*": ["src/common/*"],
+      "@navigation/*": ["src/navigation/*"]
+    }
+  }
 }
