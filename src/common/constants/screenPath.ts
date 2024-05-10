@@ -1,6 +1,10 @@
 export const screenPath = Object.freeze({
-  webView: {
-    login: 'http://localhost:3000/login',
+  navigation: {
+    drawer: 'drawer',
+    tab: 'tab',
   },
-  feature: {},
+  feature: {
+    login: 'login',
+    home: 'home',
+  },
 });

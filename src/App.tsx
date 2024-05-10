@@ -9,13 +9,17 @@ import React from 'react';
 import {StatusBar} from 'react-native';
 import styled from '@emotion/native';
 import StackNavigation from '@navigation/StackNavigation';
+import {Provider} from 'react-redux';
+import store from '@redux/store/store';
 
 function App(): React.JSX.Element {
   return (
-    <SafeAreaView>
-      <StatusBar barStyle="default" />
-      <StackNavigation />
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView>
+        <StatusBar barStyle="default" />
+        <StackNavigation />
+      </SafeAreaView>
+    </Provider>
   );
 }
 
