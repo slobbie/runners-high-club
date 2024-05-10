@@ -5,3 +5,7 @@ patch-package
 
 root 폴더 (rchapp)
 커맨드 입력 - yarn patch-package [변경한 패키지 이름]
+
+node_modules/@react-native-community/cli-server-api/build/statusPageMiddleware.js
+
+new URL(process.cwd(), 'file://')

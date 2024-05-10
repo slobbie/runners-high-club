@@ -13,22 +13,36 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '@feature/login/LoginScreen';
 import {screenPath} from '@common/constants/screenPath';
+import TabNavigation from '@navigation/TabNavigation';
+
+export type RootStackParamList = {
+  login: undefined;
+  tab: undefined;
+};
 
 /**
  * 스택네비게이터 컴포넌트
  * @returns React.JSX.Element
  */
-const Stack = createStackNavigator();
 const StackNavigation = () => {
-  const webViewPathName = screenPath.webView;
+  const Stack = createStackNavigator<RootStackParamList>();
+  const pathName = screenPath.feature;
+  const navigationName = screenPath.navigation;
   return (
     <NavigationContainer>
       <Stack.Navigator>
         {/* 로그인 스크린 */}
         <Stack.Screen
-          name={webViewPathName.login}
+          name={pathName.login as keyof RootStackParamList}
           component={LoginScreen}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name={navigationName.tab as keyof RootStackParamList}
+          component={TabNavigation}
+          options={() => ({
+            headerShown: false,
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>
