@@ -935,6 +935,10 @@ PODS:
   - React-Mapbuffer (0.74.0):
     - glog
     - React-debug
+  - react-native-config (1.5.1):
+    - react-native-config/App (= 1.5.1)
+  - react-native-config/App (1.5.1):
+    - React-Core
   - react-native-encrypted-storage (4.0.3):
     - React-Core
   - react-native-safe-area-context (4.10.1):
@@ -1254,6 +1258,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNSVG (15.2.0):
+    - React-Core
   - RNVectorIcons (10.1.0):
     - DoubleConversion
     - glog
@@ -1311,6 +1317,7 @@ DEPENDENCIES:
   - React-jsitracing (from `../node_modules/react-native/ReactCommon/hermes/executor/`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - react-native-config (from `../node_modules/react-native-config`)
   - react-native-encrypted-storage (from `../node_modules/react-native-encrypted-storage`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -1341,6 +1348,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1410,6 +1418,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-config:
+    :path: "../node_modules/react-native-config"
   react-native-encrypted-storage:
     :path: "../node_modules/react-native-encrypted-storage"
   react-native-safe-area-context:
@@ -1470,6 +1480,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
@@ -1506,6 +1518,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 36a2bbc272300313653d980de5ab700ec86c534a
   React-logger: 03f2f7b955cfe24593a2b8c9705c23e142d1ad24
   React-Mapbuffer: 5e05d78fe6505f4a054b86f415733d4ad02dd314
+  react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
   react-native-safe-area-context: dcab599c527c2d7de2d76507a523d20a0b83823d
   react-native-webview: 32ebb18b648c419b0c260416437831c402c0d7b4
@@ -1536,10 +1549,11 @@ SPEC CHECKSUMS:
   RNGestureHandler: 2fb2c561d694d6a884850c8507c180a2cc2ed4e9
   RNReanimated: 4a0c5b6f4c727ff963e545f6debb0185f261a165
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
+  RNSVG: 16a7fd5293e14799a541332ece19c22d1509ed3b
   RNVectorIcons: 2a2f79274248390b80684ea3c4400bd374a15c90
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 56f906bf6c11c931588191dde1229fd3e4e3d557
 
-PODFILE CHECKSUM: f5f33398dd70657dbfa11220f779caf650e28368
+PODFILE CHECKSUM: 7432f9325d635575b7b97ad919409b3be8127d33
 
 COCOAPODS: 1.11.3
