@@ -6,5 +6,6 @@ export const screenPath = Object.freeze({
   feature: {
     login: 'login',
     home: 'home',
+    run: 'run',
   },
 });

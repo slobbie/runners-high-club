@@ -1,0 +1,10 @@
+//
+//  Config.xcconfig
+//  rhcapp
+//
+//  Created by 정해석 on 5/11/24.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+#include? "tmp.xcconfig"
