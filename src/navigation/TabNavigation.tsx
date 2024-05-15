@@ -17,6 +17,7 @@ import RunScreen from '@feature/run/RunScreen';
 import SvgIcon from '@common/components/icon/SvgIcon';
 import Label from '@common/components/label/Label';
 import * as Icons from '@common/components/icon/index';
+import HeaderProfileButton from '@navigation/components/HeaderProfileButton';
 
 export type RootTabParamList = {
   home: undefined;
@@ -27,7 +28,8 @@ const TabNavigation = () => {
   const Tab = createBottomTabNavigator<RootTabParamList>();
   const pathName = screenPath.feature;
 
-  const icon = useMemo(() => {
+  /** 탭 아이콘 컴포넌트 */
+  const tabIcon = useMemo(() => {
     return (focused: boolean, name: keyof typeof Icons) => {
       const opacity = focused ? 1 : 0.5;
       return (
@@ -42,7 +44,8 @@ const TabNavigation = () => {
     };
   }, []);
 
-  const LabelStyle = useMemo(() => {
+  /** 탭 라벨 스타일 */
+  const tabLabelStyle = useMemo(() => {
     return (focused: boolean) => {
       return {
         color: '#333',
@@ -51,6 +54,7 @@ const TabNavigation = () => {
       };
     };
   }, []);
+
   return (
     <Tab.Navigator
       initialRouteName={pathName.home as keyof RootTabParamList}
@@ -73,22 +77,20 @@ const TabNavigation = () => {
           padding: 0,
         },
         headerStyle: {
-          backgroundColor: '#1C2632',
+          backgroundColor: '#fff',
         },
-        // headerLeft: () => <TabHeaderBackButton />,
+        headerLeft: () => <HeaderProfileButton />,
       }}>
       {/* 홈 탭 */}
       <Tab.Screen
         name={pathName.home as keyof RootTabParamList}
         component={HomeScreen}
         options={{
-          title: 'rhc',
-          headerTitleAlign: 'center',
           tabBarLabel: ({focused}) => {
-            return <Label text="기록" style={LabelStyle(focused)} />;
+            return <Label text="기록" style={tabLabelStyle(focused)} />;
           },
           tabBarIcon: ({focused}) => {
-            return icon(focused, 'barChart');
+            return tabIcon(focused, 'barChart');
           },
         }}
       />
@@ -96,13 +98,11 @@ const TabNavigation = () => {
         name={pathName.run as keyof RootTabParamList}
         component={RunScreen}
         options={{
-          title: 'rhc',
-          headerTitleAlign: 'center',
           tabBarLabel: ({focused}) => {
-            return <Label text="러닝" style={LabelStyle(focused)} />;
+            return <Label text="러닝" style={tabLabelStyle(focused)} />;
           },
           tabBarIcon: ({focused}) => {
-            return icon(focused, 'run');
+            return tabIcon(focused, 'run');
           },
         }}
       />
