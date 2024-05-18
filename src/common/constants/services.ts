@@ -24,6 +24,12 @@ const services = Object.freeze({
   storage: {
     accessToken: 'accessToken',
     refreshToken: 'refreshToken',
+    permission: {
+      location: 'location',
+      camera: 'camera',
+      photo: 'photo',
+      bluetooth: 'bluetooth',
+    },
   },
 });
 

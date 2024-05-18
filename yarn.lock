@@ -1804,6 +1804,11 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
+"@react-native-community/geolocation@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/geolocation/-/geolocation-3.2.1.tgz#a3c17d044215a45bcc364fdd2e66fca8927a3c4e"
+  integrity sha512-/+HNzuRl4UCMma7KK+KYL8k2nxAGuW+DGxqmqfpiqKBlCkCUbuFHaZZdqVD6jpsn9r/ghe583ECLmd9SV9I4Bw==
+
 "@react-native/assets-registry@0.74.81":
   version "0.74.81"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.74.81.tgz#76b17f8f79b366ec4f18a0f4e99b7cd466aa5aa7"
@@ -6443,6 +6448,15 @@ react-native-gesture-handler@^2.16.1:
     invariant "^2.2.4"
     lodash "^4.17.21"
     prop-types "^15.7.2"
+
+"react-native-nmap@https://github.com/ZeroCho/react-native-naver-map":
+  version "0.0.67"
+  resolved "https://github.com/ZeroCho/react-native-naver-map#b2134b45f0db93374863bbb1ead8efc477691c6b"
+
+react-native-permissions@^4.1.5:
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-4.1.5.tgz#db4d1ddbf076570043f4fd4168f54bb6020aec92"
+  integrity sha512-r6VMRacASmtRHS+GZ+5HQCp9p9kiE+UU9magHOZCXZLTJitdTuVHWZRrb4v4oqZGU+zAp3mZhTQftuMMv+WLUg==
 
 react-native-reanimated@^3.11.0:
   version "3.11.0"

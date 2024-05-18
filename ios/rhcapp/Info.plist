@@ -2,8 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NMFClientId</key>
+  <string>x1d5gfgpqu</string>
 	<key>HOST_URL</key>
 	<string>${HOST_URL}</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+  <string>블루투스 연결 권한이 필요합니다.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+  <string>블루투스 연결 권한이 필요합니다.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>카메라 권한이 필요합니다.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>위치 확인을 위해서 위치 권한이 필요합니다.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>위치 확인을 위해서 위치 권한이 필요합니다.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>위치 확인을 위해서 위치 권한이 필요합니다.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>위치 확인을 위해서 위치 권한이 필요합니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>사진 선택을 위해서 라이브러리 접근 권한이 필요합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>사진 선택을 위해서 라이브러리 접근 권한이 필요합니다.</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
