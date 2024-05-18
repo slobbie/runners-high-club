@@ -19,19 +19,13 @@ export type IconProps = SvgProps & {
 };
 
 /**
- *  svg 아이콘 컴포넌ㅌ,
+ *  svg 아이콘 컴포넌트
  * @property { string } name 아이콘 이름
  * @property { number } size 아이콘 사이즈
  * @property { SvgProps } SvgProps svg 공통 옵션
  * @returns React.JSX.Element
  */
-const SvgIcon = ({
-  name,
-  fill = 'black',
-  stroke = '#333',
-  size,
-  ...props
-}: IconProps) => {
+const SvgIcon = ({name, size, ...props}: IconProps) => {
   const Comp = Icons[name];
 
   const sizeProps = {
@@ -39,7 +33,7 @@ const SvgIcon = ({
     height: size,
   };
 
-  return <Comp {...props} fill={fill} stroke={stroke} {...sizeProps} />;
+  return <Comp {...props} {...sizeProps} />;
 };
 
 export default SvgIcon;
