@@ -9,15 +9,25 @@
 // Copyright (C) 2024 JHS All rights reserved.
 // =============================================================================
 
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import styled from '@emotion/native';
 import NaverMapView, {Marker, Path} from 'react-native-nmap';
 import useDevicePermissions, {TPermission} from '@hooks/useDevicePermissions';
 import Geolocation from '@react-native-community/geolocation';
 import services from '@common/constants/services';
-import {AppState, AppStateStatus, StyleProp, ViewStyle} from 'react-native';
-import CircleButton from '@common/components/button/CircleButton';
-import SvgIcon from '@common/components/icon/SvgIcon';
+import {
+  AppState,
+  AppStateStatus,
+  Keyboard,
+  NativeSyntheticEvent,
+  StyleProp,
+  TextInputChangeEventData,
+  ViewStyle,
+} from 'react-native';
+import Bottomsheet from '@common/components/bottomsheet/Bottomsheet';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import EditKmItem from '@feature/run/components/EditKmItem';
+import RunButtonGroup from '@feature/run/components/RunButtonGroup';
 
 /**
  * 달리기 측정 화면
@@ -26,8 +36,21 @@ import SvgIcon from '@common/components/icon/SvgIcon';
 const RunScreen = () => {
   /** 디바이스 권한 훅스 */
   const permissions = useDevicePermissions();
+
   /** 로케이션 권한 상수  */
   const location = services.storage.permission.location as TPermission;
+
+  /** 바텀시트 ref */
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  /** 달리기 시작 여부 */
+  const [isRun, setIsRun] = useState(false);
+
+  /** 목표 km 상태 */
+  const [kmText, setKmText] = useState('3.00');
+
+  /** 앱 백그라운드 상태 감지 */
+  const [appState, setAppState] = useState(AppState.currentState);
 
   /** 현재 위치 상태 */
   const [markerPosition, setMarkerPosition] = useState<{
@@ -58,6 +81,35 @@ const RunScreen = () => {
   /** 위치 권한 여부 */
   const [isPermissionsState, setIsPermissionsState] = useState(false);
 
+  /** 네이버 맵뷰 스타일 */
+  const naverMapViewStyle = useMemo(() => {
+    return {
+      width: '100%',
+      height: '50%',
+    } as StyleProp<ViewStyle>;
+  }, []);
+
+  /** 달리기 시작 핸들러 */
+  const startRunHandler = () => {
+    setIsRun(prev => !prev);
+  };
+
+  /** 셋팅 바텀시트 호출 핸들러 */
+  const settingHandler = () => {
+    bottomSheetModalRef.current?.present();
+  };
+
+  /** 목표 km 온체인지 이벤트 */
+  const onChangeKm = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    setKmText(e.nativeEvent.text);
+  };
+
+  /** 바텀 시트 닫기 이벤트 */
+  const closeBottomsheet = () => {
+    bottomSheetModalRef.current?.close();
+    Keyboard.dismiss();
+  };
+
   /** 로케이션 권한 검사 이펙트 */
   useEffect(() => {
     if (!isPermissionsState) {
@@ -76,10 +128,6 @@ const RunScreen = () => {
     if (isPermissionsState) {
       Geolocation.getCurrentPosition(
         info => {
-          // setMyPosition({
-          //   latitude: info.coords.latitude,
-          //   longitude: info.coords.longitude,
-          // });
           setMarkerPosition({
             latitude: info.coords.latitude,
             longitude: info.coords.longitude,
@@ -102,9 +150,6 @@ const RunScreen = () => {
     }
   }, [isPermissionsState]);
 
-  /** 앱 백그라운드 상태 감지 */
-  const [appState, setAppState] = useState(AppState.currentState);
-
   /** 백그라운드 에서 다시 앱으로 돌아왔을 시 실행 */
   useEffect(() => {
     const handleAppStateChange = (nextAppState: AppStateStatus) => {
@@ -123,12 +168,6 @@ const RunScreen = () => {
     };
     AppState.addEventListener('change', handleAppStateChange);
   }, [appState, isPermissionsState, location, permissions]);
-
-  const [isRun, setIsRun] = useState(false);
-
-  const startRunHandler = () => {
-    setIsRun(prev => !prev);
-  };
 
   /** 임시 주행 데이터 */
   useEffect(() => {
@@ -158,88 +197,76 @@ const RunScreen = () => {
     }
   }, [isRun]);
 
-  /** 네이버 맵뷰 스타일 */
-  const naverMapViewStyle = useMemo(() => {
-    return {
-      width: '100%',
-      height: '50%',
-    } as StyleProp<ViewStyle>;
-  }, []);
-
-  /** 셋팅 바텀시트 호출 핸들러 */
-  const settingHandler = () => {};
-
   return (
-    <View>
-      <TitleView>
-        <TitleText>러닝</TitleText>
-      </TitleView>
-      <KmWrapper>
-        <KmBox>
-          <KmText>3.00</KmText>
-          <KmTextUnit>Km</KmTextUnit>
-        </KmBox>
-      </KmWrapper>
-      <ButtonWrapper>
-        <ButtonBox>
-          <CircleButton onPress={settingHandler} size={40} buttonColor="#fff">
-            <SvgIcon name="setting" size={24} />
-          </CircleButton>
-          <CircleButton onPress={startRunHandler} size={80}>
-            <ButtonText>Run</ButtonText>
-          </CircleButton>
-          <CircleButton onPress={startRunHandler} size={40} buttonColor="#fff">
-            <SvgIcon name="setting" size={24} />
-          </CircleButton>
-        </ButtonBox>
-      </ButtonWrapper>
-      <NaverMapView
-        style={naverMapViewStyle}
-        zoomControl={false}
-        center={{
-          zoom: 15.7,
-          // 지도 기울기
-          tilt: 0,
-          latitude:
-            (pathPosition[pathPosition.length - 1].latitude +
-              pathPosition[pathPosition.length - 1].latitude) /
-            2,
-          longitude:
-            (pathPosition[pathPosition.length - 1].longitude +
-              pathPosition[pathPosition.length - 1].longitude) /
-            2,
-        }}>
-        {/* 시작점 */}
-        <Marker
-          coordinate={{
-            latitude: pathPosition[0].latitude,
-            longitude: pathPosition[0].longitude,
-          }}
-          width={1}
-          height={1}
-          pinColor="transparent"
-          anchor={{x: 0.5, y: 0.5}}
-          caption={{text: '시작점'}}
+    <>
+      <View>
+        <TitleView>
+          <TitleText>러닝</TitleText>
+        </TitleView>
+        <KmWrapper>
+          <KmBox>
+            <KmText>{kmText}</KmText>
+            <KmTextUnit>Km</KmTextUnit>
+          </KmBox>
+        </KmWrapper>
+        <RunButtonGroup
+          settingHandler={settingHandler}
+          startRunHandler={startRunHandler}
+          isRun={isRun}
         />
-        <Path
-          width={10}
-          color={'#40C576'}
-          outlineWidth={0}
-          coordinates={pathPosition}
+        <NaverMapView
+          style={naverMapViewStyle}
+          zoomControl={false}
+          center={{
+            zoom: 15.7,
+            // 지도 기울기
+            tilt: 0,
+            latitude:
+              (pathPosition[pathPosition.length - 1].latitude +
+                pathPosition[pathPosition.length - 1].latitude) /
+              2,
+            longitude:
+              (pathPosition[pathPosition.length - 1].longitude +
+                pathPosition[pathPosition.length - 1].longitude) /
+              2,
+          }}>
+          {/* 시작점 */}
+          <Marker
+            coordinate={{
+              latitude: pathPosition[0].latitude,
+              longitude: pathPosition[0].longitude,
+            }}
+            width={1}
+            height={1}
+            pinColor="transparent"
+            anchor={{x: 0.5, y: 0.5}}
+          />
+          <Path
+            width={10}
+            color={'#40C576'}
+            outlineWidth={0}
+            coordinates={pathPosition}
+          />
+          <Marker
+            coordinate={{
+              latitude: markerPosition.latitude,
+              longitude: markerPosition.longitude,
+            }}
+            width={12}
+            height={12}
+            pinColor={'green'}
+            image={require('../../assets/pngIcon/blue-dot.png')}
+          />
+        </NaverMapView>
+      </View>
+      <Bottomsheet snapPoint="90%" ref={bottomSheetModalRef}>
+        <EditKmItem
+          onPress={closeBottomsheet}
+          onChange={onChangeKm}
+          inputValue={kmText}
         />
-        <Marker
-          coordinate={{
-            latitude: markerPosition.latitude,
-            longitude: markerPosition.longitude,
-          }}
-          width={12}
-          height={12}
-          // anchor={{x: 0.5, y: 0.5}}
-          pinColor={'green'}
-          image={require('../../assets/pngIcon/blue-dot.png')}
-        />
-      </NaverMapView>
-    </View>
+      </Bottomsheet>
+    </>
   );
 };
 
@@ -297,27 +324,4 @@ const KmTextUnit = styled.Text`
   margin-top: auto;
   margin-bottom: 2%;
   margin-left: 10px;
-`;
-
-const ButtonWrapper = styled.View`
-  z-index: 100;
-  width: 100%;
-  height: 20%;
-  position: absolute;
-  bottom: 5%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ButtonBox = styled.View`
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  justify-content: space-around;
-`;
-
-const ButtonText = styled.Text`
-  color: #fff;
-  font-weight: bold;
 `;
