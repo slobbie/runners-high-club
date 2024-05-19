@@ -57,7 +57,7 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName={pathName.home as keyof RootTabParamList}
+      initialRouteName={pathName.run as keyof RootTabParamList}
       screenOptions={{
         tabBarAllowFontScaling: false,
         headerTitleAllowFontScaling: false,
