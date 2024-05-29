@@ -6,6 +6,10 @@
   <string>x1d5gfgpqu</string>
 	<key>HOST_URL</key>
 	<string>${HOST_URL}</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>건강 데이터를 연동을 위한 권한이 필요합니다.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>운동 데이터를 연동을 위한 권한이 필요합니다.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
   <string>블루투스 연결 권한이 필요합니다.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
