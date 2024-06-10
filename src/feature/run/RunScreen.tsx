@@ -28,6 +28,7 @@ import Bottomsheet from '@common/components/bottomsheet/Bottomsheet';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import EditKmItem from '@feature/run/components/EditKmItem';
 import RunButtonGroup from '@feature/run/components/RunButtonGroup';
+import CircleButton from '@/common/components/button/CircleButton';
 
 /**
  * 달리기 측정 화면
@@ -89,9 +90,23 @@ const RunScreen = () => {
     } as StyleProp<ViewStyle>;
   }, []);
 
+  /** 네이버 맵뷰 스타일 */
+  const runNaverMapViewStyle = useMemo(() => {
+    return {
+      width: '100%',
+      height: '100%',
+    } as StyleProp<ViewStyle>;
+  }, []);
+
   /** 달리기 시작 핸들러 */
   const startRunHandler = () => {
-    setIsRun(prev => !prev);
+    if (isRun) {
+      setIsRun(() => {
+        return false;
+      });
+    } else {
+      prepareRun();
+    }
   };
 
   /** 셋팅 바텀시트 호출 핸들러 */
@@ -123,7 +138,8 @@ const RunScreen = () => {
     }
   }, [isPermissionsState, location, permissions]);
 
-  /** 현재 디바이스 위치 이펙트 */
+  // TODO: 1초에 한번씩 호출 해주어 셋팅하면됨
+  /** 현재 디바이스 위치 호출 */
   useEffect(() => {
     if (isPermissionsState) {
       Geolocation.getCurrentPosition(
@@ -197,8 +213,125 @@ const RunScreen = () => {
     }
   }, [isRun]);
 
+  const [isPrepareRun, setIsPrepareRun] = useState(false);
+
+  const [runCount, setRunCount] = useState(3);
+
+  const prepareRun = () => {
+    setIsPrepareRun(true);
+  };
+
+  /** 달리기 준비 단계 */
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (!isRun && isPrepareRun && runCount > 0) {
+      interval = setInterval(() => {
+        setRunCount(prevCount => prevCount - 1);
+      }, 1000);
+    } else if (runCount === 0) {
+      setTimeout(() => {
+        setRunCount(3);
+        setIsPrepareRun(false);
+        setIsRun(prev => !prev);
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [isPrepareRun, isRun, runCount]);
+
   return (
     <>
+      <RunView>
+        <Top>
+          <KmTextView>
+            <RunKmText>0.00</RunKmText>
+            <RunKmTextUnit>Km</RunKmTextUnit>
+          </KmTextView>
+          <RunMapView>
+            <NaverMapView
+              style={runNaverMapViewStyle}
+              zoomControl={false}
+              center={{
+                zoom: 15.7,
+                // 지도 기울기
+                tilt: 0,
+                latitude:
+                  (pathPosition[pathPosition.length - 1].latitude +
+                    pathPosition[pathPosition.length - 1].latitude) /
+                  2,
+                longitude:
+                  (pathPosition[pathPosition.length - 1].longitude +
+                    pathPosition[pathPosition.length - 1].longitude) /
+                  2,
+              }}>
+              {/* 시작점 */}
+              <Marker
+                coordinate={{
+                  latitude: pathPosition[0].latitude,
+                  longitude: pathPosition[0].longitude,
+                }}
+                width={1}
+                height={1}
+                pinColor="transparent"
+                anchor={{x: 0.5, y: 0.5}}
+              />
+              <Path
+                width={10}
+                color={'#40C576'}
+                outlineWidth={0}
+                coordinates={pathPosition}
+              />
+              <Marker
+                coordinate={{
+                  latitude: markerPosition.latitude,
+                  longitude: markerPosition.longitude,
+                }}
+                width={12}
+                height={12}
+                pinColor={'green'}
+                image={require('../../assets/pngIcon/blue-dot.png')}
+              />
+            </NaverMapView>
+          </RunMapView>
+        </Top>
+        <Mid>
+          <RecordView>
+            <RecordText>0:00</RecordText>
+            <RecordTextUnit>시간</RecordTextUnit>
+          </RecordView>
+          <RecordView>
+            <RecordText>--</RecordText>
+            <RecordTextUnit>BPM</RecordTextUnit>
+          </RecordView>
+          <RecordView>
+            <RecordText>0:00</RecordText>
+            <RecordTextUnit>페이스</RecordTextUnit>
+          </RecordView>
+        </Mid>
+        <Bottom>
+          <CircleButton
+            onPress={settingHandler}
+            size={100}
+            buttonColor="#FFBF5F">
+            <StopButtonText>정지</StopButtonText>
+          </CircleButton>
+          <CircleButton
+            onPress={settingHandler}
+            size={100}
+            buttonColor="#FF5F5F">
+            <StopButtonText>종료</StopButtonText>
+          </CircleButton>
+        </Bottom>
+      </RunView>
+      {isPrepareRun && (
+        <CounterView>
+          {runCount > 0 ? (
+            <CountText>{runCount}</CountText>
+          ) : (
+            <CountText>출발 !</CountText>
+          )}
+        </CounterView>
+      )}
       <View>
         <TitleView>
           <TitleText>러닝</TitleText>
@@ -324,4 +457,93 @@ const KmTextUnit = styled.Text`
   margin-top: auto;
   margin-bottom: 2%;
   margin-left: 10px;
+`;
+
+const CounterView = styled.View`
+  position: absolute;
+  z-index: 1000;
+  background-color: #5dadd9;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CountText = styled.Text`
+  font-size: 100px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  color: #fff;
+`;
+
+const RunView = styled.View`
+  position: absolute;
+  z-index: 1000;
+  background-color: #5dadd9;
+  width: 100%;
+  height: 100%;
+`;
+
+const Top = styled.View`
+  flex: 1;
+  border: 1px solid red;
+  flex-direction: row;
+`;
+
+const KmTextView = styled.View`
+  flex: 1;
+  background-color: green;
+  justify-content: center;
+  align-items: center;
+`;
+
+const RunKmText = styled.Text`
+  font-weight: bold;
+  font-size: 50px;
+`;
+const RunKmTextUnit = styled.Text`
+  font-weight: bold;
+  font-size: 24px;
+`;
+
+const RunMapView = styled.View`
+  flex: 1;
+  background-color: tomato;
+`;
+
+const Mid = styled.View`
+  flex: 1;
+  border: 1px solid;
+  flex-direction: row;
+`;
+
+const Bottom = styled.View`
+  flex: 1;
+  border: 1px solid green;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const RecordView = styled.View`
+  flex: 1;
+  background-color: green;
+  justify-content: center;
+  align-items: center;
+`;
+
+const RecordText = styled.Text`
+  font-weight: bold;
+  font-size: 40px;
+`;
+
+const RecordTextUnit = styled.Text`
+  font-weight: bold;
+  font-size: 24px;
+`;
+
+const StopButtonText = styled.Text`
+  color: #fff;
+  font-weight: bold;
+  font-size: 24px;
 `;

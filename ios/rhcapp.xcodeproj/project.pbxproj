@@ -12,7 +12,6 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		4FB43E452C0652FB0011AD58 /* libRCTAppleHealthKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB43E442C0652B50011AD58 /* libRCTAppleHealthKit.a */; };
 		7699B88040F8A987B510C191 /* libPods-rhcapp-rhcappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-rhcapp-rhcappTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -24,13 +23,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = rhcapp;
-		};
-		4FB43E432C0652B50011AD58 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4FB43E3F2C0652B50011AD58 /* RCTAppleHealthKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3774C88D1D2092F20000B3F3;
-			remoteInfo = RCTAppleHealthKit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -49,7 +41,6 @@
 		3B4392A12AC88292D35C810B /* Pods-rhcapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rhcapp.debug.xcconfig"; path = "Target Support Files/Pods-rhcapp/Pods-rhcapp.debug.xcconfig"; sourceTree = "<group>"; };
 		4FB43E3D2BEFB8DF0011AD58 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		4FB43E3E2C0323270011AD58 /* rhcapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = rhcapp.entitlements; path = rhcapp/rhcapp.entitlements; sourceTree = "<group>"; };
-		4FB43E3F2C0652B50011AD58 /* RCTAppleHealthKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAppleHealthKit.xcodeproj; path = "../node_modules/react-native-health/RCTAppleHealthKit.xcodeproj"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-rhcapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rhcapp.release.xcconfig"; path = "Target Support Files/Pods-rhcapp/Pods-rhcapp.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-rhcapp-rhcappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rhcapp-rhcappTests.debug.xcconfig"; path = "Target Support Files/Pods-rhcapp-rhcappTests/Pods-rhcapp-rhcappTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-rhcapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rhcapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,7 +62,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FB43E452C0652FB0011AD58 /* libRCTAppleHealthKit.a in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-rhcapp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -121,18 +111,9 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		4FB43E402C0652B50011AD58 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4FB43E442C0652B50011AD58 /* libRCTAppleHealthKit.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				4FB43E3F2C0652B50011AD58 /* RCTAppleHealthKit.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -246,12 +227,6 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 4FB43E402C0652B50011AD58 /* Products */;
-					ProjectRef = 4FB43E3F2C0652B50011AD58 /* RCTAppleHealthKit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* rhcapp */,
@@ -259,16 +234,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		4FB43E442C0652B50011AD58 /* libRCTAppleHealthKit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTAppleHealthKit.a;
-			remoteRef = 4FB43E432C0652B50011AD58 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -508,6 +473,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = rhcapp/rhcapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DYB22FLV4W;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = rhcapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -536,6 +502,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = rhcapp/rhcapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DYB22FLV4W;
 				INFOPLIST_FILE = rhcapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -628,7 +595,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -701,7 +671,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
