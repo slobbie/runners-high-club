@@ -24,6 +24,8 @@ const services = Object.freeze({
   },
   slice: {
     login: 'loginSlice',
+    run: 'runSlice',
+    navigation: 'navigation',
   },
   storage: {
     accessToken: 'accessToken',

@@ -28,13 +28,18 @@ import Bottomsheet from '@common/components/bottomsheet/Bottomsheet';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import EditKmItem from '@feature/run/components/EditKmItem';
 import RunButtonGroup from '@feature/run/components/RunButtonGroup';
-import CircleButton from '@/common/components/button/CircleButton';
+import PrepareRun from '@feature/run/components/PrepareRun';
+import RunTracker from '@feature/run/components/RunTracker';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '@redux/store/store';
+import navigationSlice from '@navigation/slice/navigation.slice';
 
 /**
  * 달리기 측정 화면
  * @returns React.JSX.Element
  */
 const RunScreen = () => {
+  const dispatch = useDispatch();
   /** 디바이스 권한 훅스 */
   const permissions = useDevicePermissions();
 
@@ -86,22 +91,21 @@ const RunScreen = () => {
   const naverMapViewStyle = useMemo(() => {
     return {
       width: '100%',
-      height: '50%',
-    } as StyleProp<ViewStyle>;
-  }, []);
-
-  /** 네이버 맵뷰 스타일 */
-  const runNaverMapViewStyle = useMemo(() => {
-    return {
-      width: '100%',
       height: '100%',
     } as StyleProp<ViewStyle>;
   }, []);
-
+  /** 탭 네비게이션 표시 여부 */
+  const isTabShowStatus = useSelector(
+    (state: RootState) => state.navigation.isTabShowStatus,
+  );
   /** 달리기 시작 핸들러 */
   const startRunHandler = () => {
+    dispatch(navigationSlice.actions.setIsTabShowStatus(!isTabShowStatus));
     if (isRun) {
       setIsRun(() => {
+        return false;
+      });
+      setIsPause(() => {
         return false;
       });
     } else {
@@ -185,9 +189,12 @@ const RunScreen = () => {
     AppState.addEventListener('change', handleAppStateChange);
   }, [appState, isPermissionsState, location, permissions]);
 
+  /** 일시정지 상태 */
+  const [isPause, setIsPause] = useState(false);
+
   /** 임시 주행 데이터 */
   useEffect(() => {
-    if (isRun) {
+    if (isRun && !isPause) {
       const updatePosition = () => {
         setMarkerPosition(prev => ({
           ...prev,
@@ -211,12 +218,14 @@ const RunScreen = () => {
         clearTimeout(re);
       };
     }
-  }, [isRun]);
+  }, [isPause, isRun]);
 
+  /** 준비 단계 표시 여부 */
   const [isPrepareRun, setIsPrepareRun] = useState(false);
-
+  /** 준비 단계 카운터 */
   const [runCount, setRunCount] = useState(3);
 
+  /** 달리기 준비 단계  */
   const prepareRun = () => {
     setIsPrepareRun(true);
   };
@@ -233,164 +242,97 @@ const RunScreen = () => {
         setRunCount(3);
         setIsPrepareRun(false);
         setIsRun(prev => !prev);
-      }, 1000);
+      }, 650);
     }
 
     return () => clearInterval(interval);
   }, [isPrepareRun, isRun, runCount]);
 
+  /** 일시정지 핸들러 */
+  const pauseHandler = () => {
+    setIsPause(prev => !prev);
+  };
+
   return (
     <>
-      <RunView>
-        <Top>
-          <KmTextView>
-            <RunKmText>0.00</RunKmText>
-            <RunKmTextUnit>Km</RunKmTextUnit>
-          </KmTextView>
-          <RunMapView>
-            <NaverMapView
-              style={runNaverMapViewStyle}
-              zoomControl={false}
-              center={{
-                zoom: 15.7,
-                // 지도 기울기
-                tilt: 0,
-                latitude:
-                  (pathPosition[pathPosition.length - 1].latitude +
-                    pathPosition[pathPosition.length - 1].latitude) /
-                  2,
-                longitude:
-                  (pathPosition[pathPosition.length - 1].longitude +
-                    pathPosition[pathPosition.length - 1].longitude) /
-                  2,
-              }}>
-              {/* 시작점 */}
-              <Marker
-                coordinate={{
-                  latitude: pathPosition[0].latitude,
-                  longitude: pathPosition[0].longitude,
-                }}
-                width={1}
-                height={1}
-                pinColor="transparent"
-                anchor={{x: 0.5, y: 0.5}}
-              />
-              <Path
-                width={10}
-                color={'#40C576'}
-                outlineWidth={0}
-                coordinates={pathPosition}
-              />
-              <Marker
-                coordinate={{
-                  latitude: markerPosition.latitude,
-                  longitude: markerPosition.longitude,
-                }}
-                width={12}
-                height={12}
-                pinColor={'green'}
-                image={require('../../assets/pngIcon/blue-dot.png')}
-              />
-            </NaverMapView>
-          </RunMapView>
-        </Top>
-        <Mid>
-          <RecordView>
-            <RecordText>0:00</RecordText>
-            <RecordTextUnit>시간</RecordTextUnit>
-          </RecordView>
-          <RecordView>
-            <RecordText>--</RecordText>
-            <RecordTextUnit>BPM</RecordTextUnit>
-          </RecordView>
-          <RecordView>
-            <RecordText>0:00</RecordText>
-            <RecordTextUnit>페이스</RecordTextUnit>
-          </RecordView>
-        </Mid>
-        <Bottom>
-          <CircleButton
-            onPress={settingHandler}
-            size={100}
-            buttonColor="#FFBF5F">
-            <StopButtonText>정지</StopButtonText>
-          </CircleButton>
-          <CircleButton
-            onPress={settingHandler}
-            size={100}
-            buttonColor="#FF5F5F">
-            <StopButtonText>종료</StopButtonText>
-          </CircleButton>
-        </Bottom>
-      </RunView>
-      {isPrepareRun && (
-        <CounterView>
-          {runCount > 0 ? (
-            <CountText>{runCount}</CountText>
-          ) : (
-            <CountText>출발 !</CountText>
-          )}
-        </CounterView>
-      )}
+      {isPrepareRun && <PrepareRun runCount={runCount} />}
       <View>
-        <TitleView>
-          <TitleText>러닝</TitleText>
-        </TitleView>
-        <KmWrapper>
-          <KmBox>
-            <KmText>{kmText}</KmText>
-            <KmTextUnit>Km</KmTextUnit>
-          </KmBox>
-        </KmWrapper>
+        {isRun ? (
+          <RunTracker
+            isPause={isPause}
+            isRun={isRun}
+            pathPosition={pathPosition}
+            markerPosition={markerPosition}
+          />
+        ) : (
+          <>
+            <TitleView>
+              <TitleText>러닝</TitleText>
+            </TitleView>
+            <KmWrapper>
+              <KmBox>
+                <KmText>{kmText}</KmText>
+                <KmTextUnit>Km</KmTextUnit>
+              </KmBox>
+            </KmWrapper>
+            <LayerView>
+              <CircleView>
+                <NaverMapView
+                  style={naverMapViewStyle}
+                  zoomControl={false}
+                  center={{
+                    zoom: 15.7,
+                    // 지도 기울기
+                    tilt: 0,
+                    latitude:
+                      (pathPosition[pathPosition.length - 1].latitude +
+                        pathPosition[pathPosition.length - 1].latitude) /
+                      2,
+                    longitude:
+                      (pathPosition[pathPosition.length - 1].longitude +
+                        pathPosition[pathPosition.length - 1].longitude) /
+                      2,
+                  }}>
+                  {/* 시작점 */}
+                  <Marker
+                    coordinate={{
+                      latitude: pathPosition[0].latitude,
+                      longitude: pathPosition[0].longitude,
+                    }}
+                    width={1}
+                    height={1}
+                    pinColor="transparent"
+                    anchor={{x: 0.5, y: 0.5}}
+                  />
+                  <Path
+                    width={10}
+                    color={'#40C576'}
+                    outlineWidth={0}
+                    coordinates={pathPosition}
+                  />
+                  <Marker
+                    coordinate={{
+                      latitude: markerPosition.latitude,
+                      longitude: markerPosition.longitude,
+                    }}
+                    width={12}
+                    height={12}
+                    pinColor={'green'}
+                    image={require('../../assets/pngIcon/blue-dot.png')}
+                  />
+                </NaverMapView>
+              </CircleView>
+            </LayerView>
+          </>
+        )}
         <RunButtonGroup
+          isPause={isPause}
+          isRun={isRun}
           settingHandler={settingHandler}
           startRunHandler={startRunHandler}
-          isRun={isRun}
+          prepareRunHandler={prepareRun}
+          pauseHandler={pauseHandler}
         />
-        <NaverMapView
-          style={naverMapViewStyle}
-          zoomControl={false}
-          center={{
-            zoom: 15.7,
-            // 지도 기울기
-            tilt: 0,
-            latitude:
-              (pathPosition[pathPosition.length - 1].latitude +
-                pathPosition[pathPosition.length - 1].latitude) /
-              2,
-            longitude:
-              (pathPosition[pathPosition.length - 1].longitude +
-                pathPosition[pathPosition.length - 1].longitude) /
-              2,
-          }}>
-          {/* 시작점 */}
-          <Marker
-            coordinate={{
-              latitude: pathPosition[0].latitude,
-              longitude: pathPosition[0].longitude,
-            }}
-            width={1}
-            height={1}
-            pinColor="transparent"
-            anchor={{x: 0.5, y: 0.5}}
-          />
-          <Path
-            width={10}
-            color={'#40C576'}
-            outlineWidth={0}
-            coordinates={pathPosition}
-          />
-          <Marker
-            coordinate={{
-              latitude: markerPosition.latitude,
-              longitude: markerPosition.longitude,
-            }}
-            width={12}
-            height={12}
-            pinColor={'green'}
-            image={require('../../assets/pngIcon/blue-dot.png')}
-          />
-        </NaverMapView>
       </View>
       <Bottomsheet snapPoint="90%" ref={bottomSheetModalRef}>
         <EditKmItem
@@ -431,7 +373,6 @@ const KmWrapper = styled.View`
   z-index: 100;
   width: 100%;
   height: 20%;
-  /* top: 16%; */
   top: 5%;
   position: absolute;
   align-items: center;
@@ -459,91 +400,17 @@ const KmTextUnit = styled.Text`
   margin-left: 10px;
 `;
 
-const CounterView = styled.View`
-  position: absolute;
-  z-index: 1000;
-  background-color: #5dadd9;
+const LayerView = styled.View`
   width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
 `;
 
-const CountText = styled.Text`
-  font-size: 100px;
-  font-weight: bold;
-  margin-bottom: 40px;
-  color: #fff;
-`;
-
-const RunView = styled.View`
-  position: absolute;
+const CircleView = styled.View`
   z-index: 1000;
-  background-color: #5dadd9;
-  width: 100%;
-  height: 100%;
-`;
-
-const Top = styled.View`
-  flex: 1;
-  border: 1px solid red;
-  flex-direction: row;
-`;
-
-const KmTextView = styled.View`
-  flex: 1;
-  background-color: green;
-  justify-content: center;
-  align-items: center;
-`;
-
-const RunKmText = styled.Text`
-  font-weight: bold;
-  font-size: 50px;
-`;
-const RunKmTextUnit = styled.Text`
-  font-weight: bold;
-  font-size: 24px;
-`;
-
-const RunMapView = styled.View`
-  flex: 1;
-  background-color: tomato;
-`;
-
-const Mid = styled.View`
-  flex: 1;
-  border: 1px solid;
-  flex-direction: row;
-`;
-
-const Bottom = styled.View`
-  flex: 1;
-  border: 1px solid green;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-`;
-
-const RecordView = styled.View`
-  flex: 1;
-  background-color: green;
-  justify-content: center;
-  align-items: center;
-`;
-
-const RecordText = styled.Text`
-  font-weight: bold;
-  font-size: 40px;
-`;
-
-const RecordTextUnit = styled.Text`
-  font-weight: bold;
-  font-size: 24px;
-`;
-
-const StopButtonText = styled.Text`
-  color: #fff;
-  font-weight: bold;
-  font-size: 24px;
+  width: 80%;
+  height: 48%;
+  border-radius: 10px;
+  overflow: hidden;
 `;

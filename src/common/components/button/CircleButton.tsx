@@ -8,7 +8,7 @@
 // =============================================================================
 // Copyright (C) 2024 JHS All rights reserved.
 // =============================================================================
-import React from 'react';
+import React, {forwardRef} from 'react';
 import styled from '@emotion/native';
 import {TouchableOpacityProps} from 'react-native';
 
@@ -25,26 +25,19 @@ interface ICircleButton extends TouchableOpacityProps {
  * @property { React.ReactNode } children
  * @returns React.JSX.Element
  */
-const CircleButton = ({
-  size = 50,
-  buttonColor = '#5dadd9',
-  children,
-  ...rest
-}: ICircleButton) => {
-  return (
-    <Button
-      {...rest}
-      activeOpacity={0.8}
-      $size={size}
-      $buttonColor={buttonColor}>
-      {children}
-    </Button>
-  );
-};
+const CircleButton = forwardRef<any, ICircleButton>(
+  ({size = 50, buttonColor = '#5dadd9', children, ...rest}, ref) => {
+    return (
+      <Button ref={ref} {...rest} $size={size} $buttonColor={buttonColor}>
+        {children}
+      </Button>
+    );
+  },
+);
 
 export default CircleButton;
 
-const Button = styled.TouchableOpacity<{$size: number; $buttonColor: string}>`
+const Button = styled.Pressable<{$size: number; $buttonColor: string}>`
   width: ${props => `${props.$size}px`};
   height: ${props => `${props.$size}px`};
   background-color: ${props => props.$buttonColor};
