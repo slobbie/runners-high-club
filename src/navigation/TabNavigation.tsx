@@ -18,6 +18,8 @@ import SvgIcon from '@common/components/icon/SvgIcon';
 import Label from '@common/components/label/Label';
 import * as Icons from '@common/components/icon/index';
 import HeaderProfileButton from '@navigation/components/HeaderProfileButton';
+import {useSelector} from 'react-redux';
+import {RootState} from '@redux/store/store';
 
 export type RootTabParamList = {
   home: undefined;
@@ -37,6 +39,7 @@ const TabNavigation = () => {
           size={18}
           name={name}
           stroke={'none'}
+          color="#000"
           fill={'#fff'}
           opacity={opacity}
         />
@@ -55,10 +58,21 @@ const TabNavigation = () => {
     };
   }, []);
 
+  /** 탭바표시 여부 */
+  const isTabShowStatus = useSelector(
+    (state: RootState) => state.navigation.isTabShowStatus,
+  );
+
+  /** 탭 바 표시  */
+  const isShowTabBar = useMemo(() => {
+    return isTabShowStatus ? 'flex' : 'none';
+  }, [isTabShowStatus]);
+
   return (
     <Tab.Navigator
       initialRouteName={pathName.run as keyof RootTabParamList}
       screenOptions={{
+        headerShown: isTabShowStatus,
         tabBarAllowFontScaling: false,
         headerTitleAllowFontScaling: false,
         headerTitleAlign: 'center',
@@ -75,6 +89,7 @@ const TabNavigation = () => {
           borderTopWidth: 0,
           margin: 0,
           padding: 0,
+          display: isShowTabBar,
         },
         headerStyle: {
           backgroundColor: '#fff',

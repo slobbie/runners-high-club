@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android --port 8082",
-    "ios": "react-native run-ios --port 8082",
+    "ios": "react-native --reset-cache run-ios --simulator=iPhone 15 pro --port 8082",
     "lint": "eslint .",
     "start": "react-native start --reset-cache --port 8082",
     "test": "jest",
+    "build:ios": "react-native bundle --entry-file='index.js' --assets-dest='./ios' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
     "postinstall": "patch-package"
   },
   "dependencies": {

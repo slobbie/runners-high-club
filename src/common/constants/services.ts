@@ -9,10 +9,14 @@
 // Copyright (C) 2024 JHS All rights reserved.
 // =============================================================================
 
+import Config from 'react-native-config';
+
+const baseUrl = Config.BASE_URL;
+
 /** 서비스 상수 */
 const services = Object.freeze({
   webViewUri: {
-    login: 'http://localhost:3000/login',
+    login: `${baseUrl}/login`,
   },
   webView: {
     login: 'login',
@@ -20,6 +24,8 @@ const services = Object.freeze({
   },
   slice: {
     login: 'loginSlice',
+    run: 'runSlice',
+    navigation: 'navigation',
   },
   storage: {
     accessToken: 'accessToken',

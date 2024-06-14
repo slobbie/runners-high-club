@@ -16,7 +16,7 @@ import useHealthPermissions from '@hooks/useHealthPermissions';
 import healthPermissions from '@common/constants/healthPermissions';
 
 /**
- *  기록 화면
+ * 기록 화면
  * @returns React.JSX.Element
  */
 const HomeScreen = () => {

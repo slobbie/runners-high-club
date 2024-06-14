@@ -73,6 +73,8 @@ const LoginScreen = () => {
         hideKeyboardAccessoryView={true}
         setBuiltInZoomControls={false}
         originWhitelist={['*']}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
         source={{uri: services.webViewUri.login}}
         onMessage={onLoginMessage}
       />
