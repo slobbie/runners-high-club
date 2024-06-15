@@ -109,6 +109,7 @@ const TabNavigation = () => {
           },
         }}
       />
+      {/* 달리기 탭 */}
       <Tab.Screen
         name={pathName.run as keyof RootTabParamList}
         component={RunScreen}

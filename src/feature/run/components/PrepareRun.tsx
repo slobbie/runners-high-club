@@ -48,7 +48,7 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
     return () => clearTimeout(resetAnimation);
   }, [opacity, runCount]);
 
-  /** 텍스트 애니메이션 스타일 */
+  /** View 애니메이션 스타일 */
   const animatedViewStyle = useAnimatedStyle(() => {
     return {
       width: `${animatedViewWidth.value}%`,
@@ -163,7 +163,7 @@ const CounterView = styled.View`
 const CountText = styled.Text`
   font-size: 100px;
   font-weight: bold;
-  margin-bottom: 40%;
+  margin-bottom: 20%;
   color: #fff;
 `;
 
