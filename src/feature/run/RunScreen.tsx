@@ -30,9 +30,9 @@ import EditKmItem from '@feature/run/components/EditKmItem';
 import RunButtonGroup from '@feature/run/components/RunButtonGroup';
 import PrepareRun from '@feature/run/components/PrepareRun';
 import RunTracker from '@feature/run/components/RunTracker';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '@redux/store/store';
+import {useDispatch} from 'react-redux';
 import navigationSlice from '@navigation/slice/navigation.slice';
+import CompleteRun from '@feature/run/components/CompleteRun';
 
 /**
  * 달리기 측정 화면
@@ -57,6 +57,9 @@ const RunScreen = () => {
 
   /** 앱 백그라운드 상태 감지 */
   const [appState, setAppState] = useState(AppState.currentState);
+
+  /** 달리기 완료 기록 컴포넌트 표시 여부 */
+  const [isShowCompleted, setIsShowCompleted] = useState(false);
 
   /** 현재 위치 상태 */
   const [markerPosition, setMarkerPosition] = useState<{
@@ -94,13 +97,9 @@ const RunScreen = () => {
       height: '100%',
     } as StyleProp<ViewStyle>;
   }, []);
-  /** 탭 네비게이션 표시 여부 */
-  const isTabShowStatus = useSelector(
-    (state: RootState) => state.navigation.isTabShowStatus,
-  );
+
   /** 달리기 시작 핸들러 */
   const startRunHandler = () => {
-    dispatch(navigationSlice.actions.setIsTabShowStatus(!isTabShowStatus));
     if (isRun) {
       setIsRun(() => {
         return false;
@@ -108,8 +107,12 @@ const RunScreen = () => {
       setIsPause(() => {
         return false;
       });
+      setIsShowCompleted(() => {
+        return true;
+      });
     } else {
       prepareRun();
+      dispatch(navigationSlice.actions.setIsTabShowStatus(false));
     }
   };
 
@@ -253,6 +256,14 @@ const RunScreen = () => {
     setIsPause(prev => !prev);
   };
 
+  /** 달리기 완료 컴포넌트 컨트롤러 */
+  const runCompleteController = () => {
+    setIsShowCompleted(() => {
+      return false;
+    });
+    dispatch(navigationSlice.actions.setIsTabShowStatus(true));
+  };
+
   return (
     <>
       {isPrepareRun && <PrepareRun runCount={runCount} />}
@@ -334,6 +345,14 @@ const RunScreen = () => {
           pauseHandler={pauseHandler}
         />
       </View>
+      {isShowCompleted && (
+        <CompleteRun
+          pathPosition={pathPosition}
+          markerPosition={markerPosition}
+          runCompleteController={runCompleteController}
+        />
+      )}
+
       <Bottomsheet snapPoint="90%" ref={bottomSheetModalRef}>
         <EditKmItem
           onPress={closeBottomsheet}
