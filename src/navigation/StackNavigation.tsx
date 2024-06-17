@@ -30,19 +30,18 @@ const StackNavigation = () => {
   const navigationName = screenPath.navigation;
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
         {/* 로그인 스크린 */}
         <Stack.Screen
           name={pathName.login as keyof RootStackParamList}
           component={LoginScreen}
-          options={{headerShown: false}}
         />
         <Stack.Screen
           name={navigationName.tab as keyof RootStackParamList}
           component={TabNavigation}
-          options={() => ({
-            headerShown: false,
-          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

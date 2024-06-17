@@ -7,5 +7,10 @@ export const screenPath = Object.freeze({
     login: 'login',
     home: 'home',
     run: 'run',
+    record: {
+      recordStack: 'recordStack',
+      record: 'record',
+      recordDetail: 'recordDetail',
+    },
   },
 });

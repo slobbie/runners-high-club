@@ -112,7 +112,6 @@ const RunScreen = () => {
       });
     } else {
       prepareRun();
-      dispatch(navigationSlice.actions.setIsTabShowStatus(false));
     }
   };
 

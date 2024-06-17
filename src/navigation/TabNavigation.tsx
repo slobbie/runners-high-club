@@ -11,7 +11,6 @@
 
 import React, {useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HomeScreen from '@feature/home/HomeScreen';
 import {screenPath} from '@common/constants/screenPath';
 import RunScreen from '@feature/run/RunScreen';
 import SvgIcon from '@common/components/icon/SvgIcon';
@@ -20,6 +19,7 @@ import * as Icons from '@common/components/icon/index';
 import HeaderProfileButton from '@navigation/components/HeaderProfileButton';
 import {useSelector} from 'react-redux';
 import {RootState} from '@redux/store/store';
+import RecordStack from '@navigation/stack/record/RecordStack';
 
 export type RootTabParamList = {
   home: undefined;
@@ -96,10 +96,10 @@ const TabNavigation = () => {
         },
         headerLeft: () => <HeaderProfileButton />,
       }}>
-      {/* 홈 탭 */}
+      {/* 기록 탭 */}
       <Tab.Screen
-        name={pathName.home as keyof RootTabParamList}
-        component={HomeScreen}
+        name={pathName.record.recordStack as keyof RootTabParamList}
+        component={RecordStack}
         options={{
           tabBarLabel: ({focused}) => {
             return <Label text="기록" style={tabLabelStyle(focused)} />;
