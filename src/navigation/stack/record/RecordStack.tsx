@@ -28,11 +28,16 @@ const RecordStack = () => {
     <Stack.Navigator
       initialRouteName={pathName.record as keyof RootStackParamList}
       screenOptions={{
-        headerShown: false,
+        headerTitle: '',
       }}>
       <Stack.Screen
         name={pathName.record as keyof RootStackParamList}
         component={RecordScreen}
+        options={({}) => ({
+          headerLeft: () => {
+            return <HeaderButton iconName="profile" />;
+          },
+        })}
       />
       <Stack.Screen
         name={pathName.recordDetail as keyof RootStackParamList}

@@ -99,31 +99,13 @@ const TabNavigation = () => {
         headerStyle: {
           backgroundColor: '#fff',
         },
-        headerLeft: () => {
-          const routeName = getFocusedRouteNameFromRoute(route);
-
-          const isShowProfileArr = Boolean(
-            ['run', 'record'].some(item => item === routeName),
-          );
-
-          const goBack = () => {
-            navigation.goBack();
-          };
-
-          if (navigation.isFocused()) {
-            if (isShowProfileArr) {
-              return <HeaderButton iconName="profile" />;
-            } else {
-              return <HeaderButton onPress={goBack} iconName="arrowPrev" />;
-            }
-          }
-        },
       })}>
       {/* 기록 탭 */}
       <Tab.Screen
         name={pathName.record.recordStack as keyof RootTabParamList}
         component={RecordStack}
         options={{
+          headerShown: false,
           tabBarLabel: ({focused}) => {
             return <Label text="기록" style={tabLabelStyle(focused)} />;
           },
