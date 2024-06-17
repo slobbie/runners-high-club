@@ -18,6 +18,13 @@ import TabNavigation from '@navigation/TabNavigation';
 export type RootStackParamList = {
   login: undefined;
   tab: undefined;
+  run: {
+    run: undefined;
+  };
+  recordStack: {
+    record: undefined;
+    recordDetail: undefined;
+  };
 };
 
 /**

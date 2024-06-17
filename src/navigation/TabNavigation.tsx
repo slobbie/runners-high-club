@@ -16,13 +16,18 @@ import RunScreen from '@feature/run/RunScreen';
 import SvgIcon from '@common/components/icon/SvgIcon';
 import Label from '@common/components/label/Label';
 import * as Icons from '@common/components/icon/index';
-import HeaderProfileButton from '@navigation/components/HeaderProfileButton';
+import HeaderButton from '@navigation/components/HeaderButton';
 import {useSelector} from 'react-redux';
 import {RootState} from '@redux/store/store';
 import RecordStack from '@navigation/stack/record/RecordStack';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 export type RootTabParamList = {
-  home: undefined;
+  run: undefined;
+  recordStack: {
+    record: undefined;
+    recordDetail: undefined;
+  };
 };
 
 /** 탭 네이게이션 */
@@ -71,7 +76,7 @@ const TabNavigation = () => {
   return (
     <Tab.Navigator
       initialRouteName={pathName.run as keyof RootTabParamList}
-      screenOptions={{
+      screenOptions={({route, navigation}) => ({
         headerShown: isTabShowStatus,
         tabBarAllowFontScaling: false,
         headerTitleAllowFontScaling: false,
@@ -94,8 +99,26 @@ const TabNavigation = () => {
         headerStyle: {
           backgroundColor: '#fff',
         },
-        headerLeft: () => <HeaderProfileButton />,
-      }}>
+        headerLeft: () => {
+          const routeName = getFocusedRouteNameFromRoute(route);
+
+          const isShowProfileArr = Boolean(
+            ['run', 'record'].some(item => item === routeName),
+          );
+
+          const goBack = () => {
+            navigation.goBack();
+          };
+
+          if (navigation.isFocused()) {
+            if (isShowProfileArr) {
+              return <HeaderButton iconName="profile" />;
+            } else {
+              return <HeaderButton onPress={goBack} iconName="arrowPrev" />;
+            }
+          }
+        },
+      })}>
       {/* 기록 탭 */}
       <Tab.Screen
         name={pathName.record.recordStack as keyof RootTabParamList}
@@ -113,14 +136,17 @@ const TabNavigation = () => {
       <Tab.Screen
         name={pathName.run as keyof RootTabParamList}
         component={RunScreen}
-        options={{
+        options={() => ({
           tabBarLabel: ({focused}) => {
             return <Label text="러닝" style={tabLabelStyle(focused)} />;
           },
           tabBarIcon: ({focused}) => {
             return tabIcon(focused, 'run');
           },
-        }}
+          headerLeft: () => {
+            return <HeaderButton iconName="profile" />;
+          },
+        })}
       />
     </Tab.Navigator>
   );

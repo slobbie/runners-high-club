@@ -9,9 +9,12 @@
 // Copyright (C) 2024 JHS All rights reserved.
 // =============================================================================
 
+import {RootTabParamList} from '@navigation/TabNavigation';
 import ButtonCommon from '@common/components/button/ButtonCommon';
 import SvgIcon from '@common/components/icon/SvgIcon';
 import styled from '@emotion/native';
+import {useNavigation} from '@react-navigation/native';
+import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
 import {ViewToken} from 'react-native';
 import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
@@ -21,6 +24,11 @@ interface IRecordListItem {
   item: {id: number};
 }
 
+export type RecordScreenProps = StackScreenProps<
+  RootTabParamList['recordStack'],
+  'recordDetail'
+>;
+
 /**
  *  기록 목록 아이템
  * @property { Animated.SharedValue<ViewToken[]> } viewItems onViewableItemsChanged  viewItems 데이터
@@ -28,11 +36,14 @@ interface IRecordListItem {
  * @returns React.JSX.Element
  */
 const RecordListItem = ({viewItems, item}: IRecordListItem) => {
+  const navigation = useNavigation<RecordScreenProps['navigation']>();
+
   const animateViewStyle = useAnimatedStyle(() => {
     /** 현재 랜더링된 리스트 목록 */
     const currentItem = viewItems.value.map(filetItem => filetItem.index);
     /** 리스트 표시 여부 */
     const isVisible = currentItem.some(findItem => findItem === item.id);
+
     return {
       opacity: withTiming(isVisible ? 1 : 0),
       transform: [
@@ -43,6 +54,11 @@ const RecordListItem = ({viewItems, item}: IRecordListItem) => {
     };
   }, []);
 
+  /** 라우트 핸들러 */
+  const routeHandler = () => {
+    navigation.push('recordDetail');
+  };
+
   return (
     <AnimateListItem style={animateViewStyle}>
       <TopView>
@@ -51,7 +67,7 @@ const RecordListItem = ({viewItems, item}: IRecordListItem) => {
           <Title>토요일 러닝</Title>
         </TitleView>
         <IconView>
-          <ArrowButton buttonColor="#fff">
+          <ArrowButton buttonColor="#fff" onPress={routeHandler}>
             <SvgIcon name="arrow" size={24} />
           </ArrowButton>
         </IconView>

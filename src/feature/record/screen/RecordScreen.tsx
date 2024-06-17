@@ -9,7 +9,7 @@
 // Copyright (C) 2024 JHS All rights reserved.
 // =============================================================================
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import styled from '@emotion/native';
 import {
   AppState,
@@ -61,10 +61,10 @@ const RecordScreen = () => {
   /** flatlist 애니메이션 벨류 */
   const viewItems = useSharedValue<ViewToken[]>([]);
 
-  /** 랜더링 아이템 */
-  const renderItem: ListRenderItem<ItemType> = ({item}) => (
-    <RecordListItem item={item} viewItems={viewItems} />
-  );
+  /** flatlist 랜더링 아이템 */
+  const renderItem: ListRenderItem<ItemType> = useMemo(() => {
+    return ({item}) => <RecordListItem item={item} viewItems={viewItems} />;
+  }, [viewItems]);
 
   return (
     <View>
@@ -73,7 +73,7 @@ const RecordScreen = () => {
       </TitleView>
       <FlatList
         data={data}
-        initialNumToRender={4}
+        disableVirtualization={false}
         renderItem={renderItem}
         onViewableItemsChanged={info => {
           const {viewableItems} = info;
