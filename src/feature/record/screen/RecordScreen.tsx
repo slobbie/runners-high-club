@@ -22,10 +22,8 @@ import useHealthPermissions from '@hooks/useHealthPermissions';
 import healthPermissions from '@common/constants/healthPermissions';
 import {useSharedValue} from 'react-native-reanimated';
 import RecordListItem from '@feature/record/components/RecordListItem';
-
-type ItemType = {
-  id: number;
-};
+import {mockupData} from '@feature/record/mockup/recordMockup';
+import {IFlatListItem} from '@feature/record/interface/record.interface';
 
 /**
  * 기록 화면
@@ -53,17 +51,15 @@ const RecordScreen = () => {
     };
   }, [healthPermissionController]);
 
-  //TODO 임시 데이터
-  const data = new Array(50).fill(0).map((_, i) => {
-    return {id: i};
-  });
-
   /** flatlist 애니메이션 벨류 */
   const viewItems = useSharedValue<ViewToken[]>([]);
 
   /** flatlist 랜더링 아이템 */
-  const renderItem: ListRenderItem<ItemType> = useMemo(() => {
-    return ({item}) => <RecordListItem item={item} viewItems={viewItems} />;
+  const renderItem: ListRenderItem<IFlatListItem> = useMemo(() => {
+    const lastIndex = mockupData.length;
+    return ({item}) => (
+      <RecordListItem item={item} viewItems={viewItems} lastIndex={lastIndex} />
+    );
   }, [viewItems]);
 
   return (
@@ -72,7 +68,7 @@ const RecordScreen = () => {
         <TitleText>기록</TitleText>
       </TitleView>
       <FlatList
-        data={data}
+        data={mockupData}
         disableVirtualization={false}
         renderItem={renderItem}
         onViewableItemsChanged={info => {

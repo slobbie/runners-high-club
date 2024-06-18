@@ -20,13 +20,13 @@ import HeaderButton from '@navigation/components/HeaderButton';
 import {useSelector} from 'react-redux';
 import {RootState} from '@redux/store/store';
 import RecordStack from '@navigation/stack/record/RecordStack';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {IFlatListItem} from '@feature/record/interface/record.interface';
 
 export type RootTabParamList = {
   run: undefined;
   recordStack: {
     record: undefined;
-    recordDetail: undefined;
+    recordDetail: IFlatListItem;
   };
 };
 
@@ -76,7 +76,7 @@ const TabNavigation = () => {
   return (
     <Tab.Navigator
       initialRouteName={pathName.run as keyof RootTabParamList}
-      screenOptions={({route, navigation}) => ({
+      screenOptions={({}) => ({
         headerShown: isTabShowStatus,
         tabBarAllowFontScaling: false,
         headerTitleAllowFontScaling: false,

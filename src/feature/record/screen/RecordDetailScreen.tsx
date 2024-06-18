@@ -11,15 +11,22 @@
 
 import styled from '@emotion/native';
 import Geolocation from '@react-native-community/geolocation';
+import {RouteProp} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import NaverMapView, {Marker} from 'react-native-nmap';
+import {IFlatListItem} from '@feature/record/interface/record.interface';
+
+interface IRecordDetailScreen {
+  route: RouteProp<{params: IFlatListItem}, 'params'>;
+}
 
 /**
  * 기록 상세 내용 화면
  * @returns React.JSX.Element
  */
-const RecordDetailScreen = () => {
+const RecordDetailScreen = ({route}: IRecordDetailScreen) => {
+  const recordData = route.params;
   /** 현재 위치 상태 */
   const [markerPosition, setMarkerPosition] = useState<{
     latitude: number;
@@ -54,24 +61,6 @@ const RecordDetailScreen = () => {
     } as StyleProp<ViewStyle>;
   }, []);
 
-  const mockData = [
-    {
-      km: '1',
-      pace: '4:40',
-      elevation: '+10m',
-    },
-    {
-      km: '2',
-      pace: '4:40',
-      elevation: '+10m',
-    },
-    {
-      km: '3',
-      pace: '4:40',
-      elevation: '+10m',
-    },
-  ];
-
   /** 스크롤뷰 컨텐츠 스타일 */
   const contentContainerStyle = useMemo(() => {
     return {
@@ -84,41 +73,41 @@ const RecordDetailScreen = () => {
     <SafeAreaView>
       <Wrapper contentContainerStyle={contentContainerStyle}>
         <TitleView>
-          <TitleDate>2024. 06. 16 22:10</TitleDate>
-          <Title>일요일 러닝</Title>
+          <TitleDate>{recordData.date}</TitleDate>
+          <Title>{recordData.runningTitle}</Title>
         </TitleView>
         <KmWrapper>
           <KmBox>
-            <KmText>3.00</KmText>
+            <KmText>{recordData.totalKm}</KmText>
             <KmTextUnit>Km</KmTextUnit>
           </KmBox>
         </KmWrapper>
         <RecodeView>
           <RecodeBox>
             <RecordView>
-              <RecordText>25:34</RecordText>
+              <RecordText>{recordData.runningTime}</RecordText>
               <RecordTextUnit>시간</RecordTextUnit>
             </RecordView>
             <RecordView>
-              <RecordText>--</RecordText>
+              <RecordText>{recordData.kcal}</RecordText>
               <RecordTextUnit>소모 칼로리</RecordTextUnit>
             </RecordView>
             <RecordView>
-              <RecordText>0:00</RecordText>
+              <RecordText>{recordData.totalAveragePace}</RecordText>
               <RecordTextUnit>페이스</RecordTextUnit>
             </RecordView>
           </RecodeBox>
           <RecodeBox>
             <RecordView>
-              <RecordText>11 m</RecordText>
+              <RecordText>{recordData.elevationGain}</RecordText>
               <RecordTextUnit>고도상승</RecordTextUnit>
             </RecordView>
             <RecordView>
-              <RecordText>148</RecordText>
+              <RecordText>{recordData.averageHeartRate}</RecordText>
               <RecordTextUnit>평균 심박수</RecordTextUnit>
             </RecordView>
             <RecordView>
-              <RecordText>148</RecordText>
+              <RecordText>{recordData.averageCadence}</RecordText>
               <RecordTextUnit>케이던스</RecordTextUnit>
             </RecordView>
           </RecodeBox>
@@ -176,14 +165,14 @@ const RecordDetailScreen = () => {
             </DetailTitleAltitudeView>
           </DetailTitleView>
           <DetailItemView>
-            {mockData.map(item => {
+            {recordData.segmentTime.map(item => {
               return (
                 <DetailItemBox key={item.km}>
                   <DetailItemKmView>
                     <DetailTitleText>{item.km}</DetailTitleText>
                   </DetailItemKmView>
                   <DetailItemPaceView>
-                    <DetailTitleText>{item.pace}</DetailTitleText>
+                    <DetailTitleText>{item.averagePace}</DetailTitleText>
                   </DetailItemPaceView>
                   <DetailItemAltitudeView>
                     <DetailTitleText>{item.elevation}</DetailTitleText>

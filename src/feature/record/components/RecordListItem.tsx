@@ -18,13 +18,15 @@ import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
 import {ViewToken} from 'react-native';
 import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
+import {IFlatListItem} from '@feature/record/interface/record.interface';
 
 interface IRecordListItem {
   viewItems: Animated.SharedValue<ViewToken[]>;
-  item: {id: number};
+  item: IFlatListItem;
+  lastIndex: number;
 }
 
-export type RecordScreenProps = StackScreenProps<
+type RecordScreenProps = StackScreenProps<
   RootTabParamList['recordStack'],
   'recordDetail'
 >;
@@ -35,20 +37,21 @@ export type RecordScreenProps = StackScreenProps<
  * @property { item } item 랜더링 되는 viewItem 데이터
  * @returns React.JSX.Element
  */
-const RecordListItem = ({viewItems, item}: IRecordListItem) => {
+const RecordListItem = ({viewItems, item, lastIndex}: IRecordListItem) => {
   const navigation = useNavigation<RecordScreenProps['navigation']>();
 
   const animateViewStyle = useAnimatedStyle(() => {
     /** 현재 랜더링된 리스트 목록 */
     const currentItem = viewItems.value.map(filetItem => filetItem.index);
     /** 리스트 표시 여부 */
-    const isVisible = currentItem.some(findItem => findItem === item.id);
-
+    const isVisible = currentItem.some(
+      findItem => findItem === item.id || lastIndex === item.id,
+    );
     return {
-      opacity: withTiming(isVisible ? 1 : 0),
+      opacity: withTiming(isVisible ? 1 : 0.6),
       transform: [
         {
-          scale: withTiming(isVisible ? 1 : 0.6),
+          scale: withTiming(isVisible ? 1 : 0.9),
         },
       ],
     };
@@ -56,15 +59,15 @@ const RecordListItem = ({viewItems, item}: IRecordListItem) => {
 
   /** 라우트 핸들러 */
   const routeHandler = () => {
-    navigation.push('recordDetail');
+    navigation.navigate('recordDetail', item);
   };
 
   return (
     <AnimateListItem style={animateViewStyle}>
       <TopView>
         <TitleView>
-          <Date>2024.06.06</Date>
-          <Title>토요일 러닝</Title>
+          <Date>{item.date}</Date>
+          <Title>{item.runningTitle}</Title>
         </TitleView>
         <IconView>
           <ArrowButton buttonColor="#fff" onPress={routeHandler}>
@@ -74,15 +77,15 @@ const RecordListItem = ({viewItems, item}: IRecordListItem) => {
       </TopView>
       <MidView>
         <RecodeBox>
-          <RecordText>0.23</RecordText>
+          <RecordText>{item.totalKm}</RecordText>
           <RecordTextUnit>Km</RecordTextUnit>
         </RecodeBox>
         <RecodeBox>
-          <RecordText>0.23</RecordText>
+          <RecordText>{item.totalAveragePace}</RecordText>
           <RecordTextUnit>평균페이스</RecordTextUnit>
         </RecodeBox>
         <RecodeBox>
-          <RecordText>0.23</RecordText>
+          <RecordText>{item.runningTime}</RecordText>
           <RecordTextUnit>시간</RecordTextUnit>
         </RecodeBox>
       </MidView>
