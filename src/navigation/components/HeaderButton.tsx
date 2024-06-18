@@ -1,7 +1,7 @@
 // =============================================================================
-// File    :  ProfileButton.tsx
+// File    :  HeaderButton.tsx
 // Class   :
-// Purpose :  ProfileButton
+// Purpose :  HeaderButton
 // Date    :  2024.05
 // Author  :  JHS
 // History :
@@ -12,20 +12,26 @@
 import React from 'react';
 import styled from '@emotion/native';
 import SvgIcon from '@common/components/icon/SvgIcon';
+import * as Icons from '@common/components/icon/.';
+import {PressableProps} from 'react-native';
+
+interface IHeaderButton extends PressableProps {
+  iconName: keyof typeof Icons;
+}
 
 /**
- *  Header profile 버튼
+ *  Header 버튼
  * @returns React.JSX.Element
  */
-const HeaderProfileButton = () => {
+const HeaderButton = ({iconName, ...rest}: IHeaderButton) => {
   return (
-    <Button>
-      <SvgIcon name="profile" size={20} fill={'#333'} stroke={'#333'} />
+    <Button {...rest}>
+      <SvgIcon name={iconName} size={20} fill={'#333'} stroke={'#333'} />
     </Button>
   );
 };
 
-export default HeaderProfileButton;
+export default HeaderButton;
 
 const Button = styled.Pressable`
   width: 50px;

@@ -14,10 +14,18 @@ import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '@feature/login/LoginScreen';
 import {screenPath} from '@common/constants/screenPath';
 import TabNavigation from '@navigation/TabNavigation';
+import {IFlatListItem} from '@feature/record/interface/record.interface';
 
 export type RootStackParamList = {
   login: undefined;
   tab: undefined;
+  run: {
+    run: undefined;
+  };
+  recordStack: {
+    record: undefined;
+    recordDetail: IFlatListItem;
+  };
 };
 
 /**
@@ -30,19 +38,18 @@ const StackNavigation = () => {
   const navigationName = screenPath.navigation;
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
         {/* 로그인 스크린 */}
         <Stack.Screen
           name={pathName.login as keyof RootStackParamList}
           component={LoginScreen}
-          options={{headerShown: false}}
         />
         <Stack.Screen
           name={navigationName.tab as keyof RootStackParamList}
           component={TabNavigation}
-          options={() => ({
-            headerShown: false,
-          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

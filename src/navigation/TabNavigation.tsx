@@ -11,18 +11,23 @@
 
 import React, {useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HomeScreen from '@feature/home/HomeScreen';
 import {screenPath} from '@common/constants/screenPath';
 import RunScreen from '@feature/run/RunScreen';
 import SvgIcon from '@common/components/icon/SvgIcon';
 import Label from '@common/components/label/Label';
 import * as Icons from '@common/components/icon/index';
-import HeaderProfileButton from '@navigation/components/HeaderProfileButton';
+import HeaderButton from '@navigation/components/HeaderButton';
 import {useSelector} from 'react-redux';
 import {RootState} from '@redux/store/store';
+import RecordStack from '@navigation/stack/record/RecordStack';
+import {IFlatListItem} from '@feature/record/interface/record.interface';
 
 export type RootTabParamList = {
-  home: undefined;
+  run: undefined;
+  recordStack: {
+    record: undefined;
+    recordDetail: IFlatListItem;
+  };
 };
 
 /** 탭 네이게이션 */
@@ -71,7 +76,7 @@ const TabNavigation = () => {
   return (
     <Tab.Navigator
       initialRouteName={pathName.run as keyof RootTabParamList}
-      screenOptions={{
+      screenOptions={({}) => ({
         headerShown: isTabShowStatus,
         tabBarAllowFontScaling: false,
         headerTitleAllowFontScaling: false,
@@ -94,13 +99,13 @@ const TabNavigation = () => {
         headerStyle: {
           backgroundColor: '#fff',
         },
-        headerLeft: () => <HeaderProfileButton />,
-      }}>
-      {/* 홈 탭 */}
+      })}>
+      {/* 기록 탭 */}
       <Tab.Screen
-        name={pathName.home as keyof RootTabParamList}
-        component={HomeScreen}
+        name={pathName.record.recordStack as keyof RootTabParamList}
+        component={RecordStack}
         options={{
+          headerShown: false,
           tabBarLabel: ({focused}) => {
             return <Label text="기록" style={tabLabelStyle(focused)} />;
           },
@@ -113,14 +118,17 @@ const TabNavigation = () => {
       <Tab.Screen
         name={pathName.run as keyof RootTabParamList}
         component={RunScreen}
-        options={{
+        options={() => ({
           tabBarLabel: ({focused}) => {
             return <Label text="러닝" style={tabLabelStyle(focused)} />;
           },
           tabBarIcon: ({focused}) => {
             return tabIcon(focused, 'run');
           },
-        }}
+          headerLeft: () => {
+            return <HeaderButton iconName="profile" />;
+          },
+        })}
       />
     </Tab.Navigator>
   );
