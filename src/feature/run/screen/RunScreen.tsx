@@ -33,6 +33,7 @@ import RunTracker from '@feature/run/components/RunTracker';
 import {useDispatch} from 'react-redux';
 import navigationSlice from '@navigation/slice/navigation.slice';
 import CompleteRun from '@feature/run/components/CompleteRun';
+import {colors} from '@common/styles/theme';
 
 /**
  * 달리기 측정 화면
@@ -316,7 +317,7 @@ const RunScreen = () => {
                   />
                   <Path
                     width={10}
-                    color={'#40C576'}
+                    color={colors.success}
                     outlineWidth={0}
                     coordinates={pathPosition}
                   />
@@ -328,7 +329,7 @@ const RunScreen = () => {
                     width={12}
                     height={12}
                     pinColor={'green'}
-                    image={require('../../assets/pngIcon/blue-dot.png')}
+                    image={require('../../../assets/pngIcon/blue-dot.png')}
                   />
                 </NaverMapView>
               </CircleView>
@@ -368,7 +369,7 @@ export default RunScreen;
 const View = styled.View`
   flex: 1;
   z-index: 0;
-  background-color: #fefefe;
+  background-color: ${({theme}) => theme.colors.bg_gray100};
   align-items: center;
   justify-content: center;
 `;
@@ -383,7 +384,7 @@ const TitleView = styled.View`
 const TitleText = styled.Text`
   font-weight: 600;
   font-size: 22px;
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   margin-left: 5%;
 `;
 
@@ -406,13 +407,13 @@ const KmBox = styled.View`
 `;
 
 const KmText = styled.Text`
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   font-size: 60px;
   font-weight: bold;
 `;
 
 const KmTextUnit = styled.Text`
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   margin-top: auto;
   margin-bottom: 2%;
   margin-left: 10px;

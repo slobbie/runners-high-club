@@ -2,6 +2,7 @@ import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import TabNavigation from '@navigation/TabNavigation';
 import {screenPath} from '@common/constants/screenPath';
+import {colors} from '@common/styles/theme';
 
 const DrawerNavigation = () => {
   const Drawer = createDrawerNavigator();
@@ -17,11 +18,11 @@ const DrawerNavigation = () => {
           headerShown: false,
           headerTitleAllowFontScaling: false,
           headerTitleStyle: {
-            color: '#fff',
+            color: colors.bg_gray000,
             fontSize: 18,
           },
           headerStyle: {
-            backgroundColor: '#1C2632',
+            backgroundColor: colors.text_gray9,
           },
         })}
       />

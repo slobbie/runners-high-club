@@ -84,7 +84,7 @@ export default RecordScreen;
 
 const View = styled.View`
   flex: 1;
-  background-color: #f4f4f4;
+  background-color: ${({theme}) => theme.colors.bg_gray200};
 `;
 
 const TitleView = styled.View`
@@ -96,6 +96,6 @@ const TitleView = styled.View`
 const TitleText = styled.Text`
   font-weight: 600;
   font-size: 22px;
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   margin-left: 5%;
 `;

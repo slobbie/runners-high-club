@@ -56,7 +56,7 @@ const EditKmBox = styled.View`
 `;
 
 const EditKmText = styled.Text`
-  color: #5c5c5c;
+  color: ${({theme}) => theme.colors.text_gray3};
   font-size: 14px;
   font-weight: 400;
   top: 6%;
@@ -64,7 +64,7 @@ const EditKmText = styled.Text`
 `;
 
 const EditKmTextInput = styled.TextInput`
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   font-size: 60px;
   font-weight: bold;
   border-bottom-width: 2px;

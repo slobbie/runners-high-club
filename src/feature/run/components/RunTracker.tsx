@@ -167,7 +167,7 @@ export default RunTracker;
 
 const RunView = styled.View`
   position: relative;
-  background-color: #fff;
+  background-color: ${({theme}) => theme.colors.bg_gray000};
   width: 100%;
   height: 100%;
 `;

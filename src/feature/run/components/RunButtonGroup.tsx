@@ -23,6 +23,7 @@ import Animated, {
 import {Alert} from 'react-native';
 import {useDispatch} from 'react-redux';
 import navigationSlice from '@navigation/slice/navigation.slice';
+import {colors} from '@/common/styles/theme';
 
 interface IRunButtonGroup {
   startRunHandler: () => void;
@@ -146,7 +147,7 @@ const RunButtonGroup = ({
 
   /** run 버튼 컬러 */
   const runButtonColor = useMemo(() => {
-    return isRun ? '#FFBF5F' : '#5dadd9';
+    return isRun ? colors.warning : colors.primary;
   }, [isRun]);
 
   /** run 버튼 아이콘 사이즈 */
@@ -202,9 +203,9 @@ const RunButtonGroup = ({
               <SvgIcon
                 name={runButtonIconName}
                 size={runButtonIconSize}
-                color={'#fff'}
-                fill={'#fff'}
-                stroke={'#fff'}
+                color={colors.bg_gray000}
+                fill={colors.bg_gray000}
+                stroke={colors.bg_gray000}
               />
             </AnimatedCircleButton>
           </AnimatedLeftView>
@@ -212,7 +213,7 @@ const RunButtonGroup = ({
             <AnimatedCircleButton
               onPress={endRunningHandler}
               size={80}
-              buttonColor="#FF5F5F">
+              buttonColor={colors.danger}>
               <SvgIcon name="stop" size={50} stroke={'#fff'} />
             </AnimatedCircleButton>
           </AnimatedRightView>
