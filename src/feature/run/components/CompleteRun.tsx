@@ -147,7 +147,7 @@ export default CompleteRun;
 const Wrapper = styled.ScrollView`
   position: absolute;
   z-index: 1000;
-  background-color: #fff;
+  background-color: ${({theme}) => theme.colors.bg_gray000};
   width: 100%;
   height: 100%;
   padding: 20px;
@@ -155,20 +155,20 @@ const Wrapper = styled.ScrollView`
 
 const TitleView = styled.View`
   border-bottom-width: 1px;
-  border-color: #ddd;
+  border-color: ${({theme}) => theme.colors.bg_gray250};
   padding-bottom: 10px;
 `;
 
 const TitleDate = styled.Text`
   font-weight: 400;
   font-size: 16px;
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   opacity: 0.6;
 `;
 const Title = styled.Text`
   font-weight: 600;
   font-size: 22px;
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   margin-top: 10px;
 `;
 
@@ -195,13 +195,13 @@ const KmBox = styled.View`
 `;
 
 const KmText = styled.Text`
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   font-size: 60px;
   font-weight: bold;
 `;
 
 const KmTextUnit = styled.Text`
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   margin-top: auto;
   margin-bottom: 2%;
   margin-left: 10px;
@@ -238,7 +238,7 @@ const BottomButtonView = styled.View`
 `;
 
 const ButtonLabel = styled.Text`
-  color: #fff;
+  color: ${({theme}) => theme.colors.bg_gray000};
   font-weight: bold;
   font-size: 16px;
 `;

@@ -12,7 +12,7 @@
 import React, {useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {screenPath} from '@common/constants/screenPath';
-import RunScreen from '@feature/run/RunScreen';
+import RunScreen from '@/feature/run/screen/RunScreen';
 import SvgIcon from '@common/components/icon/SvgIcon';
 import Label from '@common/components/label/Label';
 import * as Icons from '@common/components/icon/index';
@@ -21,6 +21,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from '@redux/store/store';
 import RecordStack from '@navigation/stack/record/RecordStack';
 import {IFlatListItem} from '@feature/record/interface/record.interface';
+import {colors} from '@common/styles/theme';
 
 export type RootTabParamList = {
   run: undefined;
@@ -44,8 +45,8 @@ const TabNavigation = () => {
           size={18}
           name={name}
           stroke={'none'}
-          color="#000"
-          fill={'#fff'}
+          color={colors.text_000}
+          fill={colors.bg_gray000}
           opacity={opacity}
         />
       );
@@ -56,7 +57,7 @@ const TabNavigation = () => {
   const tabLabelStyle = useMemo(() => {
     return (focused: boolean) => {
       return {
-        color: '#333',
+        color: colors.text_333,
         opacity: focused ? 1 : 0.5,
         fontSize: 11,
       };
@@ -86,18 +87,18 @@ const TabNavigation = () => {
           fontSize: 18,
           fontWeight: '400',
           lineHeight: 22,
-          color: '#fff',
+          color: colors.bg_gray000,
         },
         tabBarStyle: {
           height: 40,
-          backgroundColor: '#fff',
+          backgroundColor: colors.bg_gray000,
           borderTopWidth: 0,
           margin: 0,
           padding: 0,
           display: isShowTabBar,
         },
         headerStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: colors.bg_gray000,
         },
       })}>
       {/* 기록 탭 */}

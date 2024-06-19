@@ -19,6 +19,7 @@ import React from 'react';
 import {ViewToken} from 'react-native';
 import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
 import {IFlatListItem} from '@feature/record/interface/record.interface';
+import {colors} from '@common/styles/theme';
 
 interface IRecordListItem {
   viewItems: Animated.SharedValue<ViewToken[]>;
@@ -70,7 +71,7 @@ const RecordListItem = ({viewItems, item, lastIndex}: IRecordListItem) => {
           <Title>{item.runningTitle}</Title>
         </TitleView>
         <IconView>
-          <ArrowButton buttonColor="#fff" onPress={routeHandler}>
+          <ArrowButton buttonColor={colors.bg_gray000} onPress={routeHandler}>
             <SvgIcon name="arrow" size={24} />
           </ArrowButton>
         </IconView>
@@ -98,7 +99,7 @@ export default React.memo(RecordListItem);
 const FlatListItem = styled.View`
   width: 90%;
   height: 120px;
-  background-color: #fff;
+  background-color: ${({theme}) => theme.colors.bg_gray000};
   margin-top: 20px;
   border-radius: 10px;
   align-self: center;
@@ -118,13 +119,13 @@ const TopView = styled.View`
 const TitleView = styled.View``;
 
 const Date = styled.Text`
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   font-weight: bold;
   font-size: 14px;
 `;
 
 const Title = styled.Text`
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   font-weight: 300;
   font-size: 14px;
   margin-top: 2px;
@@ -147,13 +148,13 @@ const RecodeBox = styled.View``;
 const RecordText = styled.Text`
   font-weight: bold;
   font-size: 16px;
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
 `;
 
 const RecordTextUnit = styled.Text`
   font-weight: 300;
   font-size: 14px;
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   margin-top: 2px;
 `;
 

@@ -192,29 +192,29 @@ export default RecordDetailScreen;
 
 const SafeAreaView = styled.SafeAreaView`
   flex-grow: 1;
-  background-color: #fff;
+  background-color: ${({theme}) => theme.colors.bg_gray000};
 `;
 
 const Wrapper = styled.ScrollView`
-  background-color: #fff;
+  background-color: ${({theme}) => theme.colors.bg_gray000};
 `;
 
 const TitleView = styled.View`
   border-bottom-width: 1px;
-  border-color: #ddd;
+  border-color: ${({theme}) => theme.colors.bg_gray250};
   padding-bottom: 10px;
 `;
 
 const TitleDate = styled.Text`
   font-weight: 400;
   font-size: 16px;
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   opacity: 0.6;
 `;
 const Title = styled.Text`
   font-weight: 600;
   font-size: 22px;
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   margin-top: 10px;
 `;
 
@@ -241,13 +241,13 @@ const KmBox = styled.View`
 `;
 
 const KmText = styled.Text`
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   font-size: 60px;
   font-weight: bold;
 `;
 
 const KmTextUnit = styled.Text`
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   margin-top: auto;
   margin-bottom: 2%;
   margin-left: 10px;
@@ -298,7 +298,7 @@ const DetailTitleKmView = styled.View`
 `;
 
 const DetailTitleKmText = styled.Text`
-  color: #858585;
+  color: ${({theme}) => theme.colors.text_gray2};
   font-weight: 600;
   font-size: 14px;
 `;
@@ -338,7 +338,7 @@ const DetailItemAltitudeView = styled.View`
 `;
 
 const DetailTitleText = styled.Text`
-  color: #333;
+  color: ${({theme}) => theme.colors.text_333};
   font-weight: 600;
   font-size: 16px;
 `;

@@ -155,7 +155,7 @@ const Wrapper = styled.View`
 const CounterView = styled.View`
   position: absolute;
   z-index: 2000;
-  background-color: #ffbf5f;
+  background-color: ${({theme}) => theme.colors.warning};
   justify-content: center;
   align-items: center;
 `;
@@ -164,7 +164,7 @@ const CountText = styled.Text`
   font-size: 100px;
   font-weight: bold;
   margin-bottom: 20%;
-  color: #fff;
+  color: ${({theme}) => theme.colors.bg_gray000};
 `;
 
 const AnimatedWrapper = Animated.createAnimatedComponent(Wrapper);
