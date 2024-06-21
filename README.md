@@ -1,6 +1,6 @@
 ## runner's high club app
 
-![화면 기록 2024-06-21 오후 4 19 13](https://github.com/Runner-s-High-club/app/assets/86298255/17a209c2-2f4b-4619-b931-500a914cb152)
+![화면 기록 2024-06-21 오후 4](https://github.com/Runner-s-High-club/app/assets/86298255/d24c2c35-27ee-4ae8-936e-2dbafb66ff51)
 
 ## 사용 스택
 
