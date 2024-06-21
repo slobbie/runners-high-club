@@ -1,6 +1,6 @@
 ## runner's high club app
 
-![화면 기록 2024-06-21 오후 4](https://github.com/Runner-s-High-club/app/assets/86298255/d24c2c35-27ee-4ae8-936e-2dbafb66ff51)
+![2024-06-214 48 10-ezgif com-video-to-gif-converter](https://github.com/Runner-s-High-club/app/assets/86298255/f35af105-b8dc-4f99-87b0-83f5df98cecb)
 
 ## 사용 스택
 
