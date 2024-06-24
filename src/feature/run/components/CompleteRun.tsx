@@ -39,6 +39,7 @@ const CompleteRun = ({pathPosition, runCompleteController}: ICompleteRun) => {
   const distanceRunningTime = useSelector(
     (state: RootState) => state.run.distanceRunningTime,
   );
+  /** 달리기 페이스 */
   const distanceRunningPace = useSelector(
     (state: RootState) => state.run.distanceRunningPace,
   );

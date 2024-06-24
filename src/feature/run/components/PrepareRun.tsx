@@ -32,7 +32,12 @@ interface IPrepareRun {
  * @returns React.JSX.Element
  */
 const PrepareRun = ({runCount}: IPrepareRun) => {
+  const dispatch = useDispatch();
+
   const opacity = useSharedValue(0);
+
+  /** 카운터 종료후 출발 텍스트 노출 여부 */
+  const [isCompleteText, setIsSetCompleteText] = useState(true);
 
   const animatedViewWidth = useSharedValue(30);
   const animatedViewHeight = useSharedValue(15);
@@ -74,6 +79,7 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
       opacity: animatedViewOpacity.value,
     };
   });
+
   /** 카운터 시작시 view 애니메이션 */
   useEffect(() => {
     animatedViewWidth.value = withTiming(animatedViewWidth.value + 70, {
@@ -95,18 +101,14 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
     animatedViewWidth,
   ]);
 
-  const [isText, setIsText] = useState(true);
-
-  const dispatch = useDispatch();
-
   /** 카운터 종료 시 view 애니메이션 */
   useEffect(() => {
     if (runCount === 0) {
-      setIsText(() => {
+      setIsSetCompleteText(() => {
         return true;
       });
       setTimeout(() => {
-        setIsText(() => {
+        setIsSetCompleteText(() => {
           return false;
         });
         /** 노치바 색상 변경 */
@@ -142,7 +144,7 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
             {runCount}
           </AnimatedCountText>
         ) : (
-          isText && <AnimatedCountText>출발 !</AnimatedCountText>
+          isCompleteText && <AnimatedCountText>출발 !</AnimatedCountText>
         )}
       </AnimatedView>
     </AnimatedWrapper>

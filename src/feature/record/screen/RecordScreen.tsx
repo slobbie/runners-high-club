@@ -33,6 +33,9 @@ import {IRunRecord} from '@api/run/interface/run.interface';
 const RecordScreen = () => {
   const healthPermissionController = useHealthPermissions();
 
+  /** flatlist 애니메이션 벨류 */
+  const viewItems = useSharedValue<ViewToken[]>([]);
+
   /** 건강 데이터 권한 요청 이펙트 */
   useEffect(() => {
     healthPermissionController.initHealthPermission(healthPermissions);
@@ -51,9 +54,6 @@ const RecordScreen = () => {
       listener.remove();
     };
   }, [healthPermissionController]);
-
-  /** flatlist 애니메이션 벨류 */
-  const viewItems = useSharedValue<ViewToken[]>([]);
 
   /** flatlist 랜더링 아이템 */
   const renderItem: ListRenderItem<IRunRecord> = useMemo(() => {
