@@ -15,10 +15,10 @@ import {RouteProp} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import NaverMapView, {Marker} from 'react-native-nmap';
-import {IFlatListItem} from '@feature/record/interface/record.interface';
+import {IRunRecord} from '@api/run/interface/run.interface';
 
 interface IRecordDetailScreen {
-  route: RouteProp<{params: IFlatListItem}, 'params'>;
+  route: RouteProp<{params: IRunRecord}, 'params'>;
 }
 
 /**
@@ -27,6 +27,23 @@ interface IRecordDetailScreen {
  */
 const RecordDetailScreen = ({route}: IRecordDetailScreen) => {
   const recordData = route.params;
+
+  /** 네이버 맵뷰 스타일 */
+  const naverMapViewStyle = useMemo(() => {
+    return {
+      width: '100%',
+      height: '100%',
+    } as StyleProp<ViewStyle>;
+  }, []);
+
+  /** 스크롤뷰 컨텐츠 스타일 */
+  const contentContainerStyle = useMemo(() => {
+    return {
+      padding: 20,
+      flexGrow: 1,
+    };
+  }, []);
+
   /** 현재 위치 상태 */
   const [markerPosition, setMarkerPosition] = useState<{
     latitude: number;
@@ -51,22 +68,6 @@ const RecordDetailScreen = ({route}: IRecordDetailScreen) => {
         timeout: 20000,
       },
     );
-  }, []);
-
-  /** 네이버 맵뷰 스타일 */
-  const naverMapViewStyle = useMemo(() => {
-    return {
-      width: '100%',
-      height: '100%',
-    } as StyleProp<ViewStyle>;
-  }, []);
-
-  /** 스크롤뷰 컨텐츠 스타일 */
-  const contentContainerStyle = useMemo(() => {
-    return {
-      padding: 20,
-      flexGrow: 1,
-    };
   }, []);
 
   return (

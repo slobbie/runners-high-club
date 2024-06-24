@@ -34,7 +34,7 @@ import {useDispatch} from 'react-redux';
 import navigationSlice from '@navigation/slice/navigation.slice';
 import CompleteRun from '@feature/run/components/CompleteRun';
 import {colors} from '@common/styles/theme';
-import commonSlice from '@/common/slice/common.slice';
+import commonSlice from '@common/slice/common.slice';
 
 /**
  * 달리기 측정 화면
@@ -91,6 +91,15 @@ const RunScreen = () => {
 
   /** 위치 권한 여부 */
   const [isPermissionsState, setIsPermissionsState] = useState(false);
+
+  /** 일시정지 상태 */
+  const [isPause, setIsPause] = useState(false);
+
+  /** 준비 단계 표시 여부 */
+  const [isPrepareRun, setIsPrepareRun] = useState(false);
+
+  /** 준비 단계 카운터 */
+  const [runCount, setRunCount] = useState(3);
 
   /** 네이버 맵뷰 스타일 */
   const naverMapViewStyle = useMemo(() => {
@@ -193,9 +202,6 @@ const RunScreen = () => {
     AppState.addEventListener('change', handleAppStateChange);
   }, [appState, isPermissionsState, location, permissions]);
 
-  /** 일시정지 상태 */
-  const [isPause, setIsPause] = useState(false);
-
   /** 임시 주행 데이터 */
   useEffect(() => {
     if (isRun && !isPause) {
@@ -223,12 +229,6 @@ const RunScreen = () => {
       };
     }
   }, [isPause, isRun]);
-
-  /** 준비 단계 표시 여부 */
-  const [isPrepareRun, setIsPrepareRun] = useState(false);
-
-  /** 준비 단계 카운터 */
-  const [runCount, setRunCount] = useState(3);
 
   /** 달리기 준비 단계  */
   const prepareRun = () => {
