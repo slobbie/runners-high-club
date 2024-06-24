@@ -10,7 +10,9 @@
       "@feature/*": ["src/feature/*"],
       "@common/*": ["src/common/*"],
       "@navigation/*": ["src/navigation/*"],
-      "@redux/*": ["./src/redux/*"]
+      "@redux/*": ["./src/redux/*"],
+      "@utils/*": ["./src/common/utils/*"],
+      "@api/*": ["./src/api/*"]
     }
   }
 }

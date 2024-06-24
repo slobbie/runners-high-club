@@ -6,6 +6,8 @@
   <string>x1d5gfgpqu</string>
 	<key>BASE_URL</key>
 	<string>${BASE_URL}</string>
+	<key>HOST_URL</key>
+	<string>${HOST_URL}</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>건강 데이터를 연동을 위한 권한이 필요합니다.</string>
 	<key>NSHealthUpdateUsageDescription</key>
@@ -61,18 +63,21 @@
 		<true/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
-		<!-- <key>NSExceptionDomains</key> -->
-		<!-- <dict>
-			<key>http://192.168.0.4:3000</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<true/>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
-		</dict> -->
+		<key>NSExceptionDomains</key>
+    <dict>
+        <key>localhost</key>
+        <dict>
+            <key>NSExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+        </dict>
+			  <key>3.38.21.254</key>
+        <dict>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+            <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+        </dict>
+    </dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
