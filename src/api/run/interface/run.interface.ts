@@ -1,16 +1,16 @@
 // =============================================================================
-// File    : record.interface.ts
+// File    : run.interface.ts
 // Class   :
-// Purpose : record.interface.ts
+// Purpose : run.interface.ts 인터페이스
 // Date    : 2024.06
-// Author  : JHS
+// Author  :  JHS
 // History :
 // =============================================================================
 // Copyright (C) 2024 JHS All rights reserved.
 // =============================================================================
 
 /** 러닝 기록 리스트 아이템  타입 */
-export interface IFlatListItem {
+export interface IRunRecord {
   id: number;
   // 날짜
   date: string;
@@ -25,7 +25,7 @@ export interface IFlatListItem {
   // 러닝 시간
   runningTime: string;
   // 칼로리
-  kcal: string;
+  kcal?: string;
   // 평균 케이던스
   averageCadence: number;
   // 고도 상승
@@ -33,9 +33,9 @@ export interface IFlatListItem {
   // 고도 하강
   elevationLoss: number;
   // 평균 심박수
-  averageHeartRate: string;
+  averageHeartRate?: string;
   // 최대 심박수
-  maximumHeartRate: string;
+  maximumHeartRate?: string;
   // 구간
   segmentTime: {
     km: string;

@@ -20,14 +20,14 @@ import HeaderButton from '@navigation/components/HeaderButton';
 import {useSelector} from 'react-redux';
 import {RootState} from '@redux/store/store';
 import RecordStack from '@navigation/stack/record/RecordStack';
-import {IFlatListItem} from '@feature/record/interface/record.interface';
 import {colors} from '@common/styles/theme';
+import {IRunRecord} from '@api/run/interface/run.interface';
 
 export type RootTabParamList = {
   run: undefined;
   recordStack: {
     record: undefined;
-    recordDetail: IFlatListItem;
+    recordDetail: IRunRecord;
   };
 };
 

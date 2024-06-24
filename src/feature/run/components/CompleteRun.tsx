@@ -9,11 +9,13 @@
 // Copyright (C) 2024 JHS All rights reserved.
 // =============================================================================
 
-import ButtonCommon from '@/common/components/button/ButtonCommon';
+import ButtonCommon from '@common/components/button/ButtonCommon';
+import {RootState} from '@redux/store/store';
 import styled from '@emotion/native';
 import React, {useMemo} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import NaverMapView, {Marker, Path} from 'react-native-nmap';
+import {useSelector} from 'react-redux';
 
 interface ICompleteRun {
   pathPosition: {
@@ -32,11 +34,14 @@ interface ICompleteRun {
  * @property { string } propsName 설명
  * @returns React.JSX.Element
  */
-const CompleteRun = ({
-  pathPosition,
-  markerPosition,
-  runCompleteController,
-}: ICompleteRun) => {
+const CompleteRun = ({pathPosition, runCompleteController}: ICompleteRun) => {
+  const distanceRun = useSelector((state: RootState) => state.run.distanceRun);
+  const distanceRunningTime = useSelector(
+    (state: RootState) => state.run.distanceRunningTime,
+  );
+  const distanceRunningPace = useSelector(
+    (state: RootState) => state.run.distanceRunningPace,
+  );
   /** 네이버 맵뷰 스타일 */
   const naverMapViewStyle = useMemo(() => {
     return {
@@ -48,19 +53,19 @@ const CompleteRun = ({
   return (
     <Wrapper>
       <TitleView>
-        <TitleDate>2024. 06. 16 22:10</TitleDate>
-        <Title>일요일 러닝</Title>
+        <TitleDate>2024. 06. 21</TitleDate>
+        <Title>러닝</Title>
       </TitleView>
       <KmWrapper>
         <KmBox>
-          <KmText>3.00</KmText>
+          <KmText>{distanceRun}</KmText>
           <KmTextUnit>Km</KmTextUnit>
         </KmBox>
       </KmWrapper>
       <RecodeView>
         <RecodeBox>
           <RecordView>
-            <RecordText>25:34</RecordText>
+            <RecordText>{distanceRunningTime}</RecordText>
             <RecordTextUnit>시간</RecordTextUnit>
           </RecordView>
           <RecordView>
@@ -68,17 +73,17 @@ const CompleteRun = ({
             <RecordTextUnit>BPM</RecordTextUnit>
           </RecordView>
           <RecordView>
-            <RecordText>0:00</RecordText>
+            <RecordText>{distanceRunningPace}</RecordText>
             <RecordTextUnit>페이스</RecordTextUnit>
           </RecordView>
         </RecodeBox>
         <RecodeBox>
           <RecordView>
-            <RecordText>11 m</RecordText>
+            <RecordText>0 m</RecordText>
             <RecordTextUnit>고도상승</RecordTextUnit>
           </RecordView>
           <RecordView>
-            <RecordText>148</RecordText>
+            <RecordText>--</RecordText>
             <RecordTextUnit>평균 심박수</RecordTextUnit>
           </RecordView>
           <RecordView>
@@ -121,7 +126,7 @@ const CompleteRun = ({
             outlineWidth={0}
             coordinates={pathPosition}
           />
-          <Marker
+          {/* <Marker
             coordinate={{
               latitude: markerPosition.latitude,
               longitude: markerPosition.longitude,
@@ -130,7 +135,7 @@ const CompleteRun = ({
             height={12}
             pinColor={'green'}
             image={require('../../../assets/pngIcon/blue-dot.png')}
-          />
+          /> */}
         </NaverMapView>
       </LayerView>
       <BottomButtonView>

@@ -23,7 +23,8 @@ import healthPermissions from '@common/constants/healthPermissions';
 import {useSharedValue} from 'react-native-reanimated';
 import RecordListItem from '@feature/record/components/RecordListItem';
 import {mockupData} from '@feature/record/mockup/recordMockup';
-import {IFlatListItem} from '@feature/record/interface/record.interface';
+
+import {IRunRecord} from '@api/run/interface/run.interface';
 
 /**
  * 기록 화면
@@ -55,7 +56,7 @@ const RecordScreen = () => {
   const viewItems = useSharedValue<ViewToken[]>([]);
 
   /** flatlist 랜더링 아이템 */
-  const renderItem: ListRenderItem<IFlatListItem> = useMemo(() => {
+  const renderItem: ListRenderItem<IRunRecord> = useMemo(() => {
     const lastIndex = mockupData.length;
     return ({item}) => (
       <RecordListItem item={item} viewItems={viewItems} lastIndex={lastIndex} />

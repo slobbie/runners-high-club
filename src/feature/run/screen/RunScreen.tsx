@@ -11,7 +11,7 @@
 
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import styled from '@emotion/native';
-import NaverMapView, {Marker, Path} from 'react-native-nmap';
+import NaverMapView, {Marker} from 'react-native-nmap';
 import useDevicePermissions, {TPermission} from '@hooks/useDevicePermissions';
 import Geolocation from '@react-native-community/geolocation';
 import services from '@common/constants/services';
@@ -34,6 +34,7 @@ import {useDispatch} from 'react-redux';
 import navigationSlice from '@navigation/slice/navigation.slice';
 import CompleteRun from '@feature/run/components/CompleteRun';
 import {colors} from '@common/styles/theme';
+import commonSlice from '@/common/slice/common.slice';
 
 /**
  * 달리기 측정 화면
@@ -171,7 +172,7 @@ const RunScreen = () => {
         },
       );
     }
-  }, [isPermissionsState]);
+  }, [isPermissionsState, isShowCompleted]);
 
   /** 백그라운드 에서 다시 앱으로 돌아왔을 시 실행 */
   useEffect(() => {
@@ -225,11 +226,13 @@ const RunScreen = () => {
 
   /** 준비 단계 표시 여부 */
   const [isPrepareRun, setIsPrepareRun] = useState(false);
+
   /** 준비 단계 카운터 */
   const [runCount, setRunCount] = useState(3);
 
   /** 달리기 준비 단계  */
   const prepareRun = () => {
+    dispatch(commonSlice.actions.setSafeAreaViewBg(colors.warning));
     setIsPrepareRun(true);
   };
 
@@ -242,6 +245,7 @@ const RunScreen = () => {
       }, 1000);
     } else if (runCount === 0) {
       setTimeout(() => {
+        dispatch(commonSlice.actions.setSafeAreaViewBg(colors.bg_gray000));
         setRunCount(3);
         setIsPrepareRun(false);
         setIsRun(prev => !prev);
@@ -249,7 +253,7 @@ const RunScreen = () => {
     }
 
     return () => clearInterval(interval);
-  }, [isPrepareRun, isRun, runCount]);
+  }, [dispatch, isPrepareRun, isRun, runCount]);
 
   /** 일시정지 핸들러 */
   const pauseHandler = () => {
@@ -261,6 +265,17 @@ const RunScreen = () => {
     setIsShowCompleted(() => {
       return false;
     });
+    /** 러닝 종료시 거리 초기화 */
+    setMarkerPosition({
+      latitude: 0,
+      longitude: 0,
+    });
+    setPathPosition([
+      {
+        latitude: 0,
+        longitude: 0,
+      },
+    ]);
     dispatch(navigationSlice.actions.setIsTabShowStatus(true));
   };
 
@@ -304,23 +319,6 @@ const RunScreen = () => {
                         pathPosition[pathPosition.length - 1].longitude) /
                       2,
                   }}>
-                  {/* 시작점 */}
-                  <Marker
-                    coordinate={{
-                      latitude: pathPosition[0].latitude,
-                      longitude: pathPosition[0].longitude,
-                    }}
-                    width={1}
-                    height={1}
-                    pinColor="transparent"
-                    anchor={{x: 0.5, y: 0.5}}
-                  />
-                  <Path
-                    width={10}
-                    color={colors.success}
-                    outlineWidth={0}
-                    coordinates={pathPosition}
-                  />
                   <Marker
                     coordinate={{
                       latitude: markerPosition.latitude,
