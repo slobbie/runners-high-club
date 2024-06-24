@@ -14,7 +14,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '@feature/login/LoginScreen';
 import {screenPath} from '@common/constants/screenPath';
 import TabNavigation from '@navigation/TabNavigation';
-import {IFlatListItem} from '@feature/record/interface/record.interface';
+import {IRunRecord} from '@api/run/interface/run.interface';
 
 export type RootStackParamList = {
   login: undefined;
@@ -24,7 +24,7 @@ export type RootStackParamList = {
   };
   recordStack: {
     record: undefined;
-    recordDetail: IFlatListItem;
+    recordDetail: IRunRecord;
   };
 };
 

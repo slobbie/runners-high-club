@@ -9,6 +9,8 @@
 // Copyright (C) 2024 JHS All rights reserved.
 // =============================================================================
 
+import commonSlice from '@common/slice/common.slice';
+import {colors} from '@common/styles/theme';
 import styled from '@emotion/native';
 import React, {useEffect, useState} from 'react';
 import Animated, {
@@ -17,6 +19,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
+import {useDispatch} from 'react-redux';
 
 /** 달리 준비 컴포넌트 인터페이스 */
 interface IPrepareRun {
@@ -94,6 +97,8 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
 
   const [isText, setIsText] = useState(true);
 
+  const dispatch = useDispatch();
+
   /** 카운터 종료 시 view 애니메이션 */
   useEffect(() => {
     if (runCount === 0) {
@@ -104,6 +109,8 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
         setIsText(() => {
           return false;
         });
+        /** 노치바 색상 변경 */
+        dispatch(commonSlice.actions.setSafeAreaViewBg(colors.bg_gray000));
         animatedViewTop.value = withTiming(animatedViewTop.value + 78, {
           duration: 150,
         });
@@ -123,6 +130,7 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
     animatedViewRadius,
     animatedViewTop,
     animatedViewWidth,
+    dispatch,
     runCount,
   ]);
 

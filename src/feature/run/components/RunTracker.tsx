@@ -10,7 +10,9 @@
 // =============================================================================
 
 import styled from '@emotion/native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import runSlice from '@feature/run/slice/run.slice';
 
 interface IRunTracker {
   pathPosition: {
@@ -37,7 +39,13 @@ const RunTracker = ({
   isRun,
   isPause,
 }: IRunTracker) => {
+  const dispatch = useDispatch();
   const [timer, setTimer] = useState(0);
+  const paceRef = useRef('0:00');
+  const runDataRef = useRef({
+    timer: 0,
+    kmText: '',
+  });
 
   // 시간을 포맷팅하는 함수
   const formatTime = (seconds: number) => {
@@ -58,15 +66,17 @@ const RunTracker = ({
   useEffect(() => {
     if (isRun && !isPause) {
       const updateTime = () => {
+        runDataRef.current.timer = timer;
         setTimer(prevTime => prevTime + 1);
         re = setTimeout(updateTime, 1000);
       };
       let re = setTimeout(updateTime, 1000);
       return () => {
+        dispatch(runSlice.actions.setDistanceRunningTime(formatTime(timer)));
         clearTimeout(re);
       };
     }
-  }, [isPause, isRun]);
+  }, [dispatch, isPause, isRun, timer]);
 
   // 두 지점 간의 거리를 계산하는 함수
   const calculateDistance = useCallback(
@@ -126,16 +136,79 @@ const RunTracker = ({
         markerPosition.latitude,
         markerPosition.longitude,
       );
-      setKmText(formatDistance(Math.round((km + Number.EPSILON) * 100) / 100));
+      /** 달린 거리 계산  */
+      const convertKm = formatDistance(
+        Math.round((km + Number.EPSILON) * 100) / 100,
+      );
+      setKmText(convertKm);
+      runDataRef.current.kmText = convertKm;
+      dispatch(runSlice.actions.setDistanceRun(convertKm));
     }
   }, [
     calculateDistance,
+    dispatch,
     formatDistance,
     isPause,
     isRun,
     markerPosition,
     pathPosition,
   ]);
+
+  /** 러닝 종료시 초기화 */
+  useEffect(() => {
+    return () => {
+      if (!isRun) {
+        setTimer(0);
+        setKmText('0.00');
+      }
+    };
+  }, [isRun]);
+
+  /**
+   * 현재 속도(시간당 이동 거리)를 기반으로 앞으로 1km를 달리는데 걸리는 시간을 계산하는 함수
+   * @param distanceTraveledRatio - 현재까지 이동한 거리 (0에서 1 사이의 비율)
+   * @param timeElapsedInSeconds - 현재까지 경과한 시간 (초 단위)
+   * @returns 앞으로 1km를 달리는데 걸리는 시간 (분 단위)
+   */
+  const calculateTimeToRun1kmPace = (
+    distanceTraveledRatio: number,
+    timeElapsedInSeconds: number,
+  ): string => {
+    const timeElapsedInMinutes = timeElapsedInSeconds / 60; // 시간을 분 단위로 변환
+
+    // 현재까지의 평균 페이스 계산 (분/km)
+    const averagePaceInMinutes = timeElapsedInMinutes / distanceTraveledRatio;
+
+    // 분과 초로 분리
+    const minutes = Math.floor(averagePaceInMinutes);
+    const seconds = Math.round((averagePaceInMinutes - minutes) * 60);
+
+    // 두 자리 숫자로 포맷팅
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(seconds).padStart(2, '0');
+
+    return `${formattedMinutes}:${formattedSeconds}`; // mm:ss 형식으로 반환
+  };
+
+  /** 페이스 업데이트 */
+  useEffect(() => {
+    let intervalId: any;
+    if (isRun && !isPause) {
+      intervalId = setInterval(() => {
+        const pace = calculateTimeToRun1kmPace(
+          Number(runDataRef.current.kmText),
+          runDataRef.current.timer,
+        );
+        dispatch(runSlice.actions.setDistanceRunningPace(pace));
+        paceRef.current = pace;
+      }, 2000);
+      return () => {
+        clearTimeout(intervalId);
+      };
+    } else {
+      clearInterval(intervalId);
+    }
+  }, [dispatch, isPause, isRun]);
 
   return (
     <RunView>
@@ -155,7 +228,7 @@ const RunTracker = ({
           <RecordTextUnit>BPM</RecordTextUnit>
         </RecordView>
         <RecordView>
-          <RecordText>0:00</RecordText>
+          <RecordText>{paceRef.current}</RecordText>
           <RecordTextUnit>페이스</RecordTextUnit>
         </RecordView>
       </Mid>

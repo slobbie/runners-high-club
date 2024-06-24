@@ -18,12 +18,12 @@ import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
 import {ViewToken} from 'react-native';
 import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
-import {IFlatListItem} from '@feature/record/interface/record.interface';
 import {colors} from '@common/styles/theme';
+import {IRunRecord} from '@api/run/interface/run.interface';
 
 interface IRecordListItem {
   viewItems: Animated.SharedValue<ViewToken[]>;
-  item: IFlatListItem;
+  item: IRunRecord;
   lastIndex: number;
 }
 
