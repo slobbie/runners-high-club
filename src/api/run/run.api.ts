@@ -1,16 +1,6 @@
-// =============================================================================
-// File    : record.api.ts
-// Class   :
-// Purpose : record.api.ts
-// Date    : 2024.06
-// Author  : JHS
-// History :
-// =============================================================================
-// Copyright (C) 2024 JHS All rights reserved.
-// =============================================================================
+import services from '@shared/constants/services';
+import axiosHelper from '@shared/utils/axiosHelper';
 
-import services from '@/common/constants/services';
-import axiosHelper from '@common/utils/axiosHelper';
 import {IRunRecord} from '@api/run/interface/run.interface';
 
 /**

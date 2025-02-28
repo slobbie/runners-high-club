@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from '@emotion/native';
 import {Provider} from 'react-redux';
-import store from '@redux/store/store';
+import store from '@shared/redux/store/store';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {theme} from '@common/styles/theme';
+import {theme} from '@shared/styles/theme';
 import {ThemeProvider} from '@emotion/react';
 import AppInner from '@/AppInner';
 

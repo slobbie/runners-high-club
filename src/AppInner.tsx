@@ -1,22 +1,11 @@
-// =============================================================================
-// File    :  AppInner.tsx
-// Class   :
-// Purpose :  AppInner
-// Date    :  2024.06
-// Author  :  JHS
-// History :
-// =============================================================================
-// Copyright (C) 2024 JHS All rights reserved.
-// =============================================================================
-
 import React from 'react';
 import {StatusBar} from 'react-native';
 import styled from '@emotion/native';
-import StackNavigation from '@navigation/StackNavigation';
+import StackNavigation from '@shared/navigation/StackNavigation';
 import {Provider, useSelector} from 'react-redux';
-import store, {RootState} from '@redux/store/store';
+import store, {RootState} from '@shared/redux/store/store';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {theme} from '@common/styles/theme';
+import {theme} from '@shared/styles/theme';
 import {ThemeProvider} from '@emotion/react';
 
 /**

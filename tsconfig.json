@@ -6,8 +6,9 @@
     "paths": {
       "@/*": ["src/*"],
       "@assets/*": ["src/assets/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@feature/*": ["src/feature/*"],
+      "@hooks/*": ["src/shared/hooks/*"],
+      "@features/*": ["src/features/*"],
+      "@shared/*": ["src/shared/*"],
       "@common/*": ["src/common/*"],
       "@navigation/*": ["src/navigation/*"],
       "@redux/*": ["./src/redux/*"],
