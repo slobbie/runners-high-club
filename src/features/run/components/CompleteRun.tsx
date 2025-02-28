@@ -1,21 +1,9 @@
-// =============================================================================
-// File    :  CompleteRun.tsx
-// Class   :
-// Purpose :  CompleteRun
-// Date    :  2024.06
-// Author  :  JHS
-// History :
-// =============================================================================
-// Copyright (C) 2024 JHS All rights reserved.
-// =============================================================================
-
 import ButtonCommon from '@shared/components/button/ButtonCommon';
-import {RootState} from '@shared/redux/store/store';
 import styled from '@emotion/native';
 import React, {useMemo} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import NaverMapView, {Marker, Path} from 'react-native-nmap';
-import {useSelector} from 'react-redux';
+import useRunStore from '@/features/run/store/runstore';
 
 interface ICompleteRun {
   pathPosition: {
@@ -35,14 +23,8 @@ interface ICompleteRun {
  * @returns React.JSX.Element
  */
 const CompleteRun = ({pathPosition, runCompleteController}: ICompleteRun) => {
-  const distanceRun = useSelector((state: RootState) => state.run.distanceRun);
-  const distanceRunningTime = useSelector(
-    (state: RootState) => state.run.distanceRunningTime,
-  );
-  /** 달리기 페이스 */
-  const distanceRunningPace = useSelector(
-    (state: RootState) => state.run.distanceRunningPace,
-  );
+  const {distanceRun, distanceRunningTime, distanceRunningPace} = useRunStore();
+
   /** 네이버 맵뷰 스타일 */
   const naverMapViewStyle = useMemo(() => {
     return {

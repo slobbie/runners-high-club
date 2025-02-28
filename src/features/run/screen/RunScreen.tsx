@@ -21,18 +21,19 @@ import EditKmItem from '@features/run/components/EditKmItem';
 import RunButtonGroup from '@features/run/components/RunButtonGroup';
 import PrepareRun from '@features/run/components/PrepareRun';
 import RunTracker from '@features/run/components/RunTracker';
-import {useDispatch} from 'react-redux';
-import navigationSlice from '@shared/navigation/slice/navigation.slice';
 import CompleteRun from '@features/run/components/CompleteRun';
+import useBackBgStore from '@shared/store/backBgStore';
 import {colors} from '@shared/styles/theme';
-import commonSlice from '@shared/slice/common.slice';
+import useNavigationStore from '@shared/store/navigationStore';
 
 /**
  * 달리기 측정 화면
  * @returns React.JSX.Element
  */
 const RunScreen = () => {
-  const dispatch = useDispatch();
+  const {setSafeAreaViewBg} = useBackBgStore();
+  const {setIsTabShowStatus} = useNavigationStore();
+
   /** 디바이스 권한 훅스 */
   const permissions = useDevicePermissions();
 
@@ -223,7 +224,7 @@ const RunScreen = () => {
 
   /** 달리기 준비 단계  */
   const prepareRun = () => {
-    dispatch(commonSlice.actions.setSafeAreaViewBg(colors.warning));
+    setSafeAreaViewBg(colors.warning);
     setIsPrepareRun(true);
   };
 
@@ -236,7 +237,7 @@ const RunScreen = () => {
       }, 1000);
     } else if (runCount === 0) {
       setTimeout(() => {
-        dispatch(commonSlice.actions.setSafeAreaViewBg(colors.bg_gray000));
+        setSafeAreaViewBg(colors.bg_gray000);
         setRunCount(3);
         setIsPrepareRun(false);
         setIsRun(prev => !prev);
@@ -244,7 +245,7 @@ const RunScreen = () => {
     }
 
     return () => clearInterval(interval);
-  }, [dispatch, isPrepareRun, isRun, runCount]);
+  }, [isPrepareRun, isRun, runCount, setSafeAreaViewBg]);
 
   /** 일시정지 핸들러 */
   const pauseHandler = () => {
@@ -267,7 +268,7 @@ const RunScreen = () => {
         longitude: 0,
       },
     ]);
-    dispatch(navigationSlice.actions.setIsTabShowStatus(true));
+    setIsTabShowStatus(true);
   };
 
   return (

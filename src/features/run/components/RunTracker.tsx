@@ -1,7 +1,6 @@
 import styled from '@emotion/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import runSlice from '@features/run/slice/run.slice';
+import useRunStore from '@/features/run/store/runstore';
 
 interface IRunTracker {
   pathPosition: {
@@ -28,7 +27,11 @@ const RunTracker = ({
   isRun,
   isPause,
 }: IRunTracker) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+
+  const {setDistanceRunningTime, setDistanceRun, setDistanceRunningPace} =
+    useRunStore();
+
   const [timer, setTimer] = useState(0);
   const paceRef = useRef('0:00');
   const runDataRef = useRef({
@@ -61,11 +64,11 @@ const RunTracker = ({
       };
       let re = setTimeout(updateTime, 1000);
       return () => {
-        dispatch(runSlice.actions.setDistanceRunningTime(formatTime(timer)));
+        setDistanceRunningTime(formatTime(timer));
         clearTimeout(re);
       };
     }
-  }, [dispatch, isPause, isRun, timer]);
+  }, [isPause, isRun, setDistanceRunningTime, timer]);
 
   // 두 지점 간의 거리를 계산하는 함수
   const calculateDistance = useCallback(
@@ -131,16 +134,16 @@ const RunTracker = ({
       );
       setKmText(convertKm);
       runDataRef.current.kmText = convertKm;
-      dispatch(runSlice.actions.setDistanceRun(convertKm));
+      setDistanceRun(convertKm);
     }
   }, [
     calculateDistance,
-    dispatch,
     formatDistance,
     isPause,
     isRun,
     markerPosition,
     pathPosition,
+    setDistanceRun,
   ]);
 
   /** 러닝 종료시 초기화 */
@@ -188,7 +191,7 @@ const RunTracker = ({
           Number(runDataRef.current.kmText),
           runDataRef.current.timer,
         );
-        dispatch(runSlice.actions.setDistanceRunningPace(pace));
+        setDistanceRunningPace(pace);
         paceRef.current = pace;
       }, 2000);
       return () => {
@@ -197,7 +200,7 @@ const RunTracker = ({
     } else {
       clearInterval(intervalId);
     }
-  }, [dispatch, isPause, isRun]);
+  }, [isPause, isRun, setDistanceRunningPace]);
 
   return (
     <RunView>

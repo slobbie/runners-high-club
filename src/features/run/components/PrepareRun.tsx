@@ -1,5 +1,5 @@
-import commonSlice from '@shared/slice/common.slice';
-import {colors} from '@shared/styles/theme';
+import useBackBgStore from '@/shared/store/backBgStore';
+import {colors} from '@/shared/styles/theme';
 import styled from '@emotion/native';
 import React, {useEffect, useState} from 'react';
 import Animated, {
@@ -8,7 +8,6 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import {useDispatch} from 'react-redux';
 
 /** 달리 준비 컴포넌트 인터페이스 */
 interface IPrepareRun {
@@ -21,7 +20,7 @@ interface IPrepareRun {
  * @returns React.JSX.Element
  */
 const PrepareRun = ({runCount}: IPrepareRun) => {
-  const dispatch = useDispatch();
+  const {setSafeAreaViewBg} = useBackBgStore();
 
   const opacity = useSharedValue(0);
 
@@ -101,7 +100,7 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
           return false;
         });
         /** 노치바 색상 변경 */
-        dispatch(commonSlice.actions.setSafeAreaViewBg(colors.bg_gray000));
+        setSafeAreaViewBg(colors.bg_gray000);
         animatedViewTop.value = withTiming(animatedViewTop.value + 78, {
           duration: 150,
         });
@@ -121,8 +120,8 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
     animatedViewRadius,
     animatedViewTop,
     animatedViewWidth,
-    dispatch,
     runCount,
+    setSafeAreaViewBg,
   ]);
 
   return (

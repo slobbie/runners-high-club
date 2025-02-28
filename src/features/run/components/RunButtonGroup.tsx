@@ -10,9 +10,9 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {Alert} from 'react-native';
-import {useDispatch} from 'react-redux';
-import navigationSlice from '@shared/navigation/slice/navigation.slice';
+
 import {colors} from '@shared/styles/theme';
+import useNavigationStore from '@shared/store/navigationStore';
 
 interface IRunButtonGroup {
   startRunHandler: () => void;
@@ -41,7 +41,9 @@ const RunButtonGroup = ({
   isPause,
   isRun,
 }: IRunButtonGroup) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+
+  const {setIsTabShowStatus} = useNavigationStore();
   /** 사운드 버튼 사용 여부 */
   const [isSound, setIsSound] = useState(true);
 
@@ -167,7 +169,7 @@ const RunButtonGroup = ({
     if (isRun) {
       pauseHandler();
     } else {
-      dispatch(navigationSlice.actions.setIsTabShowStatus(false));
+      setIsTabShowStatus(false);
       prepareRunHandler();
     }
   };
