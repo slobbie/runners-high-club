@@ -1,9 +1,9 @@
-import ButtonCommon from '@shared/components/button/ButtonCommon';
 import styled from '@emotion/native';
 import React, {useMemo} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import NaverMapView, {Marker, Path} from 'react-native-nmap';
-import useRunStore from '@/features/run/store/runstore';
+import useRunStore from '@features/run/store/runstore';
+import {ButtonBase} from '@shared/components/atoms';
 
 interface ICompleteRun {
   pathPosition: {
@@ -122,9 +122,9 @@ const CompleteRun = ({pathPosition, runCompleteController}: ICompleteRun) => {
         </NaverMapView>
       </LayerView>
       <BottomButtonView>
-        <ButtonCommon onPress={runCompleteController}>
+        <ButtonBase onPress={runCompleteController}>
           <ButtonLabel>완료</ButtonLabel>
-        </ButtonCommon>
+        </ButtonBase>
       </BottomButtonView>
     </Wrapper>
   );

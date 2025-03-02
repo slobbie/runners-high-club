@@ -1,20 +1,10 @@
-// =============================================================================
-// File    :  RecordDetailScreen.tsx
-// Class   :
-// Purpose :  RecordDetailScreen
-// Date    :  2024.06
-// Author  :  JHS
-// History :
-// =============================================================================
-// Copyright (C) 2024 JHS All rights reserved.
-// =============================================================================
-
-import styled from '@emotion/native';
-import Geolocation from '@react-native-community/geolocation';
-import {RouteProp} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import NaverMapView, {Marker} from 'react-native-nmap';
+import styled from '@emotion/native';
+import Geolocation from '@react-native-community/geolocation';
+import {RouteProp} from '@react-navigation/native';
+
 import {IRunRecord} from '@api/run/interface/run.interface';
 
 interface IRecordDetailScreen {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
-import * as Icons from '.';
+import * as Icons from '@shared/constants/icons';
 
 export type IconProps = SvgProps & {
   name: keyof typeof Icons;

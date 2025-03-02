@@ -1,6 +1,6 @@
 import styled from '@emotion/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import useRunStore from '@/features/run/store/runstore';
+import useRunStore from '@features/run/store/runstore';
 
 interface IRunTracker {
   pathPosition: {

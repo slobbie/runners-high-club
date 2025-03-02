@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from '@emotion/native';
-import SvgIcon from '@shared/components/icon/SvgIcon';
-import * as Icons from '@shared/components/icon/.';
 import {PressableProps} from 'react-native';
+
+import {SvgIcon} from '@shared/components/atoms';
+import * as Icons from '@shared/constants/icons';
 
 interface IHeaderButton extends PressableProps {
   iconName: keyof typeof Icons;

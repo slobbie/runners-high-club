@@ -3,10 +3,11 @@ import {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
   BottomSheetModal,
+  BottomSheetModalProps,
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
 
-interface IBottomsheet {
+interface IBottomsheet extends BottomSheetModalProps {
   children: React.ReactNode;
   snapPoint: string;
 }
@@ -17,7 +18,7 @@ interface IBottomsheet {
  * @property { string } snapPoint 바텀 시트 화면 노출 비율
  * @returns React.JSX.Element
  */
-const Bottomsheet = React.forwardRef<any, IBottomsheet>(
+const BottomSheetContainer = React.forwardRef<BottomSheetModal, IBottomsheet>(
   ({children, snapPoint}, ref) => {
     /** 화면 노출 정도 */
     const snapPoints = useMemo(() => [snapPoint], [snapPoint]);
@@ -49,4 +50,4 @@ const Bottomsheet = React.forwardRef<any, IBottomsheet>(
   },
 );
 
-export default Bottomsheet;
+export default BottomSheetContainer;

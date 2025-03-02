@@ -1,25 +1,14 @@
-// =============================================================================
-// File    :  RecordListItem.tsx
-// Class   :
-// Purpose :  RecordListItem
-// Date    :  2024.06
-// Author  :  JHS
-// History :
-// =============================================================================
-// Copyright (C) 2024 JHS All rights reserved.
-// =============================================================================
-
-import {RootTabParamList} from '@shared/navigation/TabNavigation';
-import ButtonCommon from '@shared/components/button/ButtonCommon';
-import SvgIcon from '@shared/components/icon/SvgIcon';
-import styled from '@emotion/native';
-import {useNavigation} from '@react-navigation/native';
-import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
 import {ViewToken} from 'react-native';
+import styled from '@emotion/native';
 import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
+import {StackScreenProps} from '@react-navigation/stack';
+
+import {RootTabParamList} from '@shared/navigation/TabNavigation';
+import {useNavigation} from '@react-navigation/native';
 import {colors} from '@shared/styles/theme';
 import {IRunRecord} from '@api/run/interface/run.interface';
+import {ButtonBase, SvgIcon} from '@shared/components/atoms';
 
 interface IRecordListItem {
   viewItems: Animated.SharedValue<ViewToken[]>;
@@ -158,7 +147,7 @@ const RecordTextUnit = styled.Text`
   margin-top: 2px;
 `;
 
-const ArrowButton = styled(ButtonCommon)`
+const ArrowButton = styled(ButtonBase)`
   height: 30px;
   position: absolute;
   top: -2px;

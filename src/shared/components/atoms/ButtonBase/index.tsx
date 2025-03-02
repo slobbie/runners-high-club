@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/native';
 import {PressableProps} from 'react-native';
 
-interface IButtonCommon extends PressableProps {
+interface IProps extends PressableProps {
   children: React.ReactNode;
   size?: number;
   buttonColor?: string;
@@ -15,12 +15,12 @@ interface IButtonCommon extends PressableProps {
  * @property { React.ReactNode } children
  * @returns React.JSX.Element
  */
-const ButtonCommon = ({
+const ButtonBase = ({
   children,
   size = 100,
   buttonColor = '#5dadd9',
   ...rest
-}: IButtonCommon) => {
+}: IProps) => {
   return (
     <Button {...rest} $size={size} $buttonColor={buttonColor}>
       {children}
@@ -28,7 +28,7 @@ const ButtonCommon = ({
   );
 };
 
-export default ButtonCommon;
+export default ButtonBase;
 
 const Button = styled.Pressable<{$size: number; $buttonColor: string}>`
   width: ${props => props.$size}%;

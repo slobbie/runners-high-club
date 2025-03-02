@@ -3,7 +3,7 @@ import styled from '@emotion/native';
 import NaverMapView, {Marker} from 'react-native-nmap';
 import useDevicePermissions, {
   TPermission,
-} from '@/shared/hooks/useDevicePermissions';
+} from '@shared/hooks/useDevicePermissions';
 import Geolocation from '@react-native-community/geolocation';
 import services from '@shared/constants/services';
 import {
@@ -15,7 +15,6 @@ import {
   TextInputChangeEventData,
   ViewStyle,
 } from 'react-native';
-import Bottomsheet from '@shared/components/bottomsheet/Bottomsheet';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import EditKmItem from '@features/run/components/EditKmItem';
 import RunButtonGroup from '@features/run/components/RunButtonGroup';
@@ -25,6 +24,7 @@ import CompleteRun from '@features/run/components/CompleteRun';
 import useBackBgStore from '@shared/store/backBgStore';
 import {colors} from '@shared/styles/theme';
 import useNavigationStore from '@shared/store/navigationStore';
+import {BottomSheetContainer} from '@shared/components/atoms';
 
 /**
  * 달리기 측정 화면
@@ -343,13 +343,13 @@ const RunScreen = () => {
         />
       )}
 
-      <Bottomsheet snapPoint="90%" ref={bottomSheetModalRef}>
+      <BottomSheetContainer snapPoint="90%" ref={bottomSheetModalRef}>
         <EditKmItem
           onPress={closeBottomsheet}
           onChange={onChangeKm}
           inputValue={kmText}
         />
-      </Bottomsheet>
+      </BottomSheetContainer>
     </>
   );
 };

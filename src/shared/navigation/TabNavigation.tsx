@@ -2,15 +2,13 @@ import React, {useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {screenPath} from '@shared/constants/screenPath';
 import RunScreen from '@features/run/screen/RunScreen';
-import SvgIcon from '@shared/components/icon/SvgIcon';
-import Label from '@shared/components/label/Label';
-import * as Icons from '@shared/components/icon/index';
 import HeaderButton from '@shared/navigation/components/HeaderButton';
-import {useSelector} from 'react-redux';
-import {RootState} from '@shared/redux/store/store';
 import RecordStack from '@shared/navigation/stack/record/RecordStack';
 import {colors} from '@shared/styles/theme';
 import {IRunRecord} from '@api/run/interface/run.interface';
+import {SvgIcon, Label} from '@shared/components/atoms';
+import useNavigationStore from '@shared/store/navigationStore';
+import * as Icons from '@shared/constants/icons';
 
 export type RootTabParamList = {
   run: undefined;
@@ -54,9 +52,7 @@ const TabNavigation = () => {
   }, []);
 
   /** 탭바표시 여부 */
-  const isTabShowStatus = useSelector(
-    (state: RootState) => state.navigation.isTabShowStatus,
-  );
+  const isTabShowStatus = useNavigationStore(state => state.isTabShowStatus);
 
   /** 탭 바 표시  */
   const isShowTabBar = useMemo(() => {

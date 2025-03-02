@@ -1,7 +1,5 @@
 import styled from '@emotion/native';
 import React, {useEffect, useMemo, useState} from 'react';
-import CircleButton from '@shared/components/button/CircleButton';
-import SvgIcon from '@shared/components/icon/SvgIcon';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -13,6 +11,7 @@ import {Alert} from 'react-native';
 
 import {colors} from '@shared/styles/theme';
 import useNavigationStore from '@shared/store/navigationStore';
+import {ButtonCircle, SvgIcon} from '@shared/components/atoms';
 
 interface IRunButtonGroup {
   startRunHandler: () => void;
@@ -179,9 +178,9 @@ const RunButtonGroup = ({
       <ButtonBox>
         <Left>
           {!isRun && !isPause && (
-            <CircleButton onPress={settingHandler} size={40} buttonColor="#fff">
+            <ButtonCircle onPress={settingHandler} size={40} buttonColor="#fff">
               <SvgIcon name="setting" size={24} />
-            </CircleButton>
+            </ButtonCircle>
           )}
         </Left>
         <Mid>
@@ -211,9 +210,9 @@ const RunButtonGroup = ({
         </Mid>
         <Right>
           {!isPause && (
-            <CircleButton onPress={soundHandler} size={40} buttonColor="#fff">
+            <ButtonCircle onPress={soundHandler} size={40} buttonColor="#fff">
               <SvgIcon name={soundIconName} size={26} />
-            </CircleButton>
+            </ButtonCircle>
           )}
         </Right>
       </ButtonBox>
@@ -268,7 +267,7 @@ const Right = styled.View`
   align-items: center;
 `;
 
-const AnimatedCircleButton = Animated.createAnimatedComponent(CircleButton);
+const AnimatedCircleButton = Animated.createAnimatedComponent(ButtonCircle);
 
 const AnimatedLeftView = Animated.createAnimatedComponent(BottomLeftView);
 

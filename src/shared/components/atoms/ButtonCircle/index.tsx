@@ -1,6 +1,6 @@
 import React, {forwardRef} from 'react';
 import styled from '@emotion/native';
-import {PressableProps} from 'react-native';
+import {PressableProps, View} from 'react-native';
 
 interface ICircleButton extends PressableProps {
   size?: number;
@@ -15,7 +15,7 @@ interface ICircleButton extends PressableProps {
  * @property { React.ReactNode } children
  * @returns React.JSX.Element
  */
-const CircleButton = forwardRef<any, ICircleButton>(
+const ButtonCircle = forwardRef<View, ICircleButton>(
   ({size = 50, buttonColor = '#5dadd9', children, ...rest}, ref) => {
     return (
       <Button ref={ref} {...rest} $size={size} $buttonColor={buttonColor}>
@@ -25,7 +25,7 @@ const CircleButton = forwardRef<any, ICircleButton>(
   },
 );
 
-export default CircleButton;
+export default ButtonCircle;
 
 const Button = styled.Pressable<{$size: number; $buttonColor: string}>`
   width: ${props => `${props.$size}px`};

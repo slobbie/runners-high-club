@@ -1,14 +1,3 @@
-// =============================================================================
-// File    :  HomeScreen.tsx
-// Class   :
-// Purpose :  HomeScreen
-// Date    :  2024.05
-// Author  :  JHS
-// History :
-// =============================================================================
-// Copyright (C) 2024 JHS All rights reserved.
-// =============================================================================
-
 import React, {useEffect, useMemo} from 'react';
 import styled from '@emotion/native';
 import {
@@ -18,7 +7,7 @@ import {
   ListRenderItem,
   ViewToken,
 } from 'react-native';
-import useHealthPermissions from '@/shared/hooks/useHealthPermissions';
+import useHealthPermissions from '@shared/hooks/useHealthPermissions';
 import healthPermissions from '@shared/constants/healthPermissions';
 import {useSharedValue} from 'react-native-reanimated';
 import RecordListItem from '@features/record/components/RecordListItem';
