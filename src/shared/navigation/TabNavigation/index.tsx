@@ -2,13 +2,13 @@ import React, {useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {screenPath} from '@shared/constants/screenPath';
 import RunScreen from '@features/run/screen/RunScreen';
-import HeaderButton from '@shared/navigation/components/HeaderButton';
-import RecordStack from '@shared/navigation/stack/record/RecordStack';
 import {colors} from '@shared/styles/theme';
 import {IRunRecord} from '@api/run/interface/run.interface';
 import {SvgIcon, Label} from '@shared/components/atoms';
 import useNavigationStore from '@shared/store/navigationStore';
 import * as Icons from '@shared/constants/icons';
+import {HeaderButton} from '@shared/components/molecules';
+import {RecordStack} from '@shared/navigation/Stack';
 
 export type RootTabParamList = {
   run: undefined;

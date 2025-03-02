@@ -5,17 +5,17 @@ import styled from '@emotion/native';
 import Geolocation from '@react-native-community/geolocation';
 import {RouteProp} from '@react-navigation/native';
 
-import {IRunRecord} from '@api/run/interface/run.interface';
+import {RootStackParams} from '@shared/interface/rootStackParams';
 
-interface IRecordDetailScreen {
-  route: RouteProp<{params: IRunRecord}, 'params'>;
+interface IProps {
+  route: RouteProp<RootStackParams, 'recordDetail'>;
 }
 
 /**
  * 기록 상세 내용 화면
  * @returns React.JSX.Element
  */
-const RecordDetailScreen = ({route}: IRecordDetailScreen) => {
+const RecordDetailScreen = ({route}: IProps) => {
   const recordData = route.params;
 
   /** 네이버 맵뷰 스타일 */

@@ -3,25 +3,25 @@ import {screenPath} from '@shared/constants/screenPath';
 import {createStackNavigator} from '@react-navigation/stack';
 import RecordScreen from '@features/record/screen/RecordScreen';
 import RecordDetailScreen from '@features/record/screen/RecordDetailScreen';
-import {RootStackParamList} from '@shared/navigation/StackNavigation';
-import HeaderButton from '@shared/navigation/components/HeaderButton';
+import {HeaderButton} from '@shared/components/molecules';
+import {RootStackParams} from '@shared/interface/rootStackParams';
 
 /**
  * 기록 화면 스택
  * @returns React.JSX.Element
  */
 const RecordStack = () => {
-  const Stack = createStackNavigator<RootStackParamList>();
+  const Stack = createStackNavigator<RootStackParams>();
   const pathName = screenPath.feature.record;
 
   return (
     <Stack.Navigator
-      initialRouteName={pathName.record as keyof RootStackParamList}
+      initialRouteName={pathName.record as keyof RootStackParams}
       screenOptions={{
         headerTitle: '',
       }}>
       <Stack.Screen
-        name={pathName.record as keyof RootStackParamList}
+        name={pathName.record as keyof RootStackParams}
         component={RecordScreen}
         options={({}) => ({
           headerLeft: () => {
@@ -30,7 +30,7 @@ const RecordStack = () => {
         })}
       />
       <Stack.Screen
-        name={pathName.recordDetail as keyof RootStackParamList}
+        name={'recordDetail'}
         component={RecordDetailScreen}
         options={({navigation}) => ({
           headerLeft: () => {
