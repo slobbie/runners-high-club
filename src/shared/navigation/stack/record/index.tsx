@@ -2,9 +2,9 @@ import React from 'react';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import RecordScreen from '@features/record/screen/RecordScreen';
-import RecordDetailScreen from '@features/record/screen/RecordDetailScreen';
 import {HeaderButton} from '@shared/components/molecules';
 import {RootStackParams} from '@shared/interface/rootStackParams';
+import RecordDetailScreen from '@features/recordDetail/screen/RecordDetailScreen';
 
 /**
  * 기록 화면 스택

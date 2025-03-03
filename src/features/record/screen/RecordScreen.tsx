@@ -12,8 +12,7 @@ import healthPermissions from '@shared/constants/healthPermissions';
 import {useSharedValue} from 'react-native-reanimated';
 import RecordListItem from '@features/record/components/RecordListItem';
 import {mockupData} from '@features/record/mockup/recordMockup';
-
-import {IRunRecord} from '@api/run/interface/run.interface';
+import {IRunRecord} from '@shared/interface/run.interface';
 
 /**
  * 기록 화면

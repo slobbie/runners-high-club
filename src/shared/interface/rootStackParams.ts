@@ -1,4 +1,4 @@
-import {IRunRecord} from '@api/run/interface/run.interface';
+import {IRunRecord} from '@shared/interface/run.interface';
 
 export type RootStackParams = {
   drawer: undefined;

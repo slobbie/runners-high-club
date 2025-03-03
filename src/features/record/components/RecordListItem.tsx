@@ -7,7 +7,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootTabParamList} from '@shared/navigation/TabNavigation';
 import {useNavigation} from '@react-navigation/native';
 import {colors} from '@shared/styles/theme';
-import {IRunRecord} from '@api/run/interface/run.interface';
+import {IRunRecord} from '@shared/interface/run.interface';
 import {ButtonBase, SvgIcon} from '@shared/components/atoms';
 
 interface IRecordListItem {
