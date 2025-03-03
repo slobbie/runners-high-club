@@ -1,27 +1,18 @@
 import React, {useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {screenPath} from '@shared/constants/screenPath';
+
 import RunScreen from '@features/run/screen/RunScreen';
 import {colors} from '@shared/styles/theme';
-import {IRunRecord} from '@api/run/interface/run.interface';
 import {SvgIcon, Label} from '@shared/components/atoms';
 import useNavigationStore from '@shared/store/navigationStore';
 import * as Icons from '@shared/constants/icons';
 import {HeaderButton} from '@shared/components/molecules';
 import {RecordStack} from '@shared/navigation/Stack';
-
-export type RootTabParamList = {
-  run: undefined;
-  recordStack: {
-    record: undefined;
-    recordDetail: IRunRecord;
-  };
-};
+import {RootStackParams} from '@shared/interface/rootStackParams';
 
 /** 탭 네이게이션 */
 const TabNavigation = () => {
-  const Tab = createBottomTabNavigator<RootTabParamList>();
-  const pathName = screenPath.feature;
+  const Tab = createBottomTabNavigator<RootStackParams>();
 
   /** 탭 아이콘 컴포넌트 */
   const tabIcon = useMemo(() => {
@@ -61,7 +52,7 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName={pathName.run as keyof RootTabParamList}
+      initialRouteName={'runScreen'}
       screenOptions={({}) => ({
         headerShown: isTabShowStatus,
         tabBarAllowFontScaling: false,
@@ -88,7 +79,7 @@ const TabNavigation = () => {
       })}>
       {/* 기록 탭 */}
       <Tab.Screen
-        name={pathName.record.recordStack as keyof RootTabParamList}
+        name={'recordStack'}
         component={RecordStack}
         options={{
           headerShown: false,
@@ -102,7 +93,7 @@ const TabNavigation = () => {
       />
       {/* 달리기 탭 */}
       <Tab.Screen
-        name={pathName.run as keyof RootTabParamList}
+        name={'runScreen'}
         component={RunScreen}
         options={() => ({
           tabBarLabel: ({focused}) => {

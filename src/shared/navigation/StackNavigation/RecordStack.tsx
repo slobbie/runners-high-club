@@ -1,6 +1,6 @@
 import React from 'react';
-import {screenPath} from '@shared/constants/screenPath';
 import {createStackNavigator} from '@react-navigation/stack';
+
 import RecordScreen from '@features/record/screen/RecordScreen';
 import RecordDetailScreen from '@features/record/screen/RecordDetailScreen';
 import {HeaderButton} from '@shared/components/molecules';
@@ -12,16 +12,15 @@ import {RootStackParams} from '@shared/interface/rootStackParams';
  */
 const RecordStack = () => {
   const Stack = createStackNavigator<RootStackParams>();
-  const pathName = screenPath.feature.record;
 
   return (
     <Stack.Navigator
-      initialRouteName={pathName.record as keyof RootStackParams}
+      initialRouteName={'recordScreen'}
       screenOptions={{
         headerTitle: '',
       }}>
       <Stack.Screen
-        name={pathName.record as keyof RootStackParams}
+        name={'recordScreen'}
         component={RecordScreen}
         options={({}) => ({
           headerLeft: () => {
@@ -30,7 +29,7 @@ const RecordStack = () => {
         })}
       />
       <Stack.Screen
-        name={'recordDetail'}
+        name={'recordDetailScreen'}
         component={RecordDetailScreen}
         options={({navigation}) => ({
           headerLeft: () => {

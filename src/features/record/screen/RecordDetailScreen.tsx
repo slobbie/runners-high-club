@@ -6,9 +6,10 @@ import Geolocation from '@react-native-community/geolocation';
 import {RouteProp} from '@react-navigation/native';
 
 import {RootStackParams} from '@shared/interface/rootStackParams';
+import DotPng from '@assets/png/blue-dot.png';
 
 interface IProps {
-  route: RouteProp<RootStackParams, 'recordDetail'>;
+  route: RouteProp<RootStackParams, 'recordDetailScreen'>;
 }
 
 /**
@@ -138,7 +139,7 @@ const RecordDetailScreen = ({route}: IProps) => {
               width={12}
               height={12}
               pinColor={'green'}
-              image={require('../../../assets/pngIcon/blue-dot.png')}
+              image={DotPng}
             />
           </NaverMapView>
         </LayerView>

@@ -1,13 +1,12 @@
 import {IRunRecord} from '@api/run/interface/run.interface';
 
 export type RootStackParams = {
-  login: undefined;
+  drawer: undefined;
   tab: undefined;
-  run: {
-    run: undefined;
-  };
-  recordStack: {
-    record: undefined;
-  };
-  recordDetail: IRunRecord;
+  loginScreen: undefined;
+  homeScreen: undefined;
+  runScreen: undefined;
+  recordStack: undefined;
+  recordScreen: undefined;
+  recordDetailScreen: IRunRecord;
 };

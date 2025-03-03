@@ -25,6 +25,7 @@ import useBackBgStore from '@shared/store/backBgStore';
 import {colors} from '@shared/styles/theme';
 import useNavigationStore from '@shared/store/navigationStore';
 import {BottomSheetContainer} from '@shared/components/atoms';
+import DotPng from '@assets/png/blue-dot.png';
 
 /**
  * 달리기 측정 화면
@@ -319,7 +320,7 @@ const RunScreen = () => {
                     width={12}
                     height={12}
                     pinColor={'green'}
-                    image={require('../../../assets/pngIcon/blue-dot.png')}
+                    image={DotPng}
                   />
                 </NaverMapView>
               </CircleView>

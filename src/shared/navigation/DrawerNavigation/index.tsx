@@ -1,18 +1,17 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+
 import TabNavigation from '@shared/navigation/TabNavigation';
-import {screenPath} from '@shared/constants/screenPath';
 import {colors} from '@shared/styles/theme';
 
 const DrawerNavigation = () => {
   const Drawer = createDrawerNavigator();
-  const navigationName = screenPath.navigation;
   return (
     <Drawer.Navigator
     // drawerContent={props => <MenuScreen {...props} />}
     >
       <Drawer.Screen
-        name={navigationName.tab}
+        name={'tab'}
         component={TabNavigation}
         options={() => ({
           headerShown: false,
