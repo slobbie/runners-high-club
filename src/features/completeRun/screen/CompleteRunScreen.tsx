@@ -3,18 +3,18 @@ import React, {useMemo} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import NaverMapView, {Marker, Path} from 'react-native-nmap';
 import useRunStore from '@features/run/store/runstore';
-import {ButtonBase} from '@shared/components/atoms';
 
-interface ICompleteRun {
-  pathPosition: {
-    latitude: number;
-    longitude: number;
-  }[];
-  markerPosition: {
-    latitude: number;
-    longitude: number;
-  };
-  runCompleteController: () => void;
+import {ButtonBase} from '@shared/components/atoms';
+import {CommonActions, RouteProp} from '@react-navigation/native';
+import {RootStackParams} from '@shared/interface/rootStackParams';
+import useNavigate from '@shared/hooks/useNavigate';
+import useNavigationStore from '@shared/store/navigationStore';
+
+interface IProps {
+  route: RouteProp<RootStackParams, 'completeRunScreen'>;
+  // pathPosition: IPositionBase[];
+  // markerPosition: IPositionBase;
+  // runCompleteController: () => void;
 }
 
 /**
@@ -22,8 +22,12 @@ interface ICompleteRun {
  * @property { string } propsName 설명
  * @returns React.JSX.Element
  */
-const CompleteRun = ({pathPosition, runCompleteController}: ICompleteRun) => {
+const CompleteRunScreen = ({route}: IProps) => {
+  const {pathPosition} = route.params;
   const {distanceRun, distanceRunningTime, distanceRunningPace} = useRunStore();
+  const {setIsTabShowStatus} = useNavigationStore();
+
+  const navigate = useNavigate();
 
   /** 네이버 맵뷰 스타일 */
   const naverMapViewStyle = useMemo(() => {
@@ -32,6 +36,20 @@ const CompleteRun = ({pathPosition, runCompleteController}: ICompleteRun) => {
       height: '100%',
     } as StyleProp<ViewStyle>;
   }, []);
+
+  const onFinishHandler = () => {
+    navigate.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'recordStack',
+          },
+        ],
+      }),
+    );
+    setIsTabShowStatus(true);
+  };
 
   return (
     <Wrapper>
@@ -92,6 +110,7 @@ const CompleteRun = ({pathPosition, runCompleteController}: ICompleteRun) => {
                 pathPosition[pathPosition.length - 1].longitude) /
               2,
           }}>
+          {/* 시작점 */}
           <Marker
             coordinate={{
               latitude: pathPosition[0].latitude,
@@ -108,10 +127,20 @@ const CompleteRun = ({pathPosition, runCompleteController}: ICompleteRun) => {
             outlineWidth={0}
             coordinates={pathPosition}
           />
+          {/* <Marker
+            coordinate={{
+              latitude: markerPosition.latitude,
+              longitude: markerPosition.longitude,
+            }}
+            width={12}
+            height={12}
+            pinColor={'green'}
+            image={require('../../../assets/pngIcon/blue-dot.png')}
+          /> */}
         </NaverMapView>
       </LayerView>
       <BottomButtonView>
-        <ButtonBase onPress={runCompleteController}>
+        <ButtonBase onPress={onFinishHandler}>
           <ButtonLabel>완료</ButtonLabel>
         </ButtonBase>
       </BottomButtonView>
@@ -119,7 +148,7 @@ const CompleteRun = ({pathPosition, runCompleteController}: ICompleteRun) => {
   );
 };
 
-export default CompleteRun;
+export default CompleteRunScreen;
 
 const Wrapper = styled.ScrollView`
   position: absolute;
@@ -219,16 +248,3 @@ const ButtonLabel = styled.Text`
   font-weight: bold;
   font-size: 16px;
 `;
-
-{
-  /* <Marker
-            coordinate={{
-              latitude: markerPosition.latitude,
-              longitude: markerPosition.longitude,
-            }}
-            width={12}
-            height={12}
-            pinColor={'green'}
-            image={require('../../../assets/pngIcon/blue-dot.png')}
-          /> */
-}

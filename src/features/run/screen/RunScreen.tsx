@@ -1,39 +1,41 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import styled from '@emotion/native';
-import NaverMapView, {Marker} from 'react-native-nmap';
-import useDevicePermissions, {
-  TPermission,
-} from '@shared/hooks/useDevicePermissions';
-import Geolocation from '@react-native-community/geolocation';
-import services from '@shared/constants/services';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   AppState,
   AppStateStatus,
   Keyboard,
   NativeSyntheticEvent,
-  StyleProp,
   TextInputChangeEventData,
-  ViewStyle,
 } from 'react-native';
+import styled from '@emotion/native';
+import useDevicePermissions, {
+  TPermission,
+} from '@shared/hooks/useDevicePermissions';
+import Geolocation from '@react-native-community/geolocation';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+
+import services from '@shared/constants/services';
 import EditKmItem from '@features/run/components/EditKmItem';
-import RunButtonGroup from '@features/run/components/RunButtonGroup';
+import ControlButtonGroup from '@features/run/components/ControlButtonGroup';
 import PrepareRun from '@features/run/components/PrepareRun';
-import RunTracker from '@features/run/components/RunTracker';
-import CompleteRun from '@features/run/components/CompleteRun';
+// import CompleteRun from '@features/run/components/CompleteRun';
 import useBackBgStore from '@shared/store/backBgStore';
 import {colors} from '@shared/styles/theme';
-import useNavigationStore from '@shared/store/navigationStore';
+// import useNavigationStore from '@shared/store/navigationStore';
 import {BottomSheetContainer} from '@shared/components/atoms';
-import DotPng from '@assets/png/blue-dot.png';
+import MapView from '@features/run/components/MapView';
+import useNavigate from '@shared/hooks/useNavigate';
+import {Header} from '@shared/components/organisms';
+import {HeaderIconButton} from '@shared/components/molecules';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 /**
  * 달리기 측정 화면
  * @returns React.JSX.Element
  */
 const RunScreen = () => {
+  const navigation = useNavigate();
   const {setSafeAreaViewBg} = useBackBgStore();
-  const {setIsTabShowStatus} = useNavigationStore();
+  // const {setIsTabShowStatus} = useNavigationStore();
 
   /** 디바이스 권한 훅스 */
   const permissions = useDevicePermissions();
@@ -54,7 +56,7 @@ const RunScreen = () => {
   const [appState, setAppState] = useState(AppState.currentState);
 
   /** 달리기 완료 기록 컴포넌트 표시 여부 */
-  const [isShowCompleted, setIsShowCompleted] = useState(false);
+  // const [isShowCompleted, setIsShowCompleted] = useState(false);
 
   /** 현재 위치 상태 */
   const [markerPosition, setMarkerPosition] = useState<{
@@ -94,13 +96,24 @@ const RunScreen = () => {
   /** 준비 단계 카운터 */
   const [runCount, setRunCount] = useState(3);
 
-  /** 네이버 맵뷰 스타일 */
-  const naverMapViewStyle = useMemo(() => {
-    return {
-      width: '100%',
-      height: '100%',
-    } as StyleProp<ViewStyle>;
-  }, []);
+  /** 달리기 완료 컴포넌트 컨트롤러 */
+  const runCompleteEvent = () => {
+    // setIsShowCompleted(() => {
+    //   return false;
+    // });
+    /** 러닝 종료시 거리 초기화 */
+    setMarkerPosition({
+      latitude: 0,
+      longitude: 0,
+    });
+    setPathPosition([
+      {
+        latitude: 0,
+        longitude: 0,
+      },
+    ]);
+    // setIsTabShowStatus(true);
+  };
 
   /** 달리기 시작 핸들러 */
   const startRunHandler = () => {
@@ -108,12 +121,15 @@ const RunScreen = () => {
       setIsRun(() => {
         return false;
       });
-      setIsPause(() => {
-        return false;
+      // setIsPause(() => {
+      //   return false;
+      // });
+
+      navigation.navigate('completeRunScreen', {
+        pathPosition,
+        markerPosition,
       });
-      setIsShowCompleted(() => {
-        return true;
-      });
+      runCompleteEvent();
     } else {
       prepareRun();
     }
@@ -174,7 +190,7 @@ const RunScreen = () => {
         },
       );
     }
-  }, [isPermissionsState, isShowCompleted]);
+  }, [isPermissionsState]);
 
   /** 백그라운드 에서 다시 앱으로 돌아왔을 시 실행 */
   useEffect(() => {
@@ -241,93 +257,39 @@ const RunScreen = () => {
         setSafeAreaViewBg(colors.bg_gray000);
         setRunCount(3);
         setIsPrepareRun(false);
-        setIsRun(prev => !prev);
+        navigation.navigate('runTrackerScreen');
       }, 650);
     }
 
     return () => clearInterval(interval);
-  }, [isPrepareRun, isRun, runCount, setSafeAreaViewBg]);
+  }, [isPrepareRun, runCount, setSafeAreaViewBg]);
 
   /** 일시정지 핸들러 */
   const pauseHandler = () => {
     setIsPause(prev => !prev);
   };
 
-  /** 달리기 완료 컴포넌트 컨트롤러 */
-  const runCompleteController = () => {
-    setIsShowCompleted(() => {
-      return false;
-    });
-    /** 러닝 종료시 거리 초기화 */
-    setMarkerPosition({
-      latitude: 0,
-      longitude: 0,
-    });
-    setPathPosition([
-      {
-        latitude: 0,
-        longitude: 0,
-      },
-    ]);
-    setIsTabShowStatus(true);
-  };
-
   return (
     <>
       {isPrepareRun && <PrepareRun runCount={runCount} />}
-      <View>
-        {isRun ? (
-          <RunTracker
-            isPause={isPause}
-            isRun={isRun}
-            pathPosition={pathPosition}
-            markerPosition={markerPosition}
-          />
-        ) : (
-          <>
-            <TitleView>
-              <TitleText>러닝</TitleText>
-            </TitleView>
-            <KmWrapper>
-              <KmBox>
-                <KmText>{kmText}</KmText>
-                <KmTextUnit>Km</KmTextUnit>
-              </KmBox>
-            </KmWrapper>
-            <LayerView>
-              <CircleView>
-                <NaverMapView
-                  style={naverMapViewStyle}
-                  zoomControl={false}
-                  center={{
-                    zoom: 15.7,
-                    // 지도 기울기
-                    tilt: 0,
-                    latitude:
-                      (pathPosition[pathPosition.length - 1].latitude +
-                        pathPosition[pathPosition.length - 1].latitude) /
-                      2,
-                    longitude:
-                      (pathPosition[pathPosition.length - 1].longitude +
-                        pathPosition[pathPosition.length - 1].longitude) /
-                      2,
-                  }}>
-                  <Marker
-                    coordinate={{
-                      latitude: markerPosition.latitude,
-                      longitude: markerPosition.longitude,
-                    }}
-                    width={12}
-                    height={12}
-                    pinColor={'green'}
-                    image={DotPng}
-                  />
-                </NaverMapView>
-              </CircleView>
-            </LayerView>
-          </>
-        )}
-        <RunButtonGroup
+      <SafeView>
+        <HeaderView>
+          <Header headerLeft={<HeaderIconButton iconName="profile" />} />
+        </HeaderView>
+
+        <TitleView>
+          <TitleText>러닝</TitleText>
+        </TitleView>
+
+        <KmWrapper>
+          <KmBox>
+            <KmText>{kmText}</KmText>
+            <KmTextUnit>Km</KmTextUnit>
+          </KmBox>
+        </KmWrapper>
+
+        <MapView pathPosition={pathPosition} markerPosition={markerPosition} />
+        <ControlButtonGroup
           isPause={isPause}
           isRun={isRun}
           settingHandler={settingHandler}
@@ -335,14 +297,7 @@ const RunScreen = () => {
           prepareRunHandler={prepareRun}
           pauseHandler={pauseHandler}
         />
-      </View>
-      {isShowCompleted && (
-        <CompleteRun
-          pathPosition={pathPosition}
-          markerPosition={markerPosition}
-          runCompleteController={runCompleteController}
-        />
-      )}
+      </SafeView>
 
       <BottomSheetContainer snapPoint="90%" ref={bottomSheetModalRef}>
         <EditKmItem
@@ -357,20 +312,19 @@ const RunScreen = () => {
 
 export default RunScreen;
 
-const View = styled.View`
+const SafeView = styled(SafeAreaView)`
   flex: 1;
   z-index: 0;
   background-color: ${({theme}) => theme.colors.bg_gray100};
-  align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
 
-const TitleView = styled.View`
-  position: absolute;
-  z-index: 100;
-  width: 100%;
-  top: 2%;
-`;
+const TitleView = styled.View({
+  width: '100%',
+  paddingHorizontal: 12,
+  paddingVertical: 10,
+});
 
 const TitleText = styled.Text`
   font-weight: 600;
@@ -379,15 +333,12 @@ const TitleText = styled.Text`
   margin-left: 5%;
 `;
 
-const KmWrapper = styled.View`
-  z-index: 100;
-  width: 100%;
-  height: 20%;
-  top: 5%;
-  position: absolute;
-  align-items: center;
-  justify-content: center;
-`;
+const KmWrapper = styled.View({
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingVertical: 10,
+});
 
 const KmBox = styled.View`
   flex-direction: row;
@@ -410,17 +361,6 @@ const KmTextUnit = styled.Text`
   margin-left: 10px;
 `;
 
-const LayerView = styled.View`
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-`;
-
-const CircleView = styled.View`
-  z-index: 1000;
-  width: 80%;
-  height: 48%;
-  border-radius: 10px;
-  overflow: hidden;
-`;
+const HeaderView = styled.View({
+  height: 50,
+});

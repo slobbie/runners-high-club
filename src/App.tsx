@@ -9,7 +9,7 @@ import useBackBgStore from '@shared/store/backBgStore';
 import StackNavigation from '@shared/navigation/StackNavigation';
 
 const App = (): React.JSX.Element => {
-  const safeAreaViewBg = useBackBgStore(state => state.safeAreaViewBg);
+  const {safeAreaViewBg} = useBackBgStore();
 
   return (
     <ThemeProvider theme={theme}>

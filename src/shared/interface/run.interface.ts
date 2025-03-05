@@ -43,3 +43,14 @@ export interface IRunRecord {
     }[];
   }[];
 }
+
+export interface IPositionBase {
+  latitude: number;
+  longitude: number;
+}
+
+export interface ICompleteRunScreen {
+  pathPosition: IPositionBase[];
+  markerPosition: IPositionBase;
+  // runCompleteController: () => void;
+}

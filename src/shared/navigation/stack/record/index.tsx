@@ -2,7 +2,7 @@ import React from 'react';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import RecordScreen from '@features/record/screen/RecordScreen';
-import {HeaderButton} from '@shared/components/molecules';
+import {HeaderIconButton} from '@shared/components/molecules';
 import {RootStackParams} from '@shared/interface/rootStackParams';
 import RecordDetailScreen from '@features/recordDetail/screen/RecordDetailScreen';
 
@@ -24,7 +24,7 @@ const RecordStack = () => {
         component={RecordScreen}
         options={({}) => ({
           headerLeft: () => {
-            return <HeaderButton iconName="profile" />;
+            return <HeaderIconButton iconName="profile" />;
           },
         })}
       />
@@ -36,7 +36,7 @@ const RecordStack = () => {
             const goBack = () => {
               navigation.goBack();
             };
-            return <HeaderButton onPress={goBack} iconName="arrowPrev" />;
+            return <HeaderIconButton onPress={goBack} iconName="arrowPrev" />;
           },
         })}
       />

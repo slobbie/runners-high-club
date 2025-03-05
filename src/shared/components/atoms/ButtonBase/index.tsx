@@ -32,7 +32,7 @@ export default ButtonBase;
 
 const Button = styled.Pressable<{$size: number; $buttonColor: string}>`
   width: ${props => props.$size}%;
-  height: 50px;
+  height: 56px;
   background-color: ${props => props.$buttonColor};
   border-radius: 10px;
   align-items: center;

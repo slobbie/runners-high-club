@@ -10,9 +10,7 @@
       "@shared/*": ["src/shared/*"],
       "@common/*": ["src/common/*"],
       "@navigation/*": ["src/navigation/*"],
-      "@redux/*": ["./src/redux/*"],
-      "@utils/*": ["./src/common/utils/*"],
-      "@api/*": ["./src/api/*"]
+      "@utils/*": ["./src/common/utils/*"]
     }
   }
 }

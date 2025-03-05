@@ -246,7 +246,7 @@ const KmTextUnit = styled.Text`
 `;
 
 const RecodeView = styled.View`
-  align-items: end;
+  align-items: center;
   height: 160px;
 `;
 

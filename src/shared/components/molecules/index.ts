@@ -1,1 +1,1 @@
-export {default as HeaderButton} from '@shared/components/molecules/HeaderButton';
+export {default as HeaderIconButton} from '@shared/components/molecules/HeaderIconButton';

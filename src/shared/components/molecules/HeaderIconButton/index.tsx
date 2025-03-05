@@ -13,7 +13,7 @@ interface IHeaderButton extends PressableProps {
  *  Header 버튼
  * @returns React.JSX.Element
  */
-const HeaderButton = ({iconName, ...rest}: IHeaderButton) => {
+const HeaderIconButton = ({iconName, ...rest}: IHeaderButton) => {
   return (
     <Button {...rest}>
       <SvgIcon name={iconName} size={20} fill={'#333'} stroke={'#333'} />
@@ -21,7 +21,7 @@ const HeaderButton = ({iconName, ...rest}: IHeaderButton) => {
   );
 };
 
-export default HeaderButton;
+export default HeaderIconButton;
 
 const Button = styled.Pressable`
   width: 50px;

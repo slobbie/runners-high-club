@@ -1,13 +1,13 @@
 import React, {useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import RunScreen from '@features/run/screen/RunScreen';
+// import RunScreen from '@features/run/screen/RunScreen';
 import {colors} from '@shared/styles/theme';
 import {SvgIcon, Label} from '@shared/components/atoms';
 import useNavigationStore from '@shared/store/navigationStore';
 import * as Icons from '@shared/constants/icons';
-import {HeaderButton} from '@shared/components/molecules';
-import {RecordStack} from '@shared/navigation/Stack';
+// import {HeaderIconButton} from '@shared/components/molecules';
+import {RecordStack, RunStack} from '@shared/navigation/Stack';
 import {RootStackParams} from '@shared/interface/rootStackParams';
 
 /** 탭 네이게이션 */
@@ -93,18 +93,19 @@ const TabNavigation = () => {
       />
       {/* 달리기 탭 */}
       <Tab.Screen
-        name={'runScreen'}
-        component={RunScreen}
+        name={'runStack'}
+        component={RunStack}
         options={() => ({
+          headerShown: false,
           tabBarLabel: ({focused}) => {
             return <Label text="러닝" style={tabLabelStyle(focused)} />;
           },
           tabBarIcon: ({focused}) => {
             return tabIcon(focused, 'run');
           },
-          headerLeft: () => {
-            return <HeaderButton iconName="profile" />;
-          },
+          // headerLeft: () => {
+          //   return <HeaderButton iconName="profile" />;
+          // },
         })}
       />
     </Tab.Navigator>

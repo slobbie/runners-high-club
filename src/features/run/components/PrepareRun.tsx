@@ -44,16 +44,6 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
     return () => clearTimeout(resetAnimation);
   }, [opacity, runCount]);
 
-  /** View 애니메이션 스타일 */
-  const animatedViewStyle = useAnimatedStyle(() => {
-    return {
-      width: `${animatedViewWidth.value}%`,
-      height: `${animatedViewHeight.value}%`,
-      borderRadius: animatedViewRadius.value,
-      top: `${animatedViewTop.value}%`,
-    };
-  });
-
   /** 텍스트 애니메이션 스타일 */
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -89,6 +79,8 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
     animatedViewWidth,
   ]);
 
+  const opacityBg = useSharedValue(1);
+
   /** 카운터 종료 시 view 애니메이션 */
   useEffect(() => {
     if (runCount === 0) {
@@ -101,6 +93,7 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
         });
         /** 노치바 색상 변경 */
         setSafeAreaViewBg(colors.bg_gray000);
+        opacityBg.value = withTiming(0, {duration: 100});
         animatedViewTop.value = withTiming(animatedViewTop.value + 78, {
           duration: 150,
         });
@@ -123,6 +116,17 @@ const PrepareRun = ({runCount}: IPrepareRun) => {
     runCount,
     setSafeAreaViewBg,
   ]);
+
+  /** View 애니메이션 스타일 */
+  const animatedViewStyle = useAnimatedStyle(() => {
+    return {
+      width: `${animatedViewWidth.value}%`,
+      height: `${animatedViewHeight.value}%`,
+      borderRadius: animatedViewRadius.value,
+      top: `${animatedViewTop.value}%`,
+      opacity: opacityBg.value,
+    };
+  });
 
   return (
     <AnimatedWrapper style={animatedWrapperStyle}>

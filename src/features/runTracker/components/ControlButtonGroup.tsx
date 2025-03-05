@@ -10,39 +10,28 @@ import Animated, {
 import {Alert} from 'react-native';
 
 import {colors} from '@shared/styles/theme';
-import useNavigationStore from '@shared/store/navigationStore';
+// import useNavigationStore from '@shared/store/navigationStore';
 import {ButtonCircle, SvgIcon} from '@shared/components/atoms';
 
 interface IRunButtonGroup {
-  startRunHandler: () => void;
-  settingHandler: () => void;
-  prepareRunHandler: () => void;
+  endRunCallback: () => void;
   pauseHandler: () => void;
-  isPause: boolean;
-  isRun: boolean;
+  isPause?: boolean;
 }
 
 /**
  * 런 스크린 버튼 그룹 컴포넌트
  * @property { boolean } isRun 달리기 시작 여부
  * @property { boolean } isPause 달리기 일시정지 여부
- * @property { () => void } startRunHandler 달리기 시작 함수
- * @property { () => void } settingHandler 셋팅 바텀시트 호출 함수
- * @property { () => void } prepareRunHandler 달리기 준비 단계 호출 함수
+ * @property { () => void } endRunCallback 달리기 종료 콜백 함수
  * @property { () => void } pauseHandler 달리기 임시정지 함수
  * @returns React.JSX.Element
  */
-const RunButtonGroup = ({
-  startRunHandler,
-  settingHandler,
-  prepareRunHandler,
+const ControlButtonGroup = ({
+  endRunCallback,
   pauseHandler,
   isPause,
-  isRun,
 }: IRunButtonGroup) => {
-  // const dispatch = useDispatch();
-
-  const {setIsTabShowStatus} = useNavigationStore();
   /** 사운드 버튼 사용 여부 */
   const [isSound, setIsSound] = useState(true);
 
@@ -86,67 +75,56 @@ const RunButtonGroup = ({
 
   /** 버튼 애니메이션  */
   useEffect(() => {
-    if (isRun) {
-      if (isPause) {
-        leftButtonSize.value = withSpring(80, {
+    if (isPause) {
+      leftButtonSize.value = withSpring(80, {
+        duration: 400,
+      });
+      leftTranslateX.value = withTiming(-60, {
+        duration: 200,
+        easing: Easing.linear,
+      });
+      rightTranslateX.value = withTiming(60, {
+        duration: 200,
+        easing: Easing.linear,
+      });
+    } else {
+      leftTranslateX.value = withTiming(0, {
+        duration: 200,
+        easing: Easing.linear,
+      });
+      rightTranslateX.value = withTiming(0, {
+        duration: 200,
+        easing: Easing.linear,
+      });
+      setTimeout(() => {
+        leftButtonSize.value = withSpring(84, {
           duration: 400,
         });
-        leftTranslateX.value = withTiming(-60, {
-          duration: 200,
-          easing: Easing.linear,
-        });
-        rightTranslateX.value = withTiming(60, {
-          duration: 200,
-          easing: Easing.linear,
-        });
-      } else {
-        leftTranslateX.value = withTiming(0, {
-          duration: 200,
-          easing: Easing.linear,
-        });
-        rightTranslateX.value = withTiming(0, {
-          duration: 200,
-          easing: Easing.linear,
-        });
-        setTimeout(() => {
-          leftButtonSize.value = withSpring(84, {
-            duration: 400,
-          });
-        }, 200);
-      }
+      }, 200);
     }
-  }, [
-    isPause,
-    isRun,
-    leftButtonSize,
-    leftTranslateX,
-    rightDisplay,
-    rightTranslateX,
-  ]);
+  }, [isPause, leftButtonSize, leftTranslateX, rightDisplay, rightTranslateX]);
 
   /** run 버튼 아이콘 이름 */
   const runButtonIconName = useMemo(() => {
-    if (isRun && !isPause) {
+    if (!isPause) {
       return 'pause';
-    } else if (isPause) {
-      return 'play';
-    } else {
-      return 'play';
     }
-  }, [isPause, isRun]);
+    return 'play';
+  }, [isPause]);
 
   /** run 버튼 컬러 */
   const runButtonColor = useMemo(() => {
-    return isRun ? colors.warning : colors.primary;
-  }, [isRun]);
+    return isPause ? colors.warning : colors.primary;
+  }, [isPause]);
 
   /** run 버튼 아이콘 사이즈 */
   const runButtonIconSize = useMemo(() => {
-    return isRun && !isPause ? 40 : 60;
-  }, [isPause, isRun]);
+    return isPause && !isPause ? 40 : 60;
+  }, [isPause]);
 
   /** 달리기 종료 핸들러 */
   const endRunningHandler = () => {
+    console.log('클릭됨 ~~');
     Alert.alert('달리기를 종료하시겠습니까 ?', '', [
       {
         text: '취소',
@@ -156,8 +134,7 @@ const RunButtonGroup = ({
       {
         text: '확인',
         onPress: () => {
-          pauseHandler();
-          startRunHandler();
+          endRunCallback();
         },
       },
     ]);
@@ -165,30 +142,23 @@ const RunButtonGroup = ({
 
   /** 달리기 이벤트 컨트롤러 */
   const runController = () => {
-    if (isRun) {
-      pauseHandler();
-    } else {
-      setIsTabShowStatus(false);
-      prepareRunHandler();
-    }
+    pauseHandler();
+    // if (!isPause) {
+    //   pauseHandler();
+    // } else {
+    //   setIsTabShowStatus(false);
+    // }
   };
 
   return (
     <ButtonWrapper>
       <ButtonBox>
-        <Left>
-          {!isRun && !isPause && (
-            <ButtonCircle onPress={settingHandler} size={40} buttonColor="#fff">
-              <SvgIcon name="setting" size={24} />
-            </ButtonCircle>
-          )}
-        </Left>
+        <Left />
         <Mid>
           <AnimatedLeftView style={leftButtonAnimatedStyle}>
             <AnimatedCircleButton
               style={leftButtonStyle}
               onPress={runController}
-              // size={leftButtonSize}
               buttonColor={runButtonColor}>
               <SvgIcon
                 name={runButtonIconName}
@@ -219,17 +189,15 @@ const RunButtonGroup = ({
     </ButtonWrapper>
   );
 };
-export default RunButtonGroup;
 
-const ButtonWrapper = styled.View`
-  z-index: 100;
-  width: 100%;
-  height: 20%;
-  position: absolute;
-  bottom: 5%;
-  align-items: center;
-  justify-content: center;
-`;
+export default ControlButtonGroup;
+
+const ButtonWrapper = styled.View({
+  flex: 0.5,
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: 80,
+});
 
 const ButtonBox = styled.View`
   z-index: 1;
@@ -239,12 +207,12 @@ const ButtonBox = styled.View`
   justify-content: space-around;
 `;
 
-const BottomLeftView = styled.View`
-  z-index: 2000;
-  flex-direction: row;
-  align-items: center;
-  position: absolute;
-`;
+const BottomLeftView = styled.View({
+  zIndex: 2000,
+  flexDirection: 'row',
+  alignItems: 'center',
+  position: 'absolute',
+});
 
 const BottomRightView = styled.View`
   z-index: 1000;
