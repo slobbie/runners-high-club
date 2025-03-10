@@ -12,4 +12,5 @@ export type RootStackParams = {
   recordStack: undefined;
   recordScreen: undefined;
   recordDetailScreen: IRunRecord;
+  prepareRunScreen: undefined;
 };

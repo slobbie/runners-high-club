@@ -253,7 +253,7 @@ const RunTrackerScreen = ({}: IRunTracker) => {
   const endRunCallback = () => {
     clearTimeout(pathPositionRef.current);
     pathPositionRef.current = null;
-    navigate.navigate('completeRunScreen', {pathPosition, markerPosition});
+    navigate.replace('completeRunScreen', {pathPosition, markerPosition});
   };
 
   return (

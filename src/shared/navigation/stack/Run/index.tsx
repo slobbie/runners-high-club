@@ -9,6 +9,7 @@ import CompleteRunScreen from '@features/completeRun/screen/CompleteRunScreen';
 import RunScreen from '@features/run/screen/RunScreen';
 import {HeaderIconButton} from '@shared/components/molecules';
 import RunTrackerScreen from '@features/runTracker/screen/RunTrackerScreen';
+import PrepareRunScreen from '@features/prepareRun/screen';
 
 /**
  *
@@ -28,6 +29,15 @@ const RunStack = () => {
         component={RunScreen}
         options={() => ({
           headerShown: false,
+        })}
+      />
+
+      <Stack.Screen
+        name={'prepareRunScreen'}
+        component={PrepareRunScreen}
+        options={() => ({
+          headerShown: false,
+          animationEnabled: false,
         })}
       />
       <Stack.Screen
