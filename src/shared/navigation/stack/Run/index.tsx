@@ -6,7 +6,7 @@ import {
 
 import {RootStackParams} from '@shared/interface/rootStackParams';
 import CompleteRunScreen from '@features/completeRun/screen/CompleteRunScreen';
-import RunScreen from '@features/run/screen/RunScreen';
+import RunSetupScreen from '@features/runSetup/screen/RunSetupScreen';
 import {HeaderIconButton} from '@shared/components/molecules';
 import RunTrackerScreen from '@features/runTracker/screen/RunTrackerScreen';
 import PrepareRunScreen from '@features/prepareRun/screen';
@@ -19,14 +19,14 @@ const RunStack = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName={'runScreen'}
+      initialRouteName={'runSetupScreen'}
       screenOptions={{
         headerTitle: '',
         headerShown: false,
       }}>
       <Stack.Screen
-        name={'runScreen'}
-        component={RunScreen}
+        name={'runSetupScreen'}
+        component={RunSetupScreen}
         options={() => ({
           headerShown: false,
         })}

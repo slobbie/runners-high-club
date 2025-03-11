@@ -2,20 +2,16 @@ import React from 'react';
 import styled from '@emotion/native';
 import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 
-interface IEditKmItem {
+interface IProps {
   onPress: () => void;
   inputValue: string;
   onChange: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;
 }
 
 /**
- * 런 스크린 바텀 시트 아이템 컴포넌ㅌ
- * @property { () => void } onPress
- * @property { string } inputValue
- * @property { (e: NativeSyntheticEvent<TextInputChangeEventData>) => void; } onChange 설명
- * @returns React.JSX.Element
+ * 달리기 준비 설정 컨텐츠
  */
-const EditKmItem = ({onPress, inputValue, onChange}: IEditKmItem) => {
+const SetupRunContent = ({onPress, inputValue, onChange}: IProps) => {
   return (
     <>
       <EditButton onPress={onPress}>
@@ -34,7 +30,7 @@ const EditKmItem = ({onPress, inputValue, onChange}: IEditKmItem) => {
   );
 };
 
-export default EditKmItem;
+export default SetupRunContent;
 
 const EditCloseText = styled.Text``;
 

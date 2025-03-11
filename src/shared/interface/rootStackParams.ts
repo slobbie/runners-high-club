@@ -6,7 +6,7 @@ export type RootStackParams = {
   loginScreen: undefined;
   homeScreen: undefined;
   runStack: undefined;
-  runScreen: undefined;
+  runSetupScreen: undefined;
   runTrackerScreen: undefined;
   completeRunScreen: ICompleteRunScreen;
   recordStack: undefined;

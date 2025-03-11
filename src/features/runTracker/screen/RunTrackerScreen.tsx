@@ -1,8 +1,8 @@
 import styled from '@emotion/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import useRunStore from '@features/run/store/runstore';
 import ControlButtonGroup from '@features/runTracker/components/ControlButtonGroup';
 import useNavigate from '@shared/hooks/useNavigate';
+import useRunSetupStore from '@shared/store/runSetupStore';
 
 interface IRunTracker {}
 
@@ -43,7 +43,7 @@ const RunTrackerScreen = ({}: IRunTracker) => {
   ]);
 
   const {setDistanceRunningTime, setDistanceRun, setDistanceRunningPace} =
-    useRunStore();
+    useRunSetupStore();
 
   const [timer, setTimer] = useState(0);
   const paceRef = useRef('0:00');

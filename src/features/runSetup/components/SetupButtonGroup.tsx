@@ -6,19 +6,14 @@ import useNavigationStore from '@shared/store/navigationStore';
 import {ButtonCircle, SvgIcon} from '@shared/components/atoms';
 
 interface IRunButtonGroup {
-  startRunHandler: () => void;
   settingHandler: () => void;
   prepareRunHandler: () => void;
 }
 
 /**
- * 런 스크린 버튼 그룹 컴포넌트
- * @property { () => void } startRunHandler 달리기 시작 함수
- * @property { () => void } settingHandler 셋팅 바텀시트 호출 함수
- * @property { () => void } prepareRunHandler 달리기 준비 단계 호출 함수
- * @returns React.JSX.Element
+ * 달리기 준비 단계 버튼 그룹 컴포넌트
  */
-const ControlButtonGroup = ({
+const SetupButtonGroup = ({
   settingHandler,
   prepareRunHandler,
 }: IRunButtonGroup) => {
@@ -75,7 +70,7 @@ const ControlButtonGroup = ({
     </ButtonWrapper>
   );
 };
-export default ControlButtonGroup;
+export default SetupButtonGroup;
 
 const ButtonWrapper = styled.View({
   flex: 0.5,

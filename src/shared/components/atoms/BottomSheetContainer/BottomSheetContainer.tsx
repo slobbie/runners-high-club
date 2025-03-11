@@ -4,7 +4,6 @@ import {
   BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetModalProps,
-  BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
 
 interface IBottomsheet extends BottomSheetModalProps {
@@ -13,10 +12,7 @@ interface IBottomsheet extends BottomSheetModalProps {
 }
 
 /**
- * 바텀 시트 컴포넌트
- * @property { BottomSheetModal } BottomSheetModal Type 의 ref
- * @property { string } snapPoint 바텀 시트 화면 노출 비율
- * @returns React.JSX.Element
+ * 바텀 시트 컨테이너 컴포넌트
  */
 const BottomSheetContainer = React.forwardRef<BottomSheetModal, IBottomsheet>(
   ({children, snapPoint}, ref) => {
@@ -37,15 +33,13 @@ const BottomSheetContainer = React.forwardRef<BottomSheetModal, IBottomsheet>(
     );
 
     return (
-      <BottomSheetModalProvider>
-        <BottomSheetModal
-          ref={ref}
-          index={0}
-          snapPoints={snapPoints}
-          backdropComponent={renderBackdrop}>
-          {children}
-        </BottomSheetModal>
-      </BottomSheetModalProvider>
+      <BottomSheetModal
+        ref={ref}
+        index={0}
+        snapPoints={snapPoints}
+        backdropComponent={renderBackdrop}>
+        {children}
+      </BottomSheetModal>
     );
   },
 );

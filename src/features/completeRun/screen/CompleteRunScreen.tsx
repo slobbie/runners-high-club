@@ -2,13 +2,13 @@ import styled from '@emotion/native';
 import React, {useMemo} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import NaverMapView, {Marker, Path} from 'react-native-nmap';
-import useRunStore from '@features/run/store/runstore';
 
 import {ButtonBase} from '@shared/components/atoms';
 import {CommonActions, RouteProp} from '@react-navigation/native';
 import {RootStackParams} from '@shared/interface/rootStackParams';
 import useNavigate from '@shared/hooks/useNavigate';
 import useNavigationStore from '@shared/store/navigationStore';
+import useRunSetupStore from '@shared/store/runSetupStore';
 
 interface IProps {
   route: RouteProp<RootStackParams, 'completeRunScreen'>;
@@ -24,7 +24,8 @@ interface IProps {
  */
 const CompleteRunScreen = ({route}: IProps) => {
   const {pathPosition} = route.params;
-  const {distanceRun, distanceRunningTime, distanceRunningPace} = useRunStore();
+  const {distanceRun, distanceRunningTime, distanceRunningPace} =
+    useRunSetupStore();
   const {setIsTabShowStatus} = useNavigationStore();
 
   const navigate = useNavigate();

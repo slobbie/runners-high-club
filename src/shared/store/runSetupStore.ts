@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 
-interface IRunStore {
+interface IRunSetupStore {
   distanceRun: string;
   distanceRunningTime: string;
   distanceRunningPace: string;
@@ -9,7 +9,7 @@ interface IRunStore {
   setDistanceRunningPace: (distanceRunningPace: string) => void;
 }
 
-const useRunStore = create<IRunStore>(set => ({
+const useRunSetupStore = create<IRunSetupStore>(set => ({
   distanceRun: '0.00',
   distanceRunningTime: '0:00',
   distanceRunningPace: '0:00',
@@ -24,4 +24,4 @@ const useRunStore = create<IRunStore>(set => ({
   },
 }));
 
-export default useRunStore;
+export default useRunSetupStore;

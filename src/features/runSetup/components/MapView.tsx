@@ -1,19 +1,14 @@
-import styled from '@emotion/native';
 import React from 'react';
 import {StyleSheet} from 'react-native';
+import styled from '@emotion/native';
 import NaverMapView, {Marker} from 'react-native-nmap';
 
 import DotPng from '@assets/png/blue-dot.png';
+import {IPositionBase} from '@shared/interface/position.interface';
 
 interface IProps {
-  pathPosition: {
-    latitude: number;
-    longitude: number;
-  }[];
-  markerPosition: {
-    latitude: number;
-    longitude: number;
-  };
+  pathPosition: IPositionBase[];
+  markerPosition: IPositionBase;
 }
 
 /**
