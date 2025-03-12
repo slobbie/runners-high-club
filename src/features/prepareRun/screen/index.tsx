@@ -9,22 +9,23 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import useNavigate from '@shared/hooks/useNavigate';
+import useCountdown from '@shared/hooks/useCountdown';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 /**
  * 달리기 준비 단계 스크린
  * @returns React.JSX.Element
  */
 const PrepareRunScreen = () => {
-  const {setSafeAreaViewBg} = useBackBgStore();
+  // const {setSafeAreaViewBg} = useBackBgStore();
   const navigation = useNavigate();
-  /** 준비 단계 카운터 */
-  const [runCount, setRunCount] = useState(3);
 
-  const opacity = useSharedValue(0);
+  const [count, startCountdown] = useCountdown(3);
 
   /** 카운터 종료후 출발 텍스트 노출 여부 */
   const [isCompleteText, setIsSetCompleteText] = useState(true);
 
+  const opacity = useSharedValue(0);
   const animatedViewWidth = useSharedValue(30);
   const animatedViewHeight = useSharedValue(15);
   const animatedViewRadius = useSharedValue(1000);
@@ -40,24 +41,11 @@ const PrepareRunScreen = () => {
     }, 500);
 
     return () => clearTimeout(resetAnimation);
-  }, [opacity, runCount]);
-
-  /** 텍스트 애니메이션 스타일 */
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: opacity.value,
-    };
-  });
-
-  /** 텍스트 애니메이션 스타일 */
-  const animatedWrapperStyle = useAnimatedStyle(() => {
-    return {
-      opacity: animatedViewOpacity.value,
-    };
-  });
+  }, [opacity, count]);
 
   /** 카운터 시작시 view 애니메이션 */
   useEffect(() => {
+    console.log('여기가 시작이야 ? :');
     animatedViewWidth.value = withTiming(animatedViewWidth.value + 70, {
       duration: 150,
     });
@@ -81,7 +69,7 @@ const PrepareRunScreen = () => {
 
   /** 카운터 종료 시 view 애니메이션 */
   useEffect(() => {
-    if (runCount === 0) {
+    if (count === 0) {
       setIsSetCompleteText(() => {
         return true;
       });
@@ -90,7 +78,7 @@ const PrepareRunScreen = () => {
           return false;
         });
         /** 노치바 색상 변경 */
-        setSafeAreaViewBg(colors.bg_gray000);
+        // setSafeAreaViewBg(colors.bg_gray000);
         opacityBg.value = withTiming(0, {duration: 100});
         animatedViewTop.value = withTiming(animatedViewTop.value + 78, {
           duration: 150,
@@ -104,6 +92,8 @@ const PrepareRunScreen = () => {
         animatedViewRadius.value = withSpring(animatedViewRadius.value + 1000, {
           duration: 150,
         });
+
+        navigation.navigate('runTrackerScreen');
       }, 500);
     }
   }, [
@@ -111,8 +101,7 @@ const PrepareRunScreen = () => {
     animatedViewRadius,
     animatedViewTop,
     animatedViewWidth,
-    runCount,
-    setSafeAreaViewBg,
+    count,
   ]);
 
   /** View 애니메이션 스타일 */
@@ -126,30 +115,31 @@ const PrepareRunScreen = () => {
     };
   });
 
-  /** 달리기 준비 단계 */
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (runCount > 0) {
-      interval = setInterval(() => {
-        setRunCount(prevCount => prevCount - 1);
-      }, 1000);
-    } else if (runCount === 0) {
-      setTimeout(() => {
-        setSafeAreaViewBg(colors.bg_gray000);
-        setRunCount(3);
-        navigation.navigate('runTrackerScreen');
-      }, 650);
-    }
+  /** 전체 영역 애니메이션 스타일 */
+  const animatedWrapperStyle = useAnimatedStyle(() => {
+    return {
+      opacity: animatedViewOpacity.value,
+    };
+  });
 
-    return () => clearInterval(interval);
-  }, [runCount, setSafeAreaViewBg]);
+  /** 텍스트 애니메이션 스타일 */
+  const animatedTextStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  });
+
+  /** 카운트 다운 이벤트 */
+  useEffect(() => {
+    startCountdown();
+  }, []);
 
   return (
     <AnimatedWrapper style={animatedWrapperStyle}>
-      <AnimatedView style={animatedViewStyle}>
-        {runCount > 0 ? (
-          <AnimatedCountText style={[animatedStyle]}>
-            {runCount}
+      <AnimatedView style={[animatedViewStyle]}>
+        {count > 0 ? (
+          <AnimatedCountText style={[animatedTextStyle]}>
+            {count}
           </AnimatedCountText>
         ) : (
           isCompleteText && <AnimatedCountText>출발 !</AnimatedCountText>
@@ -162,17 +152,20 @@ const PrepareRunScreen = () => {
 export default PrepareRunScreen;
 
 const Wrapper = styled.View`
-  position: absolute;
+  /* position: absolute; */
   width: 100%;
   height: 100%;
-  z-index: 1000;
+  /* z-index: 1000; */
   background-color: transparent;
+  /* background-color: blue; */
   align-items: center;
+
+  justify-content: 'center';
 `;
 
 const CounterView = styled.View`
-  position: absolute;
-  z-index: 2000;
+  /* position: absolute; */
+  /* z-index: 2000; */
   background-color: ${({theme}) => theme.colors.warning};
   justify-content: center;
   align-items: center;

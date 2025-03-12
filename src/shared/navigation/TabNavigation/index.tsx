@@ -1,14 +1,14 @@
 import React, {useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-// import RunScreen from '@features/run/screen/RunScreen';
 import {colors} from '@shared/styles/theme';
 import {SvgIcon, Label} from '@shared/components/atoms';
 import useNavigationStore from '@shared/store/navigationStore';
 import * as Icons from '@shared/constants/icons';
 // import {HeaderIconButton} from '@shared/components/molecules';
-import {RecordStack, RunStack} from '@shared/navigation/Stack';
+// import {RecordStack, RunStack} from '@shared/navigation/Stack';
 import {RootStackParams} from '@shared/interface/rootStackParams';
+import {RecordStack, RunStack} from '@shared/navigation/stacks';
 
 /** 탭 네이게이션 */
 const TabNavigation = () => {
@@ -52,7 +52,7 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName={'runScreen'}
+      initialRouteName={'recordStack'}
       screenOptions={({}) => ({
         headerShown: isTabShowStatus,
         tabBarAllowFontScaling: false,
@@ -66,7 +66,7 @@ const TabNavigation = () => {
           color: colors.bg_gray000,
         },
         tabBarStyle: {
-          height: 40,
+          height: 80,
           backgroundColor: colors.bg_gray000,
           borderTopWidth: 0,
           margin: 0,
@@ -103,9 +103,6 @@ const TabNavigation = () => {
           tabBarIcon: ({focused}) => {
             return tabIcon(focused, 'run');
           },
-          // headerLeft: () => {
-          //   return <HeaderButton iconName="profile" />;
-          // },
         })}
       />
     </Tab.Navigator>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import styled from '@emotion/native';
-import NaverMapView, {Marker} from 'react-native-nmap';
+import NaverMapView, {Marker, NaverMapViewProps} from 'react-native-nmap';
 
 import DotPng from '@assets/png/blue-dot.png';
 import {IPositionBase} from '@shared/interface/position.interface';
@@ -9,19 +9,24 @@ import {IPositionBase} from '@shared/interface/position.interface';
 interface IProps {
   pathPosition: IPositionBase[];
   markerPosition: IPositionBase;
+  mapViewProps: NaverMapViewProps;
 }
 
 /**
  * MapView 컴포넌트
- * @returns React.JSX.Element
  */
-const MapView = ({pathPosition, markerPosition}: IProps) => {
+const TrackingMapView = ({
+  pathPosition,
+  markerPosition,
+  mapViewProps,
+}: IProps) => {
   return (
     <LayerView>
       <RadiusView>
         <NaverMapView
           style={styles.naverMapView}
           zoomControl={false}
+          {...mapViewProps}
           center={{
             zoom: 15.7,
             // 지도 기울기
@@ -51,7 +56,7 @@ const MapView = ({pathPosition, markerPosition}: IProps) => {
   );
 };
 
-export default MapView;
+export default TrackingMapView;
 
 const styles = StyleSheet.create({
   naverMapView: {

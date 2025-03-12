@@ -10,10 +10,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import SetupButtonGroup from '@features/runSetup/components/SetupButtonGroup';
-import useBackBgStore from '@shared/store/backBgStore';
-import {colors} from '@shared/styles/theme';
-import {BottomSheetContainer} from '@shared/components/atoms';
-import MapView from '@features/runSetup/components/MapView';
+import {BottomSheetContainer, TrackingMapView} from '@shared/components/atoms';
 import useNavigate from '@shared/hooks/useNavigate';
 import {Header} from '@shared/components/organisms';
 import {HeaderIconButton} from '@shared/components/molecules';
@@ -26,13 +23,11 @@ import {IPositionBase} from '@shared/interface/run.interface';
  */
 const RunSetupScreen = () => {
   const navigation = useNavigate();
-  const {setSafeAreaViewBg} = useBackBgStore();
   const getCurrentPosition = useCurrentPosition();
 
   /** 디바이스 권한  */
   const permissions = useDevicePermissions();
 
-  /** 바텀시트 ref */
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   /** 목표 km 상태 */
@@ -59,23 +54,20 @@ const RunSetupScreen = () => {
   /** 위치 권한 여부 */
   const [isPermissionsState, setIsPermissionsState] = useState(false);
 
-  /** 달리기 준비 단계  */
+  /** 달리기 준비 화면 이동 */
   const prepareRun = () => {
-    setSafeAreaViewBg(colors.warning);
+    // setSafeAreaViewBg(colors.warning);
     navigation.navigate('prepareRunScreen');
   };
 
-  /** 셋팅 바텀시트 호출 핸들러 */
   const settingHandler = () => {
     bottomSheetModalRef.current?.present();
   };
 
-  /** 목표 km 온체인지 이벤트 */
   const onChangeKm = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setKmText(e.nativeEvent.text);
   };
 
-  /** 바텀 시트 닫기 이벤트 */
   const closeBottomsheet = () => {
     bottomSheetModalRef.current?.close();
     Keyboard.dismiss();
@@ -130,7 +122,13 @@ const RunSetupScreen = () => {
         </KmBox>
       </KmWrapper>
 
-      <MapView pathPosition={pathPosition} markerPosition={markerPosition} />
+      <TrackingMapView
+        pathPosition={pathPosition}
+        markerPosition={markerPosition}
+        mapViewProps={{
+          zoomControl: false,
+        }}
+      />
       <SetupButtonGroup
         settingHandler={settingHandler}
         prepareRunHandler={prepareRun}

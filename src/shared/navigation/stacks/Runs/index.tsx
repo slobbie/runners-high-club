@@ -21,7 +21,6 @@ const RunStack = () => {
     <Stack.Navigator
       initialRouteName={'runSetupScreen'}
       screenOptions={{
-        headerTitle: '',
         headerShown: false,
       }}>
       <Stack.Screen
@@ -32,14 +31,6 @@ const RunStack = () => {
         })}
       />
 
-      <Stack.Screen
-        name={'prepareRunScreen'}
-        component={PrepareRunScreen}
-        options={() => ({
-          headerShown: false,
-          animationEnabled: false,
-        })}
-      />
       <Stack.Screen
         name={'completeRunScreen'}
         component={CompleteRunScreen}
