@@ -1,5 +1,3 @@
-import useBackBgStore from '@shared/store/backBgStore';
-import {colors} from '@shared/styles/theme';
 import styled from '@emotion/native';
 import React, {useEffect, useState} from 'react';
 import Animated, {
@@ -10,15 +8,16 @@ import Animated, {
 } from 'react-native-reanimated';
 import useNavigate from '@shared/hooks/useNavigate';
 import useCountdown from '@shared/hooks/useCountdown';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {useWindowDimensions} from 'react-native';
 
 /**
  * 달리기 준비 단계 스크린
  * @returns React.JSX.Element
  */
 const PrepareRunScreen = () => {
-  // const {setSafeAreaViewBg} = useBackBgStore();
   const navigation = useNavigate();
+
+  const {width, height} = useWindowDimensions();
 
   const [count, startCountdown] = useCountdown(3);
 
@@ -32,6 +31,8 @@ const PrepareRunScreen = () => {
   const animatedViewTop = useSharedValue(30);
   const animatedViewOpacity = useSharedValue(1);
 
+  const opacityBg = useSharedValue(1);
+
   /** 카운트 애니메이션 */
   useEffect(() => {
     opacity.value = withTiming(1, {duration: 250});
@@ -43,72 +44,46 @@ const PrepareRunScreen = () => {
     return () => clearTimeout(resetAnimation);
   }, [opacity, count]);
 
-  /** 카운터 시작시 view 애니메이션 */
-  useEffect(() => {
-    console.log('여기가 시작이야 ? :');
-    animatedViewWidth.value = withTiming(animatedViewWidth.value + 70, {
+  const startFadeAnimation = () => {
+    animatedViewWidth.value = withTiming(width, {
       duration: 150,
     });
-    animatedViewHeight.value = withTiming(animatedViewHeight.value + 85, {
+    animatedViewHeight.value = withTiming(height, {
       duration: 200,
     });
+
     animatedViewTop.value = withTiming(animatedViewTop.value - 30, {
       duration: 150,
     });
     animatedViewRadius.value = withTiming(animatedViewRadius.value - 1000, {
       duration: 150,
     });
-  }, [
-    animatedViewHeight,
-    animatedViewRadius,
-    animatedViewTop,
-    animatedViewWidth,
-  ]);
+  };
 
-  const opacityBg = useSharedValue(1);
-
-  /** 카운터 종료 시 view 애니메이션 */
-  useEffect(() => {
-    if (count === 0) {
-      setIsSetCompleteText(() => {
-        return true;
-      });
-      setTimeout(() => {
-        setIsSetCompleteText(() => {
-          return false;
-        });
-        /** 노치바 색상 변경 */
-        // setSafeAreaViewBg(colors.bg_gray000);
-        opacityBg.value = withTiming(0, {duration: 100});
-        animatedViewTop.value = withTiming(animatedViewTop.value + 78, {
-          duration: 150,
-        });
-        animatedViewWidth.value = withSpring(animatedViewWidth.value - 75, {
-          duration: 150,
-        });
-        animatedViewHeight.value = withSpring(animatedViewHeight.value - 85, {
-          duration: 150,
-        });
-        animatedViewRadius.value = withSpring(animatedViewRadius.value + 1000, {
-          duration: 150,
-        });
-
-        navigation.navigate('runTrackerScreen');
-      }, 500);
-    }
-  }, [
-    animatedViewHeight,
-    animatedViewRadius,
-    animatedViewTop,
-    animatedViewWidth,
-    count,
-  ]);
+  const endViewAnimation = () => {
+    animatedViewWidth.value = withSpring(80, {
+      duration: 150,
+    });
+    animatedViewHeight.value = withSpring(80, {
+      duration: 150,
+    });
+    animatedViewRadius.value = withSpring(animatedViewRadius.value + 1000, {
+      duration: 150,
+    });
+    animatedViewTop.value = withTiming(animatedViewTop.value + 78, {
+      duration: 150,
+    });
+    opacityBg.value = withTiming(0, {duration: 300});
+    setTimeout(() => {
+      navigation.navigate('runTrackerScreen');
+    }, 200);
+  };
 
   /** View 애니메이션 스타일 */
   const animatedViewStyle = useAnimatedStyle(() => {
     return {
-      width: `${animatedViewWidth.value}%`,
-      height: `${animatedViewHeight.value}%`,
+      width: animatedViewWidth.value,
+      height: animatedViewHeight.value,
       borderRadius: animatedViewRadius.value,
       top: `${animatedViewTop.value}%`,
       opacity: opacityBg.value,
@@ -134,10 +109,32 @@ const PrepareRunScreen = () => {
     startCountdown();
   }, []);
 
+  /** 카운터 시작시 view 애니메이션 */
+  useEffect(() => {
+    startFadeAnimation();
+  }, []);
+
+  /** 카운터 종료 시 view 애니메이션 */
+  useEffect(() => {
+    if (count === 0) {
+      setIsSetCompleteText(() => {
+        return true;
+      });
+      setTimeout(() => {
+        setIsSetCompleteText(() => {
+          return false;
+        });
+        endViewAnimation();
+      }, 500);
+    }
+  }, [count]);
+
+  const isProgressCount = count > 0;
+
   return (
     <AnimatedWrapper style={animatedWrapperStyle}>
       <AnimatedView style={[animatedViewStyle]}>
-        {count > 0 ? (
+        {isProgressCount ? (
           <AnimatedCountText style={[animatedTextStyle]}>
             {count}
           </AnimatedCountText>
@@ -152,20 +149,15 @@ const PrepareRunScreen = () => {
 export default PrepareRunScreen;
 
 const Wrapper = styled.View`
-  /* position: absolute; */
   width: 100%;
   height: 100%;
-  /* z-index: 1000; */
   background-color: transparent;
-  /* background-color: blue; */
   align-items: center;
 
   justify-content: 'center';
 `;
 
 const CounterView = styled.View`
-  /* position: absolute; */
-  /* z-index: 2000; */
   background-color: ${({theme}) => theme.colors.warning};
   justify-content: center;
   align-items: center;

@@ -5,3 +5,4 @@ export {default as Label} from '@shared/components/atoms/Label';
 export {default as Space} from '@shared/components/atoms/Space';
 export {default as BottomSheetContainer} from '@shared/components/atoms/BottomSheetContainer/BottomSheetContainer';
 export {default as TrackingMapView} from '@shared/components/atoms/TrackingMapView/TrackingMapView';
+export {default as Typo} from '@shared/components/atoms/Typo';

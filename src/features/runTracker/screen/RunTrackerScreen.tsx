@@ -1,8 +1,10 @@
 import styled from '@emotion/native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import ControlButtonGroup from '@features/runTracker/components/ControlButtonGroup';
 import useNavigate from '@shared/hooks/useNavigate';
 import useRunSetupStore from '@shared/store/runSetupStore';
+import {runUtils} from '@shared/utils/runUtils';
+import {timeFormatUtils} from '@shared/utils/timeFormatUtils';
 
 interface IRunTracker {}
 
@@ -42,6 +44,10 @@ const RunTrackerScreen = ({}: IRunTracker) => {
     },
   ]);
 
+  const pathPositionRef = useRef<NodeJS.Timeout>();
+
+  const [kmText, setKmText] = useState('0.00');
+
   const {setDistanceRunningTime, setDistanceRun, setDistanceRunningPace} =
     useRunSetupStore();
 
@@ -51,21 +57,6 @@ const RunTrackerScreen = ({}: IRunTracker) => {
     timer: 0,
     kmText: '',
   });
-
-  // 시간을 포맷팅하는 함수
-  const formatTime = (seconds: number) => {
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-
-    if (hrs > 0) {
-      return `${hrs}:${mins < 10 ? '0' : ''}${mins}:${
-        secs < 10 ? '0' : ''
-      }${secs}`;
-    } else {
-      return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
-    }
-  };
 
   /** 시간 업데이트 */
   useEffect(() => {
@@ -77,86 +68,31 @@ const RunTrackerScreen = ({}: IRunTracker) => {
       };
       let re = setTimeout(updateTime, 1000);
       return () => {
-        setDistanceRunningTime(formatTime(timer));
+        setDistanceRunningTime(timeFormatUtils.formatDuration(timer));
         clearTimeout(re);
       };
     }
   }, [isPause, setDistanceRunningTime, timer]);
 
-  // 두 지점 간의 거리를 계산하는 함수
-  const calculateDistance = useCallback(
-    (
-      initialLatitude: number,
-      initialLongitude: number,
-      updatedLatitude: number,
-      updatedLongitude: number,
-    ): number => {
-      // 각도를 라디안으로 변환하는 함수
-      const degreesToRadians = (degrees: number): number => {
-        return (degrees * Math.PI) / 180;
-      };
-
-      const EARTH_RADIUS_KM = 6371; // 지구의 반경 (킬로미터)
-
-      // 두 위도 간의 차이를 라디안으로 변환
-      const deltaLatitude = degreesToRadians(updatedLatitude - initialLatitude);
-      // 두 경도 간의 차이를 라디안으로 변환
-      const deltaLongitude = degreesToRadians(
-        updatedLongitude - initialLongitude,
-      );
-
-      // 하버사인 공식의 a 값 계산
-      const a =
-        Math.sin(deltaLatitude / 2) * Math.sin(deltaLatitude / 2) +
-        Math.cos(degreesToRadians(initialLatitude)) *
-          Math.cos(degreesToRadians(updatedLatitude)) *
-          Math.sin(deltaLongitude / 2) *
-          Math.sin(deltaLongitude / 2);
-
-      // 하버사인 공식의 c 값 계산
-      const centralAngle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-      // 두 지점 간의 거리 계산
-      const distance = EARTH_RADIUS_KM * centralAngle;
-
-      return distance; // 킬로미터 단위의 거리 반환
-    },
-    [],
-  );
-
-  // 거리를 형식화하는 함수
-  const formatDistance = useCallback((distanceInKm: number): string => {
-    return `${distanceInKm.toFixed(2)}`;
-  }, []);
-
-  const [kmText, setKmText] = useState('0.00');
-
   /** km 미터 계산 호출 */
   useEffect(() => {
     if (!isPause) {
       const prevPosition = pathPosition[0];
-      const km = calculateDistance(
+      const km = runUtils.calculateDistance(
         prevPosition.latitude,
         prevPosition.longitude,
         markerPosition.latitude,
         markerPosition.longitude,
       );
       /** 달린 거리 계산  */
-      const convertKm = formatDistance(
+      const convertKm = runUtils.formatDistance(
         Math.round((km + Number.EPSILON) * 100) / 100,
       );
       setKmText(convertKm);
       runDataRef.current.kmText = convertKm;
       setDistanceRun(convertKm);
     }
-  }, [
-    calculateDistance,
-    formatDistance,
-    isPause,
-    markerPosition,
-    pathPosition,
-    setDistanceRun,
-  ]);
+  }, [isPause, markerPosition, pathPosition]);
 
   /** 러닝 종료시 초기화 */
   useEffect(() => {
@@ -165,8 +101,6 @@ const RunTrackerScreen = ({}: IRunTracker) => {
       setKmText('0.00');
     };
   }, []);
-
-  const pathPositionRef = useRef<any>();
 
   useEffect(() => {
     if (!isPause) {
@@ -177,7 +111,6 @@ const RunTrackerScreen = ({}: IRunTracker) => {
           longitude: prev.longitude + 0.000001,
         }));
         setPathPosition(prev => {
-          console.log(`여기 계속 호출되? :`);
           return [
             ...prev,
             {
@@ -199,38 +132,12 @@ const RunTrackerScreen = ({}: IRunTracker) => {
     };
   }, [isPause]);
 
-  /**
-   * 현재 속도(시간당 이동 거리)를 기반으로 앞으로 1km를 달리는데 걸리는 시간을 계산하는 함수
-   * @param distanceTraveledRatio - 현재까지 이동한 거리 (0에서 1 사이의 비율)
-   * @param timeElapsedInSeconds - 현재까지 경과한 시간 (초 단위)
-   * @returns 앞으로 1km를 달리는데 걸리는 시간 (분 단위)
-   */
-  const calculateTimeToRun1kmPace = (
-    distanceTraveledRatio: number,
-    timeElapsedInSeconds: number,
-  ): string => {
-    const timeElapsedInMinutes = timeElapsedInSeconds / 60; // 시간을 분 단위로 변환
-
-    // 현재까지의 평균 페이스 계산 (분/km)
-    const averagePaceInMinutes = timeElapsedInMinutes / distanceTraveledRatio;
-
-    // 분과 초로 분리
-    const minutes = Math.floor(averagePaceInMinutes);
-    const seconds = Math.round((averagePaceInMinutes - minutes) * 60);
-
-    // 두 자리 숫자로 포맷팅
-    const formattedMinutes = String(minutes).padStart(2, '0');
-    const formattedSeconds = String(seconds).padStart(2, '0');
-
-    return `${formattedMinutes}:${formattedSeconds}`; // mm:ss 형식으로 반환
-  };
-
   /** 페이스 업데이트 */
   useEffect(() => {
     let intervalId: any;
     if (!isPause) {
       intervalId = setInterval(() => {
-        const pace = calculateTimeToRun1kmPace(
+        const pace = runUtils.calculateTimeToRun1kmPace(
           Number(runDataRef.current.kmText),
           runDataRef.current.timer,
         );
@@ -252,7 +159,7 @@ const RunTrackerScreen = ({}: IRunTracker) => {
 
   const endRunCallback = () => {
     clearTimeout(pathPositionRef.current);
-    pathPositionRef.current = null;
+    pathPositionRef.current = undefined;
     navigate.replace('completeRunScreen', {pathPosition, markerPosition});
   };
 
@@ -266,7 +173,7 @@ const RunTrackerScreen = ({}: IRunTracker) => {
       </Top>
       <Mid>
         <RecordView>
-          <RecordText>{formatTime(timer)}</RecordText>
+          <RecordText>{timeFormatUtils.formatDuration(timer)}</RecordText>
           <RecordTextUnit>시간</RecordTextUnit>
         </RecordView>
         <RecordView>

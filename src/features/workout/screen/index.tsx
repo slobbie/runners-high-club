@@ -1,0 +1,274 @@
+import styled from '@emotion/native';
+import SetupRunContent from '@features/runSetup/components/SetupRunContent';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {
+  BottomSheetContainer,
+  ButtonCircle,
+  SvgIcon,
+  Typo,
+} from '@shared/components/atoms';
+import {Header} from '@shared/components/organisms';
+import useCountdown from '@shared/hooks/useCountdown';
+import useNavigate from '@shared/hooks/useNavigate';
+import {timeFormatUtils} from '@shared/utils/timeFormatUtils';
+import React, {useEffect, useRef, useState} from 'react';
+import {Keyboard, Pressable} from 'react-native';
+import Animated, {
+  SlideInDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import ControlButtonGroup from '../components/ControlButtonGroup';
+
+const bgColors = ['tomato', 'orange', 'yellow', 'green', 'blue'];
+
+const WorkoutScreen = () => {
+  const navigation = useNavigate();
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  const [isStart, setIsStart] = useState(false);
+
+  const closeBottomsheet = () => {
+    bottomSheetModalRef.current?.close();
+    Keyboard.dismiss();
+  };
+
+  const settingHandler = () => {
+    bottomSheetModalRef.current?.present();
+  };
+
+  const onStartHandler = () => {
+    // navigation.navigate('prepareRunScreen');
+    setIsStart(true);
+    startCountdown();
+  };
+
+  const [count, startCountdown] = useCountdown(3);
+
+  const opacity = useSharedValue(0);
+
+  /** 카운트 애니메이션 */
+  useEffect(() => {
+    if (!isStart) {
+      return;
+    }
+    opacity.value = withTiming(1, {duration: 250});
+
+    const resetAnimation = setTimeout(() => {
+      opacity.value = withTiming(0, {duration: 400});
+    }, 500);
+
+    return () => clearTimeout(resetAnimation);
+  }, [opacity, count, isStart]);
+
+  /** 텍스트 애니메이션 스타일 */
+  const animatedTextStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  });
+
+  const runDataRef = useRef({
+    timer: 0,
+    kmText: '',
+  });
+
+  const [timer, setTimer] = useState(0);
+
+  const [isPause, setIsPause] = useState(false);
+
+  /** 시간 업데이트 */
+  useEffect(() => {
+    if (count <= 0 && !isPause) {
+      const updateTime = () => {
+        runDataRef.current.timer = timer;
+        setTimer(prevTime => prevTime + 1);
+        re = setTimeout(updateTime, 1000);
+      };
+      let re = setTimeout(updateTime, 1000);
+      return () => {
+        clearTimeout(re);
+      };
+    }
+  }, [count, timer]);
+
+  return (
+    <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#1f1f1f'}}>
+      <Top>
+        <Header
+          headerLeft={
+            <Pressable onPress={() => navigation.replace('drawer')}>
+              <SvgIcon name="icon_arrow_back" size={40} />
+            </Pressable>
+          }
+        />
+      </Top>
+
+      <Content>
+        {bgColors.map((item, index) => (
+          <SetView
+            key={item}
+            entering={SlideInDown.duration(800).delay(100 * index)}
+            bgColor={item}
+            zIndex={10 * (bgColors.length - index)}
+            bottom={100 * index}>
+            <TitleView>
+              <Typo color={'#1f1f1f'} fontSize={22} fontWeight={'bold'}>
+                {index + 1} 세트
+              </Typo>
+              <Left>
+                <ButtonCircle
+                  onPress={settingHandler}
+                  size={40}
+                  buttonColor="transparent">
+                  <SvgIcon name="setting" size={24} />
+                </ButtonCircle>
+              </Left>
+            </TitleView>
+            <RepView>
+              <Typo color={'#1f1f1f'} fontSize={22} fontWeight={600}>
+                무게: 10 Kg
+              </Typo>
+              <Typo color={'#1f1f1f'} fontSize={22} fontWeight={600}>
+                휴식: 60 초
+              </Typo>
+            </RepView>
+          </SetView>
+        ))}
+      </Content>
+      <BottomContent>
+        <StartView>
+          <StartBtn onPress={onStartHandler}>
+            <Typo>START</Typo>
+          </StartBtn>
+        </StartView>
+      </BottomContent>
+
+      <BottomSheetContainer snapPoint="90%" ref={bottomSheetModalRef}>
+        <SetupRunContent
+          onPress={closeBottomsheet}
+          onChange={() => {}}
+          inputValue={''}
+        />
+      </BottomSheetContainer>
+      {isStart && (
+        <Dim>
+          <Modal>
+            {count > 0 && (
+              <AnimatedCountText style={[animatedTextStyle]}>
+                {count}
+              </AnimatedCountText>
+            )}
+            <Typo color={'#333'}>{timeFormatUtils.formatDuration(timer)}</Typo>
+            <ControlButtonGroup
+              endRunCallback={() => setIsStart(false)}
+              pauseHandler={() => setIsPause(!isPause)}
+              isPause={isPause}
+            />
+          </Modal>
+        </Dim>
+      )}
+    </SafeAreaView>
+  );
+};
+
+export default WorkoutScreen;
+
+const SetView = styled(Animated.View)<{
+  bgColor: string;
+  zIndex: number;
+  bottom: number;
+}>(({bgColor, zIndex, bottom}) => ({
+  width: '100%',
+  height: 200,
+  alignItems: 'center',
+  borderRadius: 20,
+  backgroundColor: bgColor,
+  position: 'absolute',
+  bottom,
+  zIndex,
+  paddingHorizontal: 24,
+  paddingVertical: 20,
+}));
+
+const TitleView = styled.View({
+  width: '100%',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+});
+
+const RepView = styled.View({
+  width: '100%',
+  marginTop: 'auto',
+});
+
+const Left = styled.View`
+  align-items: center;
+`;
+
+const StartView = styled.View({
+  width: '100%',
+  paddingHorizontal: 24,
+  alignItems: 'center',
+  justifyContent: 'center',
+  // position: 'absolute',
+  bottom: 0,
+  // zIndex: 1000,
+});
+
+const StartBtn = styled.TouchableOpacity(({theme}) => ({
+  width: '50%',
+  height: 56,
+  backgroundColor: theme.colors.primary,
+  borderRadius: 25,
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+const Top = styled.View({
+  flex: 3,
+  position: 'relative',
+});
+
+const Content = styled.View({
+  flex: 1,
+  position: 'relative',
+});
+
+const BottomContent = styled.View({
+  flex: 1,
+  position: 'relative',
+  alignContent: 'center',
+  justifyContent: 'center',
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+  paddingBottom: 20,
+});
+
+const Dim = styled.View({
+  width: '100%',
+  height: '100%',
+  position: 'absolute',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
+const Modal = styled.View({
+  width: '80%',
+  height: 300,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#fff',
+  borderRadius: 16,
+});
+
+const CountText = styled.Text`
+  font-size: 100px;
+  font-weight: bold;
+  color: ${({theme}) => theme.colors.text_333};
+`;
+
+const AnimatedCountText = Animated.createAnimatedComponent(CountText);

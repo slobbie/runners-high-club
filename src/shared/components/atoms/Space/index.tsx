@@ -21,10 +21,10 @@ const Space = (props: SpaceProps) => {
 
   const spaceStyle = useMemo(
     () => ({
-      marginTop: top ? top + 'px' : 0,
-      marginBottom: bottom ? bottom + 'px' : 0,
-      marginRight: right ? right + 'px' : 0,
-      marginLeft: left ? left + 'px' : 0,
+      marginTop: top ? top : 0,
+      marginBottom: bottom ? bottom : 0,
+      marginRight: right ? right : 0,
+      marginLeft: left ? left : 0,
     }),
     [top, bottom, right, left],
   ) as StyleProp<ViewStyle>;

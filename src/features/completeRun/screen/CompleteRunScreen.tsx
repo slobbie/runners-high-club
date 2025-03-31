@@ -1,6 +1,6 @@
 import styled from '@emotion/native';
-import React, {useMemo} from 'react';
-import {StyleProp, ViewStyle} from 'react-native';
+import React from 'react';
+import {StyleSheet} from 'react-native';
 import NaverMapView, {Marker, Path} from 'react-native-nmap';
 
 import {ButtonBase} from '@shared/components/atoms';
@@ -12,31 +12,18 @@ import useRunSetupStore from '@shared/store/runSetupStore';
 
 interface IProps {
   route: RouteProp<RootStackParams, 'completeRunScreen'>;
-  // pathPosition: IPositionBase[];
-  // markerPosition: IPositionBase;
-  // runCompleteController: () => void;
 }
 
 /**
- * 달리기 완료 컴포넌트
- * @property { string } propsName 설명
- * @returns React.JSX.Element
+ * 달리기 완료 화면
  */
 const CompleteRunScreen = ({route}: IProps) => {
   const {pathPosition} = route.params;
+  const navigate = useNavigate();
+
   const {distanceRun, distanceRunningTime, distanceRunningPace} =
     useRunSetupStore();
   const {setIsTabShowStatus} = useNavigationStore();
-
-  const navigate = useNavigate();
-
-  /** 네이버 맵뷰 스타일 */
-  const naverMapViewStyle = useMemo(() => {
-    return {
-      width: '100%',
-      height: '100%',
-    } as StyleProp<ViewStyle>;
-  }, []);
 
   const onFinishHandler = () => {
     navigate.dispatch(
@@ -96,7 +83,7 @@ const CompleteRunScreen = ({route}: IProps) => {
       </RecodeView>
       <LayerView>
         <NaverMapView
-          style={naverMapViewStyle}
+          style={styles.naverMapViewStyle}
           zoomControl={false}
           center={{
             zoom: 14.7,
@@ -150,6 +137,13 @@ const CompleteRunScreen = ({route}: IProps) => {
 };
 
 export default CompleteRunScreen;
+
+const styles = StyleSheet.create({
+  naverMapViewStyle: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 const Wrapper = styled.ScrollView`
   position: absolute;

@@ -10,3 +10,7 @@ export {default as stop} from '@assets/svg/stop.svg';
 export {default as pause} from '@assets/svg/pause.svg';
 export {default as arrow} from '@assets/svg/arrow.svg';
 export {default as arrowPrev} from '@assets/svg/arrowPrev.svg';
+export {default as icon_arrow_up_right} from '@assets/svg/icon_arrow_up_right.svg';
+export {default as icon_arrow_back} from '@assets/svg/icon_arrow_back.svg';
+export {default as icon_add} from '@assets/svg/icon_add.svg';
+export {default as icon_edit} from '@assets/svg/icon_edit.svg';

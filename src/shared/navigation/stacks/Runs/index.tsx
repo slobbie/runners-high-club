@@ -46,23 +46,26 @@ const RunStack = () => {
       <Stack.Screen
         name={'runTrackerScreen'}
         component={RunTrackerScreen}
-        options={{
-          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-          transitionSpec: {
-            open: {
-              animation: 'timing',
-              config: {
-                duration: 160,
-              },
-            },
-            close: {
-              animation: 'timing',
-              config: {
-                duration: 160,
-              },
-            },
-          },
-        }}
+        options={
+          {
+            // animationEnabled: false,
+            // cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+            // transitionSpec: {
+            //   open: {
+            //     animation: 'spring',
+            //     config: {
+            //       // duration: 160,
+            //     },
+            //   },
+            //   close: {
+            //     animation: 'spring',
+            //     config: {
+            //       // duration: 160,
+            //     },
+            //   },
+            // },
+          }
+        }
       />
     </Stack.Navigator>
   );

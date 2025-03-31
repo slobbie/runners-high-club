@@ -34,6 +34,7 @@ const BottomSheetContainer = React.forwardRef<BottomSheetModal, IBottomsheet>(
 
     return (
       <BottomSheetModal
+        handleComponent={null}
         ref={ref}
         index={0}
         snapPoints={snapPoints}

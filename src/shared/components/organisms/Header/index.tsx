@@ -1,9 +1,8 @@
 import styled from '@emotion/native';
 import {ANDROID} from '@shared/constants/platform';
 import * as React from 'react';
-import {StyleProp, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import Animated, {AnimatedStyle} from 'react-native-reanimated';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 interface IProps {
   animatedStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
@@ -24,7 +23,6 @@ const Header = ({
 }: IProps) => {
   return (
     <HeaderView
-      edges={['top']}
       paddingVertical={paddingVertical}
       style={animatedStyle}
       isAbsolute={isAbsolute}>
@@ -37,13 +35,14 @@ const Header = ({
 
 export default Header;
 
-const HeaderView = styled(Animated.createAnimatedComponent(SafeAreaView))<{
+const HeaderView = styled(Animated.createAnimatedComponent(View))<{
   isAbsolute?: boolean;
   paddingVertical: number;
 }>(({isAbsolute, paddingVertical}) => ({
   width: '100%',
   position: isAbsolute ? 'absolute' : 'relative',
-  paddingHorizontal: 18,
+  paddingHorizontal: 24,
+  height: 50,
   paddingTop: ANDROID ? paddingVertical + 8 : paddingVertical,
   paddingBottom: paddingVertical,
   flexDirection: 'row',

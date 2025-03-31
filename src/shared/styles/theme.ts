@@ -19,6 +19,9 @@ export const colors = {
   bg_gray250: '#ddd',
   bg_gray300: '#dadada',
 
+  bg_3B3B46: '#3B3B46',
+  bg_E2E4E6: '#E2E4E6',
+
   text_000: '#000',
   text_333: '#333',
   text_4e5968: '#4e5968',
@@ -32,6 +35,7 @@ export const colors = {
   text_gray7: '#141414',
   text_gray8: '#0A0A0A',
   text_gray9: '#1C2632',
+  text_gray10: '#6B7684',
 };
 
 export const fonts = {

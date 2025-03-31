@@ -32,19 +32,6 @@ const ControlButtonGroup = ({
   pauseHandler,
   isPause,
 }: IRunButtonGroup) => {
-  /** 사운드 버튼 사용 여부 */
-  const [isSound, setIsSound] = useState(true);
-
-  /** 사운드 버튼 핸들러 */
-  const soundHandler = () => {
-    setIsSound(prev => !prev);
-  };
-
-  /** 사운드 아이콘  */
-  const soundIconName = useMemo(() => {
-    return isSound ? 'soundMax' : 'soundMin';
-  }, [isSound]);
-
   /** 왼쪽 버튼 사이즈  */
   const leftButtonSize = useSharedValue(80);
   /** 왼쪽 버튼  TranslateX */
@@ -123,21 +110,21 @@ const ControlButtonGroup = ({
   }, [isPause]);
 
   /** 달리기 종료 핸들러 */
-  const endRunningHandler = () => {
-    Alert.alert('달리기를 종료하시겠습니까 ?', '', [
-      {
-        text: '취소',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {
-        text: '확인',
-        onPress: () => {
-          endRunCallback();
-        },
-      },
-    ]);
-  };
+  // const endRunningHandler = () => {
+  //   Alert.alert('달리기를 종료하시겠습니까 ?', '', [
+  //     {
+  //       text: '취소',
+  //       onPress: () => console.log('Cancel Pressed'),
+  //       style: 'cancel',
+  //     },
+  //     {
+  //       text: '확인',
+  //       onPress: () => {
+  //         endRunCallback();
+  //       },
+  //     },
+  //   ]);
+  // };
 
   /** 달리기 이벤트 컨트롤러 */
   const runController = () => {
@@ -147,7 +134,7 @@ const ControlButtonGroup = ({
   return (
     <ButtonWrapper>
       <ButtonBox>
-        <Left />
+        {/* <Left /> */}
         <Mid>
           <AnimatedLeftView style={leftButtonAnimatedStyle}>
             <AnimatedCircleButton
@@ -165,20 +152,13 @@ const ControlButtonGroup = ({
           </AnimatedLeftView>
           <AnimatedRightView style={rightButtonAnimatedStyle}>
             <AnimatedCircleButton
-              onPress={endRunningHandler}
+              onPress={endRunCallback}
               size={80}
               buttonColor={colors.danger}>
               <SvgIcon name="stop" size={50} stroke={'#fff'} />
             </AnimatedCircleButton>
           </AnimatedRightView>
         </Mid>
-        <Right>
-          {!isPause && (
-            <ButtonCircle onPress={soundHandler} size={40} buttonColor="#fff">
-              <SvgIcon name={soundIconName} size={26} />
-            </ButtonCircle>
-          )}
-        </Right>
       </ButtonBox>
     </ButtonWrapper>
   );
@@ -190,7 +170,6 @@ const ButtonWrapper = styled.View({
   flex: 0.5,
   alignItems: 'center',
   justifyContent: 'center',
-  marginBottom: 80,
 });
 
 const ButtonBox = styled.View`
@@ -214,17 +193,7 @@ const BottomRightView = styled.View`
   align-items: center;
 `;
 
-const Left = styled.View`
-  flex: 1;
-  align-items: center;
-`;
-
 const Mid = styled.View`
-  flex: 1;
-  align-items: center;
-`;
-
-const Right = styled.View`
   flex: 1;
   align-items: center;
 `;

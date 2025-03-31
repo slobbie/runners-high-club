@@ -14,7 +14,7 @@ export type IconProps = SvgProps & {
  * @property { SvgProps } SvgProps svg 공통 옵션
  * @returns React.JSX.Element
  */
-const SvgIcon = ({name, size, ...props}: IconProps) => {
+const SvgIcon = ({name, size = 24, ...props}: IconProps) => {
   const Comp = Icons[name];
 
   const sizeProps = {
