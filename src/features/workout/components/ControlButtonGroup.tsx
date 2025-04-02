@@ -1,5 +1,5 @@
 import styled from '@emotion/native';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -7,10 +7,8 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import {Alert} from 'react-native';
 
 import {colors} from '@shared/styles/theme';
-// import useNavigationStore from '@shared/store/navigationStore';
 import {ButtonCircle, SvgIcon} from '@shared/components/atoms';
 
 interface IRunButtonGroup {
@@ -38,20 +36,30 @@ const ControlButtonGroup = ({
   const leftTranslateX = useSharedValue<number>(0);
   /** 오른쪽 버튼  TranslateX */
   const rightTranslateX = useSharedValue<number>(0);
-  /** 오른쪽 버튼  display */
-  const rightDisplay = useSharedValue<any>('block');
+  /** 종료 버튼  TranslateX */
+  const endTranslateX = useSharedValue<number>(0);
+
   /** 왼쪽 버튼 view 애니메이션 스타일  */
   const leftButtonAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateX: leftTranslateX.value}],
     };
   });
+
+  /** 종료 버튼 view 애니메이션 스타일  */
+  const endButtonAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{translateX: endTranslateX.value}],
+    };
+  });
+
   /** 오른쪽 버튼 view 애니메이션 스타일  */
   const rightButtonAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateX: rightTranslateX.value}],
     };
   });
+
   /** 왼쪽 버튼  애니메이션 스타일  */
   const leftButtonStyle = useAnimatedStyle(() => {
     return {
@@ -63,14 +71,18 @@ const ControlButtonGroup = ({
   /** 버튼 애니메이션  */
   useEffect(() => {
     if (isPause) {
-      leftButtonSize.value = withSpring(80, {
+      leftButtonSize.value = withSpring(60, {
         duration: 400,
       });
-      leftTranslateX.value = withTiming(-60, {
+      leftTranslateX.value = withTiming(-80, {
         duration: 200,
         easing: Easing.linear,
       });
-      rightTranslateX.value = withTiming(60, {
+      rightTranslateX.value = withTiming(0, {
+        duration: 200,
+        easing: Easing.linear,
+      });
+      endTranslateX.value = withTiming(80, {
         duration: 200,
         easing: Easing.linear,
       });
@@ -84,12 +96,12 @@ const ControlButtonGroup = ({
         easing: Easing.linear,
       });
       setTimeout(() => {
-        leftButtonSize.value = withSpring(84, {
+        leftButtonSize.value = withSpring(64, {
           duration: 400,
         });
       }, 200);
     }
-  }, [isPause, leftButtonSize, leftTranslateX, rightDisplay, rightTranslateX]);
+  }, [isPause]);
 
   /** run 버튼 아이콘 이름 */
   const runButtonIconName = useMemo(() => {
@@ -104,33 +116,6 @@ const ControlButtonGroup = ({
     return isPause ? colors.warning : colors.primary;
   }, [isPause]);
 
-  /** run 버튼 아이콘 사이즈 */
-  const runButtonIconSize = useMemo(() => {
-    return isPause && !isPause ? 40 : 60;
-  }, [isPause]);
-
-  /** 달리기 종료 핸들러 */
-  // const endRunningHandler = () => {
-  //   Alert.alert('달리기를 종료하시겠습니까 ?', '', [
-  //     {
-  //       text: '취소',
-  //       onPress: () => console.log('Cancel Pressed'),
-  //       style: 'cancel',
-  //     },
-  //     {
-  //       text: '확인',
-  //       onPress: () => {
-  //         endRunCallback();
-  //       },
-  //     },
-  //   ]);
-  // };
-
-  /** 달리기 이벤트 컨트롤러 */
-  const runController = () => {
-    pauseHandler();
-  };
-
   return (
     <ButtonWrapper>
       <ButtonBox>
@@ -139,11 +124,11 @@ const ControlButtonGroup = ({
           <AnimatedLeftView style={leftButtonAnimatedStyle}>
             <AnimatedCircleButton
               style={leftButtonStyle}
-              onPress={runController}
+              onPress={pauseHandler}
               buttonColor={runButtonColor}>
               <SvgIcon
                 name={runButtonIconName}
-                size={runButtonIconSize}
+                size={40}
                 color={colors.bg_gray000}
                 fill={colors.bg_gray000}
                 stroke={colors.bg_gray000}
@@ -153,11 +138,25 @@ const ControlButtonGroup = ({
           <AnimatedRightView style={rightButtonAnimatedStyle}>
             <AnimatedCircleButton
               onPress={endRunCallback}
-              size={80}
+              size={60}
               buttonColor={colors.danger}>
-              <SvgIcon name="stop" size={50} stroke={'#fff'} />
+              <SvgIcon name="stop" size={24} stroke={'#fff'} />
             </AnimatedCircleButton>
           </AnimatedRightView>
+          <AnimatedLeftView style={endButtonAnimatedStyle}>
+            <AnimatedCircleButton
+              style={leftButtonStyle}
+              onPress={pauseHandler}
+              buttonColor={runButtonColor}>
+              <SvgIcon
+                name={runButtonIconName}
+                size={40}
+                color={colors.bg_gray000}
+                fill={colors.bg_gray000}
+                stroke={colors.bg_gray000}
+              />
+            </AnimatedCircleButton>
+          </AnimatedLeftView>
         </Mid>
       </ButtonBox>
     </ButtonWrapper>

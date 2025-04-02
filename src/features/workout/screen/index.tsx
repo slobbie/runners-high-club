@@ -4,6 +4,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {
   BottomSheetContainer,
   ButtonCircle,
+  Space,
   SvgIcon,
   Typo,
 } from '@shared/components/atoms';
@@ -21,12 +22,15 @@ import Animated, {
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ControlButtonGroup from '../components/ControlButtonGroup';
+import useRoutineStore from '@shared/store/routine.store';
 
 const bgColors = ['tomato', 'orange', 'yellow', 'green', 'blue'];
 
 const WorkoutScreen = () => {
   const navigation = useNavigate();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  const {routineData} = useRoutineStore();
 
   const [isStart, setIsStart] = useState(false);
 
@@ -40,7 +44,6 @@ const WorkoutScreen = () => {
   };
 
   const onStartHandler = () => {
-    // navigation.navigate('prepareRunScreen');
     setIsStart(true);
     startCountdown();
   };
@@ -94,6 +97,16 @@ const WorkoutScreen = () => {
     }
   }, [count, timer]);
 
+  const endSetHandler = () => {
+    setTimer(0);
+    setIsPause(false);
+    setIsStart(false);
+  };
+
+  const today = '목요일';
+
+  const findRoutine = routineData.find(find => find.day === today);
+
   return (
     <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#1f1f1f'}}>
       <Top>
@@ -107,16 +120,16 @@ const WorkoutScreen = () => {
       </Top>
 
       <Content>
-        {bgColors.map((item, index) => (
+        {findRoutine?.routines?.map((item, index) => (
           <SetView
-            key={item}
+            key={item.id}
             entering={SlideInDown.duration(800).delay(100 * index)}
-            bgColor={item}
-            zIndex={10 * (bgColors.length - index)}
+            bgColor={bgColors[index]}
+            zIndex={10 * (routineData.length - index)}
             bottom={100 * index}>
             <TitleView>
               <Typo color={'#1f1f1f'} fontSize={22} fontWeight={'bold'}>
-                {index + 1} 세트
+                {item.rep} 세트
               </Typo>
               <Left>
                 <ButtonCircle
@@ -129,10 +142,10 @@ const WorkoutScreen = () => {
             </TitleView>
             <RepView>
               <Typo color={'#1f1f1f'} fontSize={22} fontWeight={600}>
-                무게: 10 Kg
+                무게: {item.weight} Kg
               </Typo>
               <Typo color={'#1f1f1f'} fontSize={22} fontWeight={600}>
-                휴식: 60 초
+                휴식: {item.rest} 초
               </Typo>
             </RepView>
           </SetView>
@@ -156,17 +169,28 @@ const WorkoutScreen = () => {
       {isStart && (
         <Dim>
           <Modal>
-            {count > 0 && (
+            {count > 0 ? (
               <AnimatedCountText style={[animatedTextStyle]}>
                 {count}
               </AnimatedCountText>
+            ) : (
+              <CountView>
+                <Typo color={'#333'} fontSize={30} fontWeight={600}>
+                  운동시간
+                </Typo>
+                <Space bottom={20} />
+                <Typo color={'#333'} fontSize={40} fontWeight={600}>
+                  {timeFormatUtils.formatDuration(timer)}
+                </Typo>
+                <BottomButtonView>
+                  <ControlButtonGroup
+                    endRunCallback={endSetHandler}
+                    pauseHandler={() => setIsPause(!isPause)}
+                    isPause={isPause}
+                  />
+                </BottomButtonView>
+              </CountView>
             )}
-            <Typo color={'#333'}>{timeFormatUtils.formatDuration(timer)}</Typo>
-            <ControlButtonGroup
-              endRunCallback={() => setIsStart(false)}
-              pauseHandler={() => setIsPause(!isPause)}
-              isPause={isPause}
-            />
           </Modal>
         </Dim>
       )}
@@ -214,9 +238,7 @@ const StartView = styled.View({
   paddingHorizontal: 24,
   alignItems: 'center',
   justifyContent: 'center',
-  // position: 'absolute',
   bottom: 0,
-  // zIndex: 1000,
 });
 
 const StartBtn = styled.TouchableOpacity(({theme}) => ({
@@ -258,7 +280,7 @@ const Dim = styled.View({
 
 const Modal = styled.View({
   width: '80%',
-  height: 300,
+  height: 400,
   justifyContent: 'center',
   alignItems: 'center',
   backgroundColor: '#fff',
@@ -272,3 +294,20 @@ const CountText = styled.Text`
 `;
 
 const AnimatedCountText = Animated.createAnimatedComponent(CountText);
+
+const CountView = styled.View({
+  width: '100%',
+  height: '100%',
+  alignItems: 'center',
+  position: 'relative',
+  padding: 24,
+  paddingTop: 80,
+});
+
+const BottomButtonView = styled.View({
+  width: '100%',
+  position: 'absolute',
+  bottom: 40,
+  alignItems: 'center',
+  justifyContent: 'center',
+});
