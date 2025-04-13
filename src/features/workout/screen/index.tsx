@@ -1,5 +1,4 @@
 import styled from '@emotion/native';
-import SetupRunContent from '@features/runSetup/components/SetupRunContent';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {
   BottomSheetContainer,
@@ -23,6 +22,10 @@ import Animated, {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ControlButtonGroup from '../components/ControlButtonGroup';
 import useRoutineStore from '@shared/store/routine.store';
+import {IRap} from '@features/workoutRoutineForm/store/useRapsStore';
+import uuid from 'react-native-uuid';
+import RestButtonGroup from '../components/RestButtonGroup';
+import SetupRunContent from '../components/SetupRunContent';
 
 const bgColors = ['tomato', 'orange', 'yellow', 'green', 'blue'];
 
@@ -48,7 +51,9 @@ const WorkoutScreen = () => {
     startCountdown();
   };
 
-  const [count, startCountdown] = useCountdown(3);
+  const [baseCount, setBaseCount] = useState(3);
+
+  const [count, startCountdown] = useCountdown(baseCount);
 
   const opacity = useSharedValue(0);
 
@@ -82,6 +87,54 @@ const WorkoutScreen = () => {
 
   const [isPause, setIsPause] = useState(false);
 
+  const endWorkHandler = () => {
+    setTimer(0);
+    setIsPause(false);
+    setIsStart(false);
+    setIsRest(false);
+  };
+
+  const today = '목요일';
+
+  const findRoutine = routineData.find(find => find.day === today);
+
+  const [isRest, setIsRest] = useState<boolean>(false);
+  const [currentRap, setCurrentRap] = useState<Partial<IRap>>();
+  const [restDuration, setRestDuration] = useState<number>(100);
+  const [currentSet, setCurrentSet] = useState<number>(1);
+
+  const endSetHandler = () => {
+    setCurrentSet(prev => prev + 1);
+
+    setCurrentRap({
+      id: uuid.v4(),
+      duration: timer,
+      weight: 0,
+    });
+
+    setTimer(0);
+    setIsRest(true);
+  };
+
+  const nextSetHandler = () => {
+    const lastRep = findRoutine?.routines;
+
+    if (isPause) {
+      setIsPause(false);
+    }
+
+    if (currentSet === lastRep?.length) {
+      console.log(`currentRap :`, currentRap);
+      endWorkHandler();
+      return;
+    }
+
+    setBaseCount(3);
+    startCountdown(() => {
+      setIsRest(false);
+    });
+  };
+
   /** 시간 업데이트 */
   useEffect(() => {
     if (count <= 0 && !isPause) {
@@ -97,15 +150,19 @@ const WorkoutScreen = () => {
     }
   }, [count, timer]);
 
-  const endSetHandler = () => {
-    setTimer(0);
-    setIsPause(false);
-    setIsStart(false);
-  };
-
-  const today = '목요일';
-
-  const findRoutine = routineData.find(find => find.day === today);
+  /** 시간 업데이트 */
+  useEffect(() => {
+    if (isRest) {
+      const updateTime = () => {
+        setRestDuration(prevTime => prevTime - 1);
+        re = setTimeout(updateTime, 1000);
+      };
+      let re = setTimeout(updateTime, 1000);
+      return () => {
+        clearTimeout(re);
+      };
+    }
+  }, [isRest]);
 
   return (
     <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#1f1f1f'}}>
@@ -176,18 +233,25 @@ const WorkoutScreen = () => {
             ) : (
               <CountView>
                 <Typo color={'#333'} fontSize={30} fontWeight={600}>
-                  운동시간
+                  {isRest ? '휴식' : '운동시간'}
                 </Typo>
                 <Space bottom={20} />
                 <Typo color={'#333'} fontSize={40} fontWeight={600}>
-                  {timeFormatUtils.formatDuration(timer)}
+                  {isRest
+                    ? timeFormatUtils.formatDuration(restDuration)
+                    : timeFormatUtils.formatDuration(timer)}
                 </Typo>
                 <BottomButtonView>
-                  <ControlButtonGroup
-                    endRunCallback={endSetHandler}
-                    pauseHandler={() => setIsPause(!isPause)}
-                    isPause={isPause}
-                  />
+                  {isRest ? (
+                    <RestButtonGroup nextSetHandler={nextSetHandler} />
+                  ) : (
+                    <ControlButtonGroup
+                      nextSetHandler={endSetHandler}
+                      endRunCallback={endWorkHandler}
+                      pauseHandler={() => setIsPause(!isPause)}
+                      isPause={isPause}
+                    />
+                  )}
                 </BottomButtonView>
               </CountView>
             )}
@@ -255,8 +319,10 @@ const Top = styled.View({
 });
 
 const Content = styled.View({
-  flex: 1,
   position: 'relative',
+  paddingHorizontal: 24,
+  alignContent: 'center',
+  justifyContent: 'center',
 });
 
 const BottomContent = styled.View({

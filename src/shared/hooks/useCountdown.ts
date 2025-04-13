@@ -33,7 +33,7 @@ const useCountdown = (
     }
   };
 
-  const startCountdown = (onComplete?: () => void) => {
+  const startCountdown = async (onComplete?: () => void) => {
     if (count !== initialCount) {
       setCount(initialCount);
     }

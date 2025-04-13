@@ -1,10 +1,7 @@
-import {Header} from '@shared/components/organisms';
+import {DrawerMenu, Header} from '@shared/components/organisms';
 import React, {useState} from 'react';
 import styled from '@emotion/native';
-import {DrawerActions, useNavigation} from '@react-navigation/native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {Space, SvgIcon, Typo} from '@shared/components/atoms';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Drawer} from 'react-native-drawer-layout';
 import Animated, {
   SlideInDown,
   SlideInRight,
@@ -12,15 +9,20 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Space, SvgIcon, Typo} from '@shared/components/atoms';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import useRoutineStore from '@shared/store/routine.store';
+import useNavigate from '@shared/hooks/useNavigate';
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
-
+  const navigation = useNavigate();
   const insets = useSafeAreaInsets();
   const {routineData} = useRoutineStore();
 
-  const today = '목요일';
+  const today = new Date().getDay();
 
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
   const [startWorkout, setStartWorkout] = useState<boolean>(false);
@@ -56,103 +58,118 @@ const HomeScreen = () => {
 
   const workoutData = routineData.find(data => data.day === today);
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+
   return (
-    <Wrapper>
-      <Content
-        style={{
-          paddingTop: insets.top,
-        }}>
-        <Header
-          headerLeft={
-            <TouchableOpacity
-              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-              <Typo>프로필자리</Typo>
-            </TouchableOpacity>
-          }
-          headerRight={
-            <TouchableOpacity
-              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-              <Typo>123</Typo>
-            </TouchableOpacity>
-          }
-        />
-        <TitleView>
-          <AnimatedToDayView entering={SlideInRight.duration(800)}>
-            <Typo fontSize={16} fontWeight={'bold'}>
-              Monday
-            </Typo>
-            <Typo fontSize={16} fontWeight={'bold'}>
-              13
-            </Typo>
-          </AnimatedToDayView>
-          <Animated.View entering={SlideInRight.duration(600)}>
-            <Typo fontSize={36} fontWeight={'bold'}>
-              TODAY - {workoutData?.workoutName}
-            </Typo>
-          </Animated.View>
-        </TitleView>
-        <Space bottom={20} />
-        <Animated.FlatList
-          data={workoutData?.routines || []}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            gap: 10,
-            paddingBottom: 30,
-            paddingHorizontal: 24,
+    <Drawer
+      drawerType="slide"
+      open={isDrawerOpen}
+      onOpen={() => {}}
+      onClose={() => setIsDrawerOpen(false)}
+      renderDrawerContent={() => (
+        <DrawerMenu
+          onClose={() => {
+            setIsDrawerOpen(false);
           }}
+        />
+      )}>
+      <Wrapper>
+        <Content
           style={{
-            flex: 1,
-          }}
-          keyExtractor={item => item.id.toString()}
-          itemLayoutAnimation={SlideInRight.duration(600)}
-          renderItem={({item, index}) => {
-            return (
-              <AnimatedCardItem
-                style={[
-                  currentIndex === index ? cardItemStyle : undefined,
-                  currentIndex === index && startWorkout
-                    ? startWorkoutStyle
-                    : undefined,
-                  {backgroundColor: '#fff'},
-                ]}
-                onPressIn={() => onPressIn(index)}
-                onPressOut={onPressOut}
-                entering={SlideInDown.duration(800).delay(100 * index)} // 추가적인 지연 효과 적용 가능
-              >
-                <ArrowUpRight>
-                  <SvgIcon name={'icon_arrow_up_right'} />
-                </ArrowUpRight>
-                <Typo
-                  fontSize={24}
-                  color={'#1f1f1f'}
-                  lineHeight={40}
-                  fontWeight={'bold'}>
-                  {item.title}
+            paddingTop: insets.top,
+          }}>
+          <Header
+            headerLeft={
+              <ToDayView>
+                <Typo fontSize={16} fontWeight={'bold'}>
+                  Monday
                 </Typo>
-                <Typo
-                  fontSize={16}
-                  color={'#1f1f1f'}
-                  lineHeight={40}
-                  fontWeight={'bold'}>
-                  세트간 휴식 {item.rest} 초
+                <Typo fontSize={16} fontWeight={'bold'}>
+                  13
                 </Typo>
-                <CircleView>
-                  <StartView>
-                    <Typo
-                      fontSize={16}
-                      color={'#1f1f1f'}
-                      lineHeight={40}
-                      fontWeight={'bold'}>
-                      {`시작하기`}
-                    </Typo>
-                  </StartView>
-                </CircleView>
-              </AnimatedCardItem>
-            );
-          }}
-        />
-      </Content>
-    </Wrapper>
+              </ToDayView>
+            }
+            headerRight={
+              <TouchableOpacity onPress={() => setIsDrawerOpen(true)}>
+                <SvgIcon
+                  name="icon_menu"
+                  size={24}
+                  fill={'#fff'}
+                  stroke={'#fff'}
+                />
+              </TouchableOpacity>
+            }
+          />
+          <TitleView>
+            <Animated.View entering={SlideInRight.duration(600)}>
+              <Typo fontSize={36} fontWeight={'bold'}>
+                TODAY - {workoutData?.workoutName}
+              </Typo>
+            </Animated.View>
+          </TitleView>
+          <Space bottom={20} />
+          <Animated.FlatList
+            data={workoutData?.routines || []}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              gap: 10,
+              paddingBottom: 30,
+              paddingHorizontal: 24,
+            }}
+            style={{
+              flex: 1,
+            }}
+            keyExtractor={item => item.id.toString()}
+            itemLayoutAnimation={SlideInRight.duration(600)}
+            renderItem={({item, index}) => {
+              return (
+                <AnimatedCardItem
+                  style={[
+                    currentIndex === index ? cardItemStyle : undefined,
+                    currentIndex === index && startWorkout
+                      ? startWorkoutStyle
+                      : undefined,
+                    {backgroundColor: '#fff'},
+                  ]}
+                  onPressIn={() => onPressIn(index)}
+                  onPressOut={onPressOut}
+                  entering={SlideInDown.duration(800).delay(100 * index)} // 추가적인 지연 효과 적용 가능
+                >
+                  <ArrowUpRight>
+                    <SvgIcon name={'icon_arrow_up_right'} />
+                  </ArrowUpRight>
+                  <Typo
+                    fontSize={24}
+                    color={'#1f1f1f'}
+                    lineHeight={40}
+                    fontWeight={'bold'}>
+                    {item.title}
+                  </Typo>
+                  <Typo
+                    fontSize={16}
+                    color={'#1f1f1f'}
+                    lineHeight={40}
+                    fontWeight={'bold'}>
+                    세트간 휴식 {item.rest} 초
+                  </Typo>
+                  <CircleView>
+                    <StartView>
+                      <Typo
+                        fontSize={16}
+                        color={'#1f1f1f'}
+                        lineHeight={40}
+                        fontWeight={'bold'}>
+                        {`시작하기`}
+                      </Typo>
+                    </StartView>
+                  </CircleView>
+                </AnimatedCardItem>
+              );
+            }}
+          />
+        </Content>
+      </Wrapper>
+    </Drawer>
   );
 };
 
@@ -171,8 +188,6 @@ const ToDayView = styled.View({
   flexDirection: 'row',
   gap: 4,
 });
-
-const AnimatedToDayView = Animated.createAnimatedComponent(ToDayView);
 
 const TitleView = styled.View({
   alignItems: 'flex-start',

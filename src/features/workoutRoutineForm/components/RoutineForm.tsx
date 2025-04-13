@@ -1,12 +1,16 @@
+import React, {useState} from 'react';
 import styled from '@emotion/native';
-import {Typo} from '@shared/components/atoms';
+import uuid from 'react-native-uuid';
+
+import {ButtonCustom, Picker, SvgIcon, Typo} from '@shared/components/atoms';
 import {InputLabel} from '@shared/components/molecules';
 import {colors} from '@shared/styles/theme';
-import React from 'react';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import useRoutineFormStore from '@features/workoutRoutineForm/store/routineForm.store';
+import useRoutineFormStore from '@features/workoutRoutineForm/store/useRoutineFormStore';
 import useTextChange from '@shared/hooks/useTextChange';
-import uuid from 'react-native-uuid';
+import PickerButton from '@features/workoutRoutineForm/components/PickerButton';
+import {IPickerItem} from '@shared/components/atoms/Picker';
+import useCreateSecondsData from '@features/workoutRoutineForm/hooks/useCreateSecondsData';
 
 interface IProps {
   hideFormHandler: () => void;
@@ -18,10 +22,18 @@ const RoutineForm = ({hideFormHandler}: IProps) => {
   const {routineFormEdit, setRoutineFormData, updateRoutineFormData} =
     useRoutineFormStore();
 
+  const [showPicker, setShowPicker] = useState(false);
+
   const [title, onChangeTitle] = useTextChange(routineFormEdit?.title || '');
   const [rep, onChangeRep] = useTextChange(routineFormEdit?.rep || '');
   const [weight, onChangeWeight] = useTextChange(routineFormEdit?.weight || '');
-  const [rest, onChangeRest] = useTextChange(routineFormEdit?.rest || '');
+
+  const secondsData = useCreateSecondsData();
+
+  const [restDuration, onChangeRestDuration] = useState<IPickerItem>({
+    id: 0,
+    label: '',
+  });
 
   const onForm = () => {
     const routineId = routineFormEdit?.id || uuid.v4();
@@ -31,7 +43,7 @@ const RoutineForm = ({hideFormHandler}: IProps) => {
       title,
       rep,
       weight,
-      rest,
+      restDuration,
     };
     if (routineFormEdit) {
       updateRoutineFormData(payload);
@@ -42,21 +54,43 @@ const RoutineForm = ({hideFormHandler}: IProps) => {
     hideFormHandler();
   };
 
-  const btnDisabled =
-    title === '' || rep === '' || weight === '' || rest === '';
+  const btnDisabled = title === '' || rep === '' || weight === '';
 
   const btnText = routineFormEdit ? '수정' : '추가';
 
+  const resetForm = () => {
+    onChangeTitle('');
+    onChangeRep('');
+    onChangeWeight('');
+    hideFormHandler();
+  };
+
   return (
     <Content style={{paddingBottom: insets.top}}>
+      <Header>
+        <ButtonCustom onPress={resetForm}>
+          <SvgIcon name="icon_close" size={24} />
+        </ButtonCustom>
+      </Header>
       <InputView>
         <InputLabel label="운동명" onChangeText={onChangeTitle} value={title} />
-        <InputLabel label="총 세트" onChangeText={onChangeRep} value={rep} />
-        <InputLabel label="무게" onChangeText={onChangeWeight} value={weight} />
         <InputLabel
-          label="휴식 시간"
-          onChangeText={onChangeRest}
-          value={rest}
+          label="총 세트"
+          onChangeText={onChangeRep}
+          value={rep}
+          keyboardType="number-pad"
+        />
+        <InputLabel
+          label="무게"
+          onChangeText={onChangeWeight}
+          value={weight}
+          keyboardType="number-pad"
+        />
+
+        <PickerButton
+          title="휴식 시간"
+          label={restDuration.label || '휴식 시간을 선택해 주세요'}
+          onPress={() => setShowPicker(true)}
         />
       </InputView>
 
@@ -70,6 +104,15 @@ const RoutineForm = ({hideFormHandler}: IProps) => {
           </Typo>
         </AddButton>
       </Bottom>
+
+      {showPicker && (
+        <Picker
+          defaultValue={secondsData[0].id}
+          data={secondsData}
+          onChange={onChangeRestDuration}
+          onClose={() => setShowPicker(false)}
+        />
+      )}
     </Content>
   );
 };
@@ -82,6 +125,14 @@ const Content = styled(SafeAreaView)({
   paddingVertical: 20,
   alignContent: 'center',
   position: 'relative',
+});
+
+const Header = styled.View({
+  width: '100%',
+  paddingHorizontal: 24,
+  height: 40,
+  justifyContent: 'flex-end',
+  flexDirection: 'row',
 });
 
 const InputView = styled.View({

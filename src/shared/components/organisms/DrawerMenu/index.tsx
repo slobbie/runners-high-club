@@ -1,47 +1,29 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-} from '@react-navigation/drawer';
+import {DrawerContentScrollView} from '@react-navigation/drawer';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {ButtonBase, Typo} from '@shared/components/atoms';
+import useNavigate from '@shared/hooks/useNavigate';
 
-const DrawerMenu = props => {
+interface IProps {
+  onClose: () => void;
+}
+
+const DrawerMenu = ({onClose}: IProps) => {
+  const navigation = useNavigate();
+
   return (
-    <DrawerContentScrollView {...props}>
-      {/* 프로필 영역 */}
-      <View style={styles.profileContainer}>
-        <Image
-          source={{uri: 'https://via.placeholder.com/80'}}
-          style={styles.profileImage}
-        />
-        <Text style={styles.profileName}>사용자 이름</Text>
-      </View>
-
-      {/* 기본 Drawer 항목 */}
-      <DrawerItemList {...props} />
-
-      {/* 로그아웃 버튼 */}
-      <TouchableOpacity
-        style={styles.logoutButton}
-        onPress={() => console.log('로그아웃')}>
-        <Text style={styles.logoutText}>로그아웃</Text>
-      </TouchableOpacity>
+    <DrawerContentScrollView>
+      <SafeAreaView>
+        <ButtonBase
+          onPress={() => {
+            onClose();
+            navigation.navigate('workoutRoutineFormScreen');
+          }}>
+          <Typo fontSize={22}>운동 추가</Typo>
+        </ButtonBase>
+      </SafeAreaView>
     </DrawerContentScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  profileContainer: {padding: 20, alignItems: 'center'},
-  profileImage: {width: 80, height: 80, borderRadius: 40, marginBottom: 10},
-  profileName: {fontSize: 18, fontWeight: 'bold'},
-  logoutButton: {
-    padding: 15,
-    alignItems: 'center',
-    backgroundColor: 'green',
-    margin: 10,
-    borderRadius: 5,
-  },
-  logoutText: {color: '#fff', fontSize: 16},
-});
 
 export default DrawerMenu;

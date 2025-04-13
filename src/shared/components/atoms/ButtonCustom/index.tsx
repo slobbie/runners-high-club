@@ -4,7 +4,6 @@ import {PressableProps} from 'react-native';
 
 interface IProps extends PressableProps {
   children: React.ReactNode;
-  buttonColor?: string;
 }
 
 /**
@@ -14,21 +13,13 @@ interface IProps extends PressableProps {
  * @property { React.ReactNode } children
  * @returns React.JSX.Element
  */
-const ButtonBase = ({children, buttonColor = '#5dadd9', ...rest}: IProps) => {
-  return (
-    <Button {...rest} buttonColor={buttonColor}>
-      {children}
-    </Button>
-  );
+const ButtonBase = ({children, ...rest}: IProps) => {
+  return <Button {...rest}>{children}</Button>;
 };
 
 export default ButtonBase;
 
-const Button = styled.Pressable<{buttonColor: string}>(({buttonColor}) => ({
-  width: '100%',
-  height: 56,
-  backgroundColor: buttonColor,
-  borderRadius: 10,
+const Button = styled.Pressable({
   alignItems: 'center',
   justifyContent: 'center',
-}));
+});

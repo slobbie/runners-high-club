@@ -14,3 +14,7 @@ export {default as icon_arrow_up_right} from '@assets/svg/icon_arrow_up_right.sv
 export {default as icon_arrow_back} from '@assets/svg/icon_arrow_back.svg';
 export {default as icon_add} from '@assets/svg/icon_add.svg';
 export {default as icon_edit} from '@assets/svg/icon_edit.svg';
+export {default as icon_refresh} from '@assets/svg/icon_refresh.svg';
+export {default as icon_arrow_circle_right} from '@assets/svg/icon_arrow_circle_right.svg';
+export {default as icon_menu} from '@assets/svg/icon_menu.svg';
+export {default as icon_close} from '@assets/svg/icon_close.svg';

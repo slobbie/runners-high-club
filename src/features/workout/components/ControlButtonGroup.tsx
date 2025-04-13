@@ -1,5 +1,5 @@
 import styled from '@emotion/native';
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect} from 'react';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -15,6 +15,7 @@ interface IRunButtonGroup {
   endRunCallback: () => void;
   pauseHandler: () => void;
   isPause?: boolean;
+  nextSetHandler: () => void;
 }
 
 /**
@@ -29,6 +30,7 @@ const ControlButtonGroup = ({
   endRunCallback,
   pauseHandler,
   isPause,
+  nextSetHandler,
 }: IRunButtonGroup) => {
   /** 왼쪽 버튼 사이즈  */
   const leftButtonSize = useSharedValue(80);
@@ -95,25 +97,16 @@ const ControlButtonGroup = ({
         duration: 200,
         easing: Easing.linear,
       });
+      endTranslateX.value = withTiming(0, {
+        duration: 200,
+        easing: Easing.linear,
+      });
       setTimeout(() => {
         leftButtonSize.value = withSpring(64, {
           duration: 400,
         });
       }, 200);
     }
-  }, [isPause]);
-
-  /** run 버튼 아이콘 이름 */
-  const runButtonIconName = useMemo(() => {
-    if (!isPause) {
-      return 'pause';
-    }
-    return 'play';
-  }, [isPause]);
-
-  /** run 버튼 컬러 */
-  const runButtonColor = useMemo(() => {
-    return isPause ? colors.warning : colors.primary;
   }, [isPause]);
 
   return (
@@ -125,38 +118,35 @@ const ControlButtonGroup = ({
             <AnimatedCircleButton
               style={leftButtonStyle}
               onPress={pauseHandler}
-              buttonColor={runButtonColor}>
+              buttonColor={colors.warning}>
               <SvgIcon
-                name={runButtonIconName}
-                size={40}
+                name={isPause ? 'icon_refresh' : 'pause'}
                 color={colors.bg_gray000}
                 fill={colors.bg_gray000}
                 stroke={colors.bg_gray000}
               />
             </AnimatedCircleButton>
           </AnimatedLeftView>
-          <AnimatedRightView style={rightButtonAnimatedStyle}>
+          <AnimatedCenterView style={rightButtonAnimatedStyle}>
             <AnimatedCircleButton
-              onPress={endRunCallback}
+              onPress={nextSetHandler}
               size={60}
+              buttonColor={colors.primary}>
+              <SvgIcon
+                name="icon_arrow_circle_right"
+                size={36}
+                stroke={'#fff'}
+              />
+            </AnimatedCircleButton>
+          </AnimatedCenterView>
+          <AnimatedRightView style={endButtonAnimatedStyle}>
+            <AnimatedCircleButton
+              style={leftButtonStyle}
+              onPress={endRunCallback}
               buttonColor={colors.danger}>
               <SvgIcon name="stop" size={24} stroke={'#fff'} />
             </AnimatedCircleButton>
           </AnimatedRightView>
-          <AnimatedLeftView style={endButtonAnimatedStyle}>
-            <AnimatedCircleButton
-              style={leftButtonStyle}
-              onPress={pauseHandler}
-              buttonColor={runButtonColor}>
-              <SvgIcon
-                name={runButtonIconName}
-                size={40}
-                color={colors.bg_gray000}
-                fill={colors.bg_gray000}
-                stroke={colors.bg_gray000}
-              />
-            </AnimatedCircleButton>
-          </AnimatedLeftView>
         </Mid>
       </ButtonBox>
     </ButtonWrapper>
@@ -180,7 +170,14 @@ const ButtonBox = styled.View`
 `;
 
 const BottomLeftView = styled.View({
-  zIndex: 2000,
+  zIndex: 3000,
+  flexDirection: 'row',
+  alignItems: 'center',
+  position: 'absolute',
+});
+
+const BottomCenterView = styled.View({
+  zIndex: 1000,
   flexDirection: 'row',
   alignItems: 'center',
   position: 'absolute',
@@ -200,5 +197,7 @@ const Mid = styled.View`
 const AnimatedCircleButton = Animated.createAnimatedComponent(ButtonCircle);
 
 const AnimatedLeftView = Animated.createAnimatedComponent(BottomLeftView);
+
+const AnimatedCenterView = Animated.createAnimatedComponent(BottomCenterView);
 
 const AnimatedRightView = Animated.createAnimatedComponent(BottomRightView);
