@@ -12,7 +12,6 @@ import {
   Typo,
 } from '@shared/components/atoms';
 import {InputLabel, Picker} from '@shared/components/molecules';
-import RoutineForm from '@features/workoutRoutineForm/components/RoutineForm';
 import {Header} from '@shared/components/organisms';
 import useNavigate from '@shared/hooks/useNavigate';
 import useRoutineFormStore from '@features/workoutRoutineForm/store/useRoutineFormStore';
@@ -23,6 +22,7 @@ import PickerButton from '@features/workoutRoutineForm/components/PickerButton';
 import RoutineCard from '@features/workoutRoutineForm/components/RoutineCard';
 import RoutineAddButton from '@features/workoutRoutineForm/components/RoutineAddButton';
 import {weekdays} from '@shared/constants/weekdays';
+import RoutineForm from '@features/workoutRoutineForm/components/RoutineForm';
 
 const WorkoutRoutineFormScreen = () => {
   const navigation = useNavigate();

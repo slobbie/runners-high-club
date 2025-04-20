@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import styled from '@emotion/native';
 import {Drawer} from 'react-native-drawer-layout';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -9,6 +9,10 @@ import RoutineName from '@features/home/components/RoutineName';
 import HomeHeader from '@features/home/components/HomeHeader';
 import {DrawerMenu} from '@shared/components/organisms';
 import {Space} from '@shared/components/atoms';
+import {IRoutineForm, IRoutines} from '@shared/interface/routine.interface';
+import OtherRoutineTitle from '@features/home/components/OtherRoutineTitle';
+import {FlatList} from 'react-native-gesture-handler';
+import {StyleSheet} from 'react-native';
 
 const HomeScreen = () => {
   const insets = useSafeAreaInsets();
@@ -18,7 +22,26 @@ const HomeScreen = () => {
 
   const today = new Date().getDay();
 
-  const workoutData = routineData.find(data => data.day === today);
+  const todayRoutine = routineData.find(data => data.day === today);
+  const otherRoutines = routineData.filter(routine => routine !== todayRoutine);
+  const restRoutines = otherRoutines.flatMap(routine => routine.routines);
+
+  const sortRoutinesByToday = (
+    routines: IRoutines[],
+    pTodayRoutine: IRoutines | undefined,
+  ): IRoutineForm[] => {
+    if (!pTodayRoutine) {
+      return otherRoutines.flatMap(routine => routine.routines);
+    }
+
+    const todayRoutines = pTodayRoutine.routines;
+    return [...todayRoutines, ...restRoutines];
+  };
+
+  const sortedRoutines = useMemo(
+    () => sortRoutinesByToday(routineData, todayRoutine),
+    [routineData, todayRoutine],
+  );
 
   return (
     <Drawer
@@ -39,12 +62,28 @@ const HomeScreen = () => {
             paddingTop: insets.top,
           }}>
           <HomeHeader setIsDrawerOpen={setIsDrawerOpen} />
-
-          <RoutineName workoutName={workoutData?.workoutName || ''} />
-
-          <Space bottom={20} />
-
-          <TodayRoutineList routineFormData={workoutData?.routines || []} />
+          <FlatList
+            data={[1]}
+            contentContainerStyle={Styles.contentContainer}
+            ListHeaderComponent={() => (
+              <>
+                <RoutineName workoutName={todayRoutine?.workoutName || ''} />
+                <Space bottom={20} />
+                <TodayRoutineList routineFormData={sortedRoutines || []} />
+              </>
+            )}
+            renderItem={() => (
+              <>
+                {restRoutines.length > 0 && (
+                  <>
+                    <OtherRoutineTitle />
+                    <Space bottom={20} />
+                    <TodayRoutineList routineFormData={restRoutines || []} />
+                  </>
+                )}
+              </>
+            )}
+          />
         </Content>
       </Wrapper>
     </Drawer>
@@ -52,6 +91,14 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
+
+const Styles = StyleSheet.create({
+  contentContainer: {
+    flex: 1,
+    gap: 20,
+    // paddingHorizontal: 24,
+  },
+});
 
 const Wrapper = styled.View({
   flex: 1,
