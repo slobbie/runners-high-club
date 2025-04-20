@@ -4,15 +4,12 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
       "@assets/*": ["src/assets/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@feature/*": ["src/feature/*"],
+      "@features/*": ["src/features/*"],
+      "@shared/*": ["src/shared/*"],
       "@common/*": ["src/common/*"],
       "@navigation/*": ["src/navigation/*"],
-      "@redux/*": ["./src/redux/*"],
-      "@utils/*": ["./src/common/utils/*"],
-      "@api/*": ["./src/api/*"]
+      "@utils/*": ["./src/common/utils/*"]
     }
   }
 }

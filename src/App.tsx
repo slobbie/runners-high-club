@@ -1,21 +1,24 @@
 import React from 'react';
 import styled from '@emotion/native';
-import {Provider} from 'react-redux';
-import store from '@redux/store/store';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {theme} from '@common/styles/theme';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+
+import {theme} from '@shared/styles/theme';
 import {ThemeProvider} from '@emotion/react';
-import AppInner from '@/AppInner';
+import StackNavigation from '@shared/navigation/StackNavigation';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const App = (): React.JSX.Element => {
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <SafeAreaProvider>
         <GHRootView>
-          <AppInner />
+          <BottomSheetModalProvider>
+            <StackNavigation />
+          </BottomSheetModalProvider>
         </GHRootView>
-      </ThemeProvider>
-    </Provider>
+      </SafeAreaProvider>
+    </ThemeProvider>
   );
 };
 
