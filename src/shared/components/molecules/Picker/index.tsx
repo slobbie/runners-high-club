@@ -6,8 +6,8 @@ import {
 } from 'react-native';
 import styled from '@emotion/native';
 
-import {ButtonBase, Typo} from '@shared/components/atoms';
 import {colors} from '@shared/styles/theme';
+import {ButtonBase, Typo} from '@shared/components/atoms';
 
 const ITEM_HEIGHT = 50; // 각 항목의 높이
 const VISIBLE_ITEMS = 5; // 보여질 항목 수 (홀수로 설정)

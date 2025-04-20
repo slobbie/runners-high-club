@@ -1,5 +1,16 @@
+import React, {useEffect, useRef, useState} from 'react';
 import styled from '@emotion/native';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {Keyboard, Pressable} from 'react-native';
+import Animated, {
+  SlideInDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import uuid from 'react-native-uuid';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
 import {
   BottomSheetContainer,
   ButtonCircle,
@@ -11,21 +22,11 @@ import {Header} from '@shared/components/organisms';
 import useCountdown from '@shared/hooks/useCountdown';
 import useNavigate from '@shared/hooks/useNavigate';
 import {timeFormatUtils} from '@shared/utils/timeFormatUtils';
-import React, {useEffect, useRef, useState} from 'react';
-import {Keyboard, Pressable} from 'react-native';
-import Animated, {
-  SlideInDown,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import ControlButtonGroup from '../components/ControlButtonGroup';
-import useRoutineStore from '@shared/store/routine.store';
+import ControlButtonGroup from '@features/workout/components/ControlButtonGroup';
+import useRoutineStore from '@shared/store/useRoutineStore';
 import {IRap} from '@features/workoutRoutineForm/store/useRapsStore';
-import uuid from 'react-native-uuid';
-import RestButtonGroup from '../components/RestButtonGroup';
-import SetupRunContent from '../components/SetupRunContent';
+import RestButtonGroup from '@features/workout/components/RestButtonGroup';
+import SetupRunContent from '@features/workout/components/SetupRunContent';
 
 const bgColors = ['tomato', 'orange', 'yellow', 'green', 'blue'];
 
@@ -94,9 +95,11 @@ const WorkoutScreen = () => {
     setIsRest(false);
   };
 
-  const today = '목요일';
+  const today = new Date().getDay();
 
   const findRoutine = routineData.find(find => find.day === today);
+
+  console.log(`findRoutine :`, findRoutine);
 
   const [isRest, setIsRest] = useState<boolean>(false);
   const [currentRap, setCurrentRap] = useState<Partial<IRap>>();
@@ -169,7 +172,7 @@ const WorkoutScreen = () => {
       <Top>
         <Header
           headerLeft={
-            <Pressable onPress={() => navigation.replace('drawer')}>
+            <Pressable onPress={() => navigation.goBack()}>
               <SvgIcon name="icon_arrow_back" size={40} />
             </Pressable>
           }
@@ -191,8 +194,9 @@ const WorkoutScreen = () => {
               <Left>
                 <ButtonCircle
                   onPress={settingHandler}
-                  size={40}
-                  buttonColor="transparent">
+                  // size={40}
+                  // buttonColor="transparent"
+                >
                   <SvgIcon name="setting" size={24} />
                 </ButtonCircle>
               </Left>
@@ -202,7 +206,7 @@ const WorkoutScreen = () => {
                 무게: {item.weight} Kg
               </Typo>
               <Typo color={'#1f1f1f'} fontSize={22} fontWeight={600}>
-                휴식: {item.rest} 초
+                휴식: {item.restDuration.label} 초
               </Typo>
             </RepView>
           </SetView>

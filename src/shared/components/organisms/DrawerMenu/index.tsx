@@ -1,8 +1,9 @@
 import React from 'react';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ButtonBase, Typo} from '@shared/components/atoms';
+
 import useNavigate from '@shared/hooks/useNavigate';
+import {ButtonBase, Typo} from '@shared/components/atoms';
 
 interface IProps {
   onClose: () => void;

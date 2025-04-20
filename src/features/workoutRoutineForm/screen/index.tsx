@@ -11,15 +11,14 @@ import {
   SvgIcon,
   Typo,
 } from '@shared/components/atoms';
-import {InputLabel} from '@shared/components/molecules';
+import {InputLabel, Picker} from '@shared/components/molecules';
 import RoutineForm from '@features/workoutRoutineForm/components/RoutineForm';
 import {Header} from '@shared/components/organisms';
 import useNavigate from '@shared/hooks/useNavigate';
 import useRoutineFormStore from '@features/workoutRoutineForm/store/useRoutineFormStore';
 import useTextChange from '@shared/hooks/useTextChange';
 import {IRoutineForm} from '@shared/interface/routine.interface';
-import useRoutineStore from '@shared/store/routine.store';
-import Picker from '@shared/components/atoms/Picker';
+import useRoutineStore from '@shared/store/useRoutineStore';
 import PickerButton from '@features/workoutRoutineForm/components/PickerButton';
 import RoutineCard from '@features/workoutRoutineForm/components/RoutineCard';
 import RoutineAddButton from '@features/workoutRoutineForm/components/RoutineAddButton';
@@ -39,8 +38,8 @@ const WorkoutRoutineFormScreen = () => {
   const [isDayPickerOpen, setIsDayPickerOpen] = useState<boolean>(false);
 
   const [day, onChangeDay] = useState<{id: number; label: string}>({
-    id: 1,
-    label: '월요일',
+    id: new Date().getDay(),
+    label: weekdays[new Date().getDay()].label,
   });
 
   const showFormHandler = () => {

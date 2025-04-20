@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from '@emotion/native';
 import {PressableProps} from 'react-native';
+import styled from '@emotion/native';
 
 interface IProps extends PressableProps {
   children: React.ReactNode;

@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import styled from '@emotion/native';
 import uuid from 'react-native-uuid';
 
-import {ButtonCustom, Picker, SvgIcon, Typo} from '@shared/components/atoms';
-import {InputLabel} from '@shared/components/molecules';
+import {ButtonCustom, SvgIcon, Typo} from '@shared/components/atoms';
+import {InputLabel, Picker} from '@shared/components/molecules';
 import {colors} from '@shared/styles/theme';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import useRoutineFormStore from '@features/workoutRoutineForm/store/useRoutineFormStore';
 import useTextChange from '@shared/hooks/useTextChange';
 import PickerButton from '@features/workoutRoutineForm/components/PickerButton';
-import {IPickerItem} from '@shared/components/atoms/Picker';
+import {IPickerItem} from '@shared/components/molecules/Picker';
 import useCreateSecondsData from '@features/workoutRoutineForm/hooks/useCreateSecondsData';
 
 interface IProps {

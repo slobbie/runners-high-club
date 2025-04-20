@@ -1,8 +1,9 @@
-import styled from '@emotion/native';
-import {ANDROID} from '@shared/constants/platform';
 import * as React from 'react';
+import styled from '@emotion/native';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import Animated, {AnimatedStyle} from 'react-native-reanimated';
+
+import {ANDROID} from '@shared/constants/platform';
 
 interface IProps {
   animatedStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
