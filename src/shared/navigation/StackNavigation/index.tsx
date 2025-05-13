@@ -6,6 +6,7 @@ import {RootStackParams} from '@shared/interface/rootStackParams';
 import WorkoutScreen from '@features/workout/screen';
 import WorkoutRoutineFormScreen from '@features/workoutRoutineForm/screen';
 import HomeScreen from '@features/home/screen';
+import StatisticsScreen from '@features/statistics/screen';
 import {colors} from '@shared/styles/theme';
 
 const StackNavigation = () => {
@@ -46,6 +47,14 @@ const StackNavigation = () => {
             headerStyle: {
               backgroundColor: colors.text_gray9,
             },
+          })}
+        />
+        <Stack.Screen
+          name={'statisticsScreen'}
+          component={StatisticsScreen}
+          options={() => ({
+            headerShown: false,
+            headerTitleAllowFontScaling: false,
           })}
         />
       </Stack.Navigator>

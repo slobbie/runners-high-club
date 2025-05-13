@@ -1,42 +1,42 @@
 import React from 'react';
 import styled from '@emotion/native';
-import {TouchableOpacity} from 'react-native';
+import {Pressable} from 'react-native';
 
-import {Header} from '@shared/components/organisms';
-import {SvgIcon, Typo} from '@shared/components/atoms';
+import {SvgIcon} from '@shared/components/atoms';
+import TodayRoutineName from '@features/home/components/TodayRoutineName';
 
 interface IProps {
-  setIsDrawerOpen: (value: React.SetStateAction<boolean>) => void;
+  setIsDrawerOpen: (value: boolean) => void;
+  workoutName: string;
 }
 
-const HomeHeader = ({setIsDrawerOpen}: IProps) => {
+/**
+ * 홈 헤더
+ */
+const HomeHeader = ({setIsDrawerOpen, workoutName}: IProps) => {
   return (
-    <Header
-      headerLeft={
-        <ToDayView>
-          <Typo fontSize={16} fontWeight={'bold'}>
-            Monday
-          </Typo>
-          <Typo fontSize={16} fontWeight={'bold'}>
-            13
-          </Typo>
-        </ToDayView>
-      }
-      headerRight={
-        <TouchableOpacity
-          onPress={() => {
-            setIsDrawerOpen(true);
-          }}>
-          <SvgIcon name="icon_menu" size={24} fill={'#fff'} stroke={'#fff'} />
-        </TouchableOpacity>
-      }
-    />
+    <TopSection>
+      <HeaderRow>
+        <Pressable onPress={() => setIsDrawerOpen(true)}>
+          <SvgIcon name="icon_menu" size={28} color="#ffffff" />
+        </Pressable>
+      </HeaderRow>
+
+      <TodayRoutineName workoutName={workoutName} />
+    </TopSection>
   );
 };
 
 export default HomeHeader;
 
-const ToDayView = styled.View({
+const TopSection = styled.View({
+  padding: 20,
+  paddingBottom: 10,
+});
+
+const HeaderRow = styled.View({
   flexDirection: 'row',
-  gap: 4,
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 24,
 });

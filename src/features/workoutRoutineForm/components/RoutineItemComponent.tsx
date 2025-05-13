@@ -14,20 +14,20 @@ const RoutineItemComponent = memo(
     onEdit: (item: IRoutineForm) => void;
   }) => (
     <RoutineItem>
-      <Typo fontSize={16} fontWeight={600} color={colors.text_333}>
+      <Typo fontSize={16} fontWeight={600} color={"#1a1a1a"}>
         종목: {item.title}
       </Typo>
-      <Typo fontSize={16} fontWeight={600} color={colors.text_333}>
+      <Typo fontSize={16} fontWeight={600} color={"#1a1a1a"}>
         세트: {item.rep}
       </Typo>
-      <Typo fontSize={16} fontWeight={600} color={colors.text_333}>
+      <Typo fontSize={16} fontWeight={600} color={"#1a1a1a"}>
         무게: {item.weight}
       </Typo>
-      <Typo fontSize={16} fontWeight={600} color={colors.text_333}>
+      <Typo fontSize={16} fontWeight={600} color={"#1a1a1a"}>
         휴식: {item.restDuration.label}
       </Typo>
       <DeleteButton onPress={() => onEdit(item)}>
-        <SvgIcon name="icon_edit" size={24} />
+        <SvgIcon name="icon_edit" size={24} color="#1a1a1a" />
       </DeleteButton>
     </RoutineItem>
   ),
@@ -35,16 +35,14 @@ const RoutineItemComponent = memo(
 
 export default RoutineItemComponent;
 
-const RoutineItem = styled.View(({theme}) => ({
+const RoutineItem = styled.View({
   width: '100%',
-  backgroundColor: theme.colors.bg_gray100,
-  borderRadius: 14,
   paddingHorizontal: 16,
   paddingVertical: 15,
-  marginBottom: 10,
+  marginBottom: 0,
   alignItems: 'flex-start',
   gap: 10,
-}));
+});
 
 const DeleteButton = styled.TouchableOpacity(({}) => ({
   borderRadius: 100,

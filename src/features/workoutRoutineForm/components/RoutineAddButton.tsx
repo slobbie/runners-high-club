@@ -38,8 +38,7 @@ const AddView = styled.View({
   width: '100%',
   alignItems: 'center',
   gap: 10,
-  position: 'absolute',
-  bottom: 80,
+  marginVertical: 16,
 });
 
 const AddButton = styled.Pressable(({theme}) => ({

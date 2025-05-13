@@ -1,48 +1,58 @@
-import React, {useCallback} from 'react';
-import {StyleSheet} from 'react-native';
-import Animated, {SlideInRight} from 'react-native-reanimated';
+import styled from '@emotion/native';
+import React from 'react';
+import {FlatList} from 'react-native';
 
+import TodayTaskCard from '@features/home/components/TodayTaskCard';
 import {IRoutineForm} from '@shared/interface/routine.interface';
-import TodayRoutineCard from '@features/home/components/TodayRoutineCard';
+import EmptyRoutine from '@features/home/components/EmptyRoutine';
 
 interface IProps {
-  routineFormData: IRoutineForm[];
+  todayRoutine: IRoutineForm[];
 }
 
-const TodayRoutineList = ({routineFormData}: IProps) => {
-  const keyExtractor = useCallback(
-    (item: IRoutineForm) => item.id.toString(),
-    [],
-  );
-
-  const renderItem = useCallback(
-    ({item, index}: {item: IRoutineForm; index: number}) => (
-      <TodayRoutineCard item={item} index={index} />
-    ),
-    [],
-  );
-
+/**
+ * 오늘의 루틴
+ */
+const TodayRoutineList = ({todayRoutine}: IProps) => {
   return (
-    <Animated.FlatList
-      data={routineFormData}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.contentContainer}
-      style={styles.flatList}
-      keyExtractor={keyExtractor}
-      itemLayoutAnimation={SlideInRight.duration(600)}
-      renderItem={renderItem}
-    />
+    <MainContent>
+      <FlatList
+        data={todayRoutine}
+        ListHeaderComponent={<TasksTitle>오늘의 루틴</TasksTitle>}
+        keyExtractor={item => item.id.toString()}
+        ListEmptyComponent={
+          <EmptyRoutine
+            title={'오늘의 루틴이 없습니다'}
+            description={'루틴을 등록하고 오늘의 운동을 시작해보세요'}
+          />
+        }
+        renderItem={({item, index}: {item: IRoutineForm; index: number}) => {
+          return (
+            <RoutineListContainer>
+              <TodayTaskCard item={item} itemIndex={index} />
+            </RoutineListContainer>
+          );
+        }}
+      />
+    </MainContent>
   );
 };
 
 export default TodayRoutineList;
 
-const styles = StyleSheet.create({
-  contentContainer: {
-    gap: 10,
-    paddingBottom: 30,
-  },
-  flatList: {
-    paddingHorizontal: 24,
-  },
+const MainContent = styled.View({
+  flex: 1,
+  padding: 20,
+});
+
+const RoutineListContainer = styled.View({
+  marginBottom: 24,
+});
+
+const TasksTitle = styled.Text({
+  fontSize: 18,
+  fontWeight: '600',
+  color: '#ffffff',
+  marginTop: 32,
+  marginBottom: 16,
 });
